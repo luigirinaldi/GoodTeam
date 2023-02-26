@@ -1,1 +1,2 @@
-# GoodTeam
+# 3-axis Accelerometer Testing 
+
