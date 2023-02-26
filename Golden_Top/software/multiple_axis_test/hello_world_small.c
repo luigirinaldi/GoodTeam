@@ -123,6 +123,7 @@ void sys_timer_isr(){
   acc_x = acc_x - x_off;
   acc_y = acc_y - y_off;
   acc_z = acc_z - z_off;
+  printf("%d,%d,%d\n", acc_x, acc_y, acc_z);
 }
 
 void timer_init(void * isr) {
@@ -155,7 +156,6 @@ int main()
   timer_init(sys_timer_isr);
 
   while (1){
-    printf("%d,%d,%d\n", acc_x, acc_y, acc_z);
   };
 
   return 0;

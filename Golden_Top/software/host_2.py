@@ -4,6 +4,11 @@ import sys
 import matplotlib.pyplot as plt
 import numpy as np
 import math
+import queue
+
+
+
+coeffs = [-0.0117,    0.0018,    0.0017,    0.0016,    0.0015,    0.0014,    0.0014,    0.0013,    0.0013,    0.0013,    0.0012,    0.0012,    0.0012,    0.0011,    0.0011,    0.0010,    0.0009,    0.0009,    0.0008,    0.0007,    0.0006,    0.0005,    0.0003,    0.0002,    0.0001,   -0.0001,   -0.0003,   -0.0004,   -0.0006,   -0.0008,   -0.0010,   -0.0011,   -0.0013,   -0.0015,   -0.0016,   -0.0018,   -0.0019,   -0.0021,   -0.0022,   -0.0023,   -0.0023,   -0.0024,   -0.0024,   -0.0024,   -0.0023,   -0.0022,   -0.0021,   -0.0020,   -0.0018,   -0.0016,   -0.0014,   -0.0011,   -0.0008,   -0.0005,   -0.0002,    0.0002,    0.0006,    0.0010,    0.0014,    0.0018,    0.0022,    0.0027,    0.0031,    0.0035,    0.0039,    0.0043,    0.0046,    0.0049,    0.0052,    0.0054,    0.0056,    0.0057,    0.0058,    0.0058,    0.0058,    0.0057,    0.0055,    0.0052,    0.0048,    0.0044,    0.0039,    0.0033,    0.0026,    0.0019,    0.0010,    0.0001,   -0.0009,   -0.0019,   -0.0030,   -0.0042,   -0.0055,   -0.0068,   -0.0081,   -0.0095,   -0.0108,   -0.0123,   -0.0137,   -0.0151,   -0.0166,   -0.0180,   -0.0194,   -0.0207,   -0.0221,   -0.0233,   -0.0246,   -0.0257,   -0.0268,   -0.0278,   -0.0287,   -0.0295,   -0.0303,   -0.0309,   -0.0314,   -0.0318,   -0.0321,   -0.0323,    0.9677,   -0.0323,   -0.0321,   -0.0318,   -0.0314,   -0.0309,   -0.0303,   -0.0295,   -0.0287,   -0.0278,   -0.0268,   -0.0257,   -0.0246,   -0.0233,   -0.0221,   -0.0207,   -0.0194,   -0.0180,   -0.0166,   -0.0151,   -0.0137,   -0.0123,   -0.0108,   -0.0095,   -0.0081,   -0.0068,   -0.0055,   -0.0042,   -0.0030,   -0.0019,   -0.0009,    0.0001,    0.0010,    0.0019,    0.0026,    0.0033,    0.0039,    0.0044,    0.0048,    0.0052,    0.0055,    0.0057,    0.0058,    0.0058,    0.0058,    0.0057,    0.0056,    0.0054,    0.0052,    0.0049,    0.0046,    0.0043,    0.0039,    0.0035,    0.0031,    0.0027,    0.0022,    0.0018,    0.0014,    0.0010,    0.0006,    0.0002,   -0.0002,   -0.0005,   -0.0008,   -0.0011,   -0.0014,   -0.0016,   -0.0018,   -0.0020,   -0.0021,   -0.0022,   -0.0023,   -0.0024,   -0.0024,   -0.0024,   -0.0023,   -0.0023,   -0.0022,   -0.0021,   -0.0019,   -0.0018,   -0.0016,   -0.0015,   -0.0013,   -0.0011,   -0.0010,   -0.0008,   -0.0006,   -0.0004,   -0.0003,   -0.0001,    0.0001,    0.0002,    0.0003,    0.0005,    0.0006,    0.0007,    0.0008,    0.0009,    0.0009,    0.0010,    0.0011,    0.0011,    0.0012,    0.0012,    0.0012,    0.0013,    0.0013, 0.0013,    0.0014,    0.0014,    0.0015,    0.0016,    0.0017,    0.0018,   -0.0117]
 
 if __name__ == '__main__':
     with subprocess.Popen(
@@ -13,58 +18,43 @@ if __name__ == '__main__':
         stdin = subprocess.PIPE,
         stdout = subprocess.PIPE
     ) as process:
-        # print(stdout.decode("utf-8"))
-        # for c in iter(lambda: process.stdout.read(1), b""):
-        #     sys.stdout.buffer.write(c)
-        plt.ion()
-        fig = plt.figure()
-        fig.set_size_inches(15,9)
-        ax1 = fig.add_subplot(1,1,1) # span the left hand side
-
-        max_points = 400
-        points_before_update = 10
-
+        
         star_t = time.time()
         end_t = time.time()
 
-        xs = []
-        y0 = []
-        y1 = []
-        yFFT = []
-        ax1.plot(xs, y0, '-b')
-        ax1.plot(xs, y1, '-r')
-        counter = 0
+        delta_t = 1 # 100 microseconds
+
+        x_v = 0
+        x_p = 0
+
+        
+        # moving average
+        # AVG_SIZE = 100
+        x_vals = queue.Queue(len(coeffs))
+
         while True:
-            # result = process.stdout.readline().decode("utf-8")
-            # vals = result.split(",")
-            tmp = process.stdout.read(1) # read one char
+
+            result = process.stdout.readline().decode("utf-8").strip()
+            accs = result.split(",")
             
             try:
-                while(ord(tmp) != 254): # wait for start bit
-                    tmp = process.stdout.read(1)
-                vals = process.stdout.read(4)
-                # vals = [ord(x) for x in vals]
-                # for b in vals:
-                    # print(b, end=",")
-                # print()
-                raw = (vals[0] | ((vals[1] & 0x7f ) << 8) ) + (-(2**15) if vals[1] >> 7 == 0x1 else 0) # twos complement implementation because i don't know how to use built in python
-                filt = (vals[2] | ((vals[3] & 0x7f ) << 8) ) + (-(2**15) if vals[3] >> 7 == 0x1 else 0)
-                # print(raw)
-                y0.append(raw)
-                y1.append(filt)
-                xs.append(counter)  
-            except:
-                print("parsing error")
-                quit()
+                # compute moving average
+                if x_vals.full(): # remove extra vals
+                    x_vals.get()
+                x_vals.put(int(accs[0])) # add new value
 
-            # # print(xs[-20:])
-                
-            if counter % points_before_update == 0:
-                ax1.clear() # the trick!!
-                ax1.plot(xs[-max_points:], y0[-max_points:], '-b')
-                ax1.plot(xs[-max_points:], y1[-max_points:], '-r')
-                fig.canvas.draw()
-                fig.canvas.flush_events()
-            
-            counter += 1
+                x_filt = 0
+                # print(list(x_vals.queue))
+                for i, val in enumerate(list(x_vals.queue)):
+                    x_filt += val * coeffs[i]
+
+                if abs(x_filt) >= 2: 
+                    x_v += x_filt * (delta_t)
+                    x_p += x_v * (delta_t)
+                print(f'{x_filt:.2f}, {x_v:.2f}, {x_p:.2f}')     
+            except:
+                print("no data yet")
+
+            # end_t = time.time()
+            # star_t = time.time()
         
