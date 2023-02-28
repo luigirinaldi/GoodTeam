@@ -11,6 +11,8 @@ X_s = []
 X_a = []
 X_v = []
 X_p = []
+X_raw_a = []
+X_damping = []
 
 
 def main():
@@ -28,17 +30,19 @@ def main():
         # x_p : position
 
         delta_t = 1e-3 # 100 microseconds
-        damp = 0.0005
+        damp = 0.005
 
         num_samples = 0
 
         x_v = 0
         x_p = 0
         x_a_prev = 0
+        x_v_prev = 0
+        x_damping = 0
 
         
         # moving average
-        AVG_SIZE = 100
+        AVG_SIZE = 20
         x_vals = queue.Queue(AVG_SIZE)
 
         end_t = time.time()
@@ -50,8 +54,8 @@ def main():
             accs = result.split(",")
             
             try:
-
-                x_filt = int(accs[0]) >> 2 # chop off bottom 2 bits
+                X_raw_a.append(int(accs[0]))
+                x_filt = int(accs[0]) >> 1 # chop off bottom 2 bits
 
                 # FILTERING
                 # compute moving average
@@ -65,19 +69,25 @@ def main():
                     x_filt += val 
                 x_filt /= AVG_SIZE
 
+                # DAMPING
+                x_damping = 0
                 # COMPUTING INTEGRAL
 
-                if abs(x_filt) >= 1: 
+                if abs(x_filt) >= 2: 
                     if (num_samples != 0):
                         # compute area with rectangle + triangle
-                        x_v += (x_a_prev * delta_t) + ((x_filt - x_a_prev)/2) * (delta_t) 
+                        x_v += (x_a_prev * delta_t) + ((x_filt - x_a_prev) / 2) * delta_t 
                 else:
-                    x_v -= x_v * damp 
+                    x_damping = x_v * damp
+                    x_v -= x_damping
 
                 # compute area of velocity with rectangle + triangle
-                x_p += x_v * (delta_t)
+                if (num_samples != 0):
+                    x_p += x_v_prev * (delta_t) + ((x_v - x_v_prev) / 2) * delta_t
                 
                 x_a_prev = x_filt
+                x_v_prev = x_v
+
 
                 # PRINT STUFF
 
@@ -85,6 +95,7 @@ def main():
                 X_a.append(x_filt)
                 X_v.append(x_v)
                 X_p.append(x_p)
+                X_damping.append(x_damping)
 
                 print(f'{x_filt:.2f}, {x_v:.2f}, {x_p:.2f}')    
                 num_samples += 1 
@@ -112,8 +123,24 @@ if __name__ == '__main__':
         ax = fig.add_subplot(1,1,1)
 
         ax.plot(X_s, X_a, '-b', label='acceleration')
-        ax.plot(X_s, X_v, '-r', label='velocity')
-        ax.plot(X_s, X_p, '-g', label='position')
+        ax.plot(X_s, X_raw_a, '-m', label='raw_accel')
+        ax1 = ax.twinx()
+        ax1.plot(X_s, X_damping, '-y', label='damping')
+        ax1.plot(X_s, X_v, '-r', label='velocity')
+        ax1.plot(X_s, X_p, '-g', label='position')
+
+        sample_p = 1e-3
+        num_samples = len(X_s)
+
+        x_fft = np.linspace(0.0, 1.0/(2.0*sample_p), len(X_s)//2)
+
+        y_fft = np.fft.fft(X_raw_a)
+
+        fig2 = plt.figure()
+        fig2.set_size_inches(15,9)
+
+        fft = fig2.add_subplot(1,1,1)
+        fft.plot(x_fft, np.abs(y_fft[:len(X_s)//2]))
 
         plt.legend()
         plt.show()
