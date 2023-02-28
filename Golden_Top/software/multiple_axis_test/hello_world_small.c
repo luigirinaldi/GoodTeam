@@ -129,8 +129,9 @@ void sys_timer_isr(){
 void timer_init(void * isr) {
     // clock is 50 MHz
     // 0x4C4B40 is one tick per tenth of a second
-    // 0x7A120 one tick per millisecond
-    // 0xC350 ont tick every 100 microseconds
+    // 0x7A120 one tick per 10 millisecond
+    // 0xC350 ont tick every millisecond
+    // 2FA F080 one per second
     IOWR_ALTERA_AVALON_TIMER_CONTROL(TIMER_BASE, 0x0003);
     IOWR_ALTERA_AVALON_TIMER_STATUS(TIMER_BASE, 0);
     IOWR_ALTERA_AVALON_TIMER_PERIODL(TIMER_BASE, 0xC350);
