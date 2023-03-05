@@ -54,7 +54,7 @@ def main():
             accs = result.split(",")
             
             try:
-                X_raw_a.append(int(accs[0]))
+                X_raw_a.append(int(accs[2]))
                 x_filt = int(accs[0]) >> 1 # chop off bottom 2 bits
 
                 # FILTERING
@@ -73,7 +73,7 @@ def main():
                 x_damping = 0
                 # COMPUTING INTEGRAL
 
-                if abs(x_filt) >= 2: 
+                if abs(x_filt) >= 10: 
                     if (num_samples != 0):
                         # compute area with rectangle + triangle
                         x_v += (x_a_prev * delta_t) + ((x_filt - x_a_prev) / 2) * delta_t 
@@ -124,23 +124,23 @@ if __name__ == '__main__':
 
         ax.plot(X_s, X_a, '-b', label='acceleration')
         ax.plot(X_s, X_raw_a, '-m', label='raw_accel')
-        ax1 = ax.twinx()
-        ax1.plot(X_s, X_damping, '-y', label='damping')
-        ax1.plot(X_s, X_v, '-r', label='velocity')
-        ax1.plot(X_s, X_p, '-g', label='position')
+        # ax1 = ax.twinx()
+        # ax1.plot(X_s, X_damping, '-y', label='damping')
+        # ax1.plot(X_s, X_v, '-r', label='velocity')
+        # ax1.plot(X_s, X_p, '-g', label='position')
 
-        sample_p = 1e-3
-        num_samples = len(X_s)
+        # sample_p = 1e-3
+        # num_samples = len(X_s)
 
-        x_fft = np.linspace(0.0, 1.0/(2.0*sample_p), len(X_s)//2)
+        # x_fft = np.linspace(0.0, 1.0/(2.0*sample_p), len(X_s)//2)
 
-        y_fft = np.fft.fft(X_raw_a)
+        # y_fft = np.fft.fft(X_raw_a)
 
-        fig2 = plt.figure()
-        fig2.set_size_inches(15,9)
+        # fig2 = plt.figure()
+        # fig2.set_size_inches(15,9)
 
-        fft = fig2.add_subplot(1,1,1)
-        fft.plot(x_fft, np.abs(y_fft[:len(X_s)//2]))
+        # fft = fig2.add_subplot(1,1,1)
+        # fft.plot(x_fft, np.abs(y_fft[:len(X_s)//2]))
 
         plt.legend()
         plt.show()
