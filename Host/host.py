@@ -7,13 +7,9 @@ import math
 import queue
 from datetime import datetime, timedelta
 
-X_s = []
-X_a = []
-X_v = []
-X_p = []
-X_raw_a = []
-X_damping = []
-
+Accel = []
+Magnitude = []
+X_time = []
 
 def main():
     with subprocess.Popen(
@@ -24,23 +20,11 @@ def main():
         stdout = subprocess.PIPE
     ) as process:
         
-        # variables name
-        # x_filt : filtered acceleration
-        # x_v : velocity (area of acceleration)
-        # x_p : position
-
         delta_t = 1e-3 # 100 microseconds
         damp = 0.005
 
         num_samples = 0
 
-        x_v = 0
-        x_p = 0
-        x_a_prev = 0
-        x_v_prev = 0
-        x_damping = 0
-
-        
         # moving average
         AVG_SIZE = 20
         x_vals = queue.Queue(AVG_SIZE)
@@ -54,51 +38,20 @@ def main():
             accs = result.split(",")
             
             try:
-                X_raw_a.append(int(accs[2]))
-                x_filt = int(accs[0]) >> 1 # chop off bottom 2 bits
+                a = [int(x) for x in accs]
+                Accel.append(a)
 
-                # FILTERING
-                # compute moving average
-                if x_vals.full(): # remove extra vals
-                    x_vals.get()
-                x_vals.put(x_filt) # add new value
+                magn = 0
+                # magn = math.sqrt(a[0]**2 + a[1]**2 + a[2]**2)
+                Magnitude.append(magn)
 
-                # x_filt = 0
-                # # print(list(x_vals.queue))
-                for i, val in enumerate(list(x_vals.queue)):
-                    x_filt += val 
-                x_filt /= AVG_SIZE
-
-                # DAMPING
-                x_damping = 0
-                # COMPUTING INTEGRAL
-
-                if abs(x_filt) >= 10: 
-                    if (num_samples != 0):
-                        # compute area with rectangle + triangle
-                        x_v += (x_a_prev * delta_t) + ((x_filt - x_a_prev) / 2) * delta_t 
-                else:
-                    x_damping = x_v * damp
-                    x_v -= x_damping
-
-                # compute area of velocity with rectangle + triangle
-                if (num_samples != 0):
-                    x_p += x_v_prev * (delta_t) + ((x_v - x_v_prev) / 2) * delta_t
+                print(f"{magn:.2f}", a)
+                if (magn >= 50):
+                    print("tap")
                 
-                x_a_prev = x_filt
-                x_v_prev = x_v
+                X_time.append(num_samples * delta_t)
 
-
-                # PRINT STUFF
-
-                X_s.append(num_samples * delta_t)  
-                X_a.append(x_filt)
-                X_v.append(x_v)
-                X_p.append(x_p)
-                X_damping.append(x_damping)
-
-                print(f'{x_filt:.2f}, {x_v:.2f}, {x_p:.2f}')    
-                num_samples += 1 
+                num_samples += 1
 
             except:
                 print("no data yet")
@@ -122,8 +75,12 @@ if __name__ == '__main__':
         fig.set_size_inches(15,9)
         ax = fig.add_subplot(1,1,1)
 
-        ax.plot(X_s, X_a, '-b', label='acceleration')
-        ax.plot(X_s, X_raw_a, '-m', label='raw_accel')
+        ax.plot(X_time, [pt[0] for pt in Accel], label='x')
+        ax.plot(X_time, [pt[1] for pt in Accel], label='y')
+        ax.plot(X_time, [pt[2] for pt in Accel], label='z')
+
+
+        ax.plot(X_time, Magnitude, '-m', label='magnitude')
         # ax1 = ax.twinx()
         # ax1.plot(X_s, X_damping, '-y', label='damping')
         # ax1.plot(X_s, X_v, '-r', label='velocity')
