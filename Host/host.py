@@ -9,7 +9,12 @@ from datetime import datetime, timedelta
 
 Accel = []
 Magnitude = []
+Magn_filt = []
 X_time = []
+Taps = []
+
+TAP_SIZE = 10
+TAP_SIZE_FILT = 6
 
 def main():
     with subprocess.Popen(
@@ -24,38 +29,71 @@ def main():
         damp = 0.005
 
         num_samples = 0
+        prevTap = 0
 
         # moving average
-        AVG_SIZE = 20
-        x_vals = queue.Queue(AVG_SIZE)
+        AVG_SIZE = 4
+        avg_vals = queue.Queue(AVG_SIZE)
 
         end_t = time.time()
         start_time = datetime.now()
         
+        prevResult = ""
+
         while True:
 
             result = process.stdout.readline().decode("utf-8").strip()
-            accs = result.split(",")
             
-            try:
-                a = [int(x) for x in accs]
-                Accel.append(a)
-
-                magn = 0
-                # magn = math.sqrt(a[0]**2 + a[1]**2 + a[2]**2)
-                Magnitude.append(magn)
-
-                print(f"{magn:.2f}", a)
-                if (magn >= 50):
-                    print("tap")
+            if result != prevResult:            
+                accs = result.split(",")
                 
-                X_time.append(num_samples * delta_t)
 
-                num_samples += 1
+                try:
+                    a = [int(x) for x in accs]
+                    Accel.append(a)
 
-            except:
-                print("no data yet")
+                    magn = math.sqrt(a[0]**2 + a[1]**2 + a[2]**2)
+                    Magnitude.append(magn)
 
+                    # print(f"{magn:.2f}", a)
+                    if (magn >= TAP_SIZE):
+                        Taps.append(100)
+                        print(datetime.now(), "normal Tap")
+                    else:
+                        Taps.append(-TAP_SIZE)
+
+
+                    # FILTERING
+                    # compute moving average
+                    if avg_vals.full(): # remove extra vals
+                        avg_vals.get()
+                    avg_vals.put(magn) # add new value
+
+                    filt_magn = 0
+                    # # print(list(x_vals.queue))
+                    for i, val in enumerate(list(avg_vals.queue)):
+                        filt_magn += val 
+                    filt_magn /= AVG_SIZE
+
+                    if (prevTap >= TAP_SIZE_FILT and filt_magn < TAP_SIZE_FILT):
+                        print(datetime.now(), "filt tap")
+                    #     Taps.append(40)
+                    # else:
+                    #     Taps.append(TAP_SIZE_FILT)
+                    
+                    prevTap = filt_magn
+
+                    Magn_filt.append(filt_magn)
+                    
+                    X_time.append(num_samples * delta_t)
+
+                    num_samples += 1
+
+                except:
+                    print("no data yet")
+            
+            prevResult = result
+                
             # end_t = time.time()
             # star_t = time.time()
         
@@ -75,12 +113,15 @@ if __name__ == '__main__':
         fig.set_size_inches(15,9)
         ax = fig.add_subplot(1,1,1)
 
-        ax.plot(X_time, [pt[0] for pt in Accel], label='x')
-        ax.plot(X_time, [pt[1] for pt in Accel], label='y')
-        ax.plot(X_time, [pt[2] for pt in Accel], label='z')
+        # ax.plot(X_time, [pt[0] for pt in Accel], label='x')
+        # ax.plot(X_time, [pt[1] for pt in Accel], label='y')
+        # ax.plot(X_time, [pt[2] for pt in Accel], label='z')
 
 
-        ax.plot(X_time, Magnitude, '-m', label='magnitude')
+        ax.plot(X_time, Magnitude, '-', label='magnitude')
+        ax.plot(X_time, Magn_filt, '-m', label='magnitude filt')
+
+        ax.plot(X_time, Taps, '-', label="Taps")
         # ax1 = ax.twinx()
         # ax1.plot(X_s, X_damping, '-y', label='damping')
         # ax1.plot(X_s, X_v, '-r', label='velocity')
