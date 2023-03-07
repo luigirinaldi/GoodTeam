@@ -13,8 +13,8 @@ Magn_filt = []
 X_time = []
 Taps = []
 
-TAP_SIZE = 10
-TAP_SIZE_FILT = 6
+TAP_SIZE = 2
+TAP_THRESH = 7
 
 def main():
     with subprocess.Popen(
@@ -31,8 +31,11 @@ def main():
         num_samples = 0
         prevTap = 0
 
+        isTapping = False
+        numTaps = 0
+
         # moving average
-        AVG_SIZE = 4
+        AVG_SIZE = 3
         avg_vals = queue.Queue(AVG_SIZE)
 
         end_t = time.time()
@@ -46,7 +49,7 @@ def main():
             
             if result != prevResult:            
                 accs = result.split(",")
-                
+                # print(result)
 
                 try:
                     a = [int(x) for x in accs]
@@ -55,12 +58,12 @@ def main():
                     magn = math.sqrt(a[0]**2 + a[1]**2 + a[2]**2)
                     Magnitude.append(magn)
 
-                    # print(f"{magn:.2f}", a)
-                    if (magn >= TAP_SIZE):
-                        Taps.append(100)
-                        print(datetime.now(), "normal Tap")
-                    else:
-                        Taps.append(-TAP_SIZE)
+                    # # print(f"{magn:.2f}", a)
+                    # if (magn >= TAP_SIZE):
+                    #     Taps.append(100)
+                    #     print(datetime.now(), "normal Tap")
+                    # else:
+                    #     Taps.append(-TAP_SIZE)
 
 
                     # FILTERING
@@ -75,12 +78,25 @@ def main():
                         filt_magn += val 
                     filt_magn /= AVG_SIZE
 
-                    if (prevTap >= TAP_SIZE_FILT and filt_magn < TAP_SIZE_FILT):
-                        print(datetime.now(), "filt tap")
-                    #     Taps.append(40)
-                    # else:
-                    #     Taps.append(TAP_SIZE_FILT)
                     
+
+                    if isTapping:
+                        numTaps += 1
+                        Taps.append(40)
+                        # picks up the moment the signal goes from above to below the threshold ( falling edge )
+                        if (prevTap >= TAP_THRESH and filt_magn < TAP_THRESH):
+                            isTapping = False
+                            if numTaps >= TAP_SIZE:
+                                print(datetime.now(), "Tap!", numTaps)
+                    else:
+                        Taps.append(TAP_THRESH)
+                        # picks up Rising edge
+                        if ( filt_magn >= TAP_THRESH and prevTap < TAP_THRESH):
+                            print("Start tapping")
+                            isTapping = True
+                            numTaps = 0
+
+
                     prevTap = filt_magn
 
                     Magn_filt.append(filt_magn)
@@ -118,7 +134,7 @@ if __name__ == '__main__':
         # ax.plot(X_time, [pt[2] for pt in Accel], label='z')
 
 
-        ax.plot(X_time, Magnitude, '-', label='magnitude')
+        # ax.plot(X_time, Magnitude, '-', label='magnitude')
         ax.plot(X_time, Magn_filt, '-m', label='magnitude filt')
 
         ax.plot(X_time, Taps, '-', label="Taps")

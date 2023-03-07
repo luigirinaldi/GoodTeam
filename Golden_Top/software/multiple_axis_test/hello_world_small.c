@@ -91,10 +91,10 @@
 
 // GLOBALS
 
-alt_up_accelerometer_spi_dev * acc_dev;
-alt_32 acc_x = 0;
-alt_32 acc_y = 0;
-alt_32 acc_z = 0;
+volatile alt_up_accelerometer_spi_dev * acc_dev;
+volatile alt_32 acc_x = 0;
+volatile alt_32 acc_y = 0;
+volatile alt_32 acc_z = 0;
 
 // offsets
 alt_32 x_off = -15;
@@ -134,8 +134,8 @@ void timer_init(void * isr) {
     // 2FA F080 one per second
     IOWR_ALTERA_AVALON_TIMER_CONTROL(TIMER_BASE, 0x0003);
     IOWR_ALTERA_AVALON_TIMER_STATUS(TIMER_BASE, 0);
-    IOWR_ALTERA_AVALON_TIMER_PERIODL(TIMER_BASE, 0xC350);
-    IOWR_ALTERA_AVALON_TIMER_PERIODH(TIMER_BASE, 0x0000); 
+    IOWR_ALTERA_AVALON_TIMER_PERIODL(TIMER_BASE, 0xA120);
+    IOWR_ALTERA_AVALON_TIMER_PERIODH(TIMER_BASE, 0x0007); 
     alt_irq_register(TIMER_IRQ, 0, isr);
     IOWR_ALTERA_AVALON_TIMER_CONTROL(TIMER_BASE, 0x0007); // 0b0...0111
 
