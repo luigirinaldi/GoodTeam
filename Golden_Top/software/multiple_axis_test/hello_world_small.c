@@ -89,7 +89,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#define ACCEL_INT_1 0x00021038
+#define ACCEL_INT_1 0x00021039
+
 // GLOBALS
+
+volatile tap_counter = 0;
 
 volatile alt_up_accelerometer_spi_dev * acc_dev;
 volatile alt_32 acc_x = 0;
@@ -141,6 +146,19 @@ void timer_init(void * isr) {
 
 }
 
+
+
+void accelerometer_isr(){
+  alt_putstr("received accelerometer interrupt!\n");
+  alt_8 data;
+  alt_up_accelerometer_spi_read(acc_dev, 0x2B, &data);
+  // alt_printf("axis: x %x, y %x, z %x\n", (data & 0b100) >> 2, (data & 0b10) >> 1, data & 0b1);
+  alt_printf("axis: %x\n", data & 0b111);
+  data = 0;
+  alt_up_accelerometer_spi_read(acc_dev, 0x30, &data);
+  alt_printf("INT_SOURCE: %x, %x\n", data, tap_counter++);
+}
+
 int main()
 { 
   alt_putstr("Hello from Nios II!\n");
@@ -154,7 +172,19 @@ int main()
         return 1;
   }
 
-  timer_init(sys_timer_isr);
+  // set bits to enable tap detection
+  alt_up_accelerometer_spi_write(acc_dev, 0x2A, 0b00000001); // enable tap on all axes
+  alt_up_accelerometer_spi_write(acc_dev, 0x21, 0x10); // set DUR (0x10 = 10ms for some reason)
+  alt_up_accelerometer_spi_write(acc_dev, 0x1D ,0x30); // set THRESH_TAP (0x30 = 3g)
+
+  // set bits in the accel register to enable interrupts
+  alt_up_accelerometer_spi_write(acc_dev, 0x2F, 0b10111111); // set SINGLE_TAP to INT_1 pin
+  alt_up_accelerometer_spi_write(acc_dev, 0x2E, 0b01000000); // enable single tap to generate interrupts
+
+  // set function to be executed on interrupt
+  alt_irq_register(ACCELEROMETER_SPI_IRQ, 0, accelerometer_isr);
+
+  // timer_init(sys_timer_isr);
 
   while (1){
   };
