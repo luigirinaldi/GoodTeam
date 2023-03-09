@@ -89,74 +89,50 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define ACCEL_INT_1 0x00021038
-#define ACCEL_INT_1 0x00021039
-
 // GLOBALS
 
-volatile tap_counter = 0;
+int tap_counter = 0;
 
-volatile alt_up_accelerometer_spi_dev * acc_dev;
-volatile alt_32 acc_x = 0;
-volatile alt_32 acc_y = 0;
-volatile alt_32 acc_z = 0;
+alt_32 prev_time = 0;
 
-// offsets
-alt_32 x_off = -15;
-alt_32 y_off = 4;
-alt_32 z_off = 256; // g value
+alt_up_accelerometer_spi_dev * acc_dev;
 
-// time
-
-dt = 1; // 1 us
-
-// velocity
-
-alt_32 x_v = 0;
-
-// position
-
-alt_32 x_p = 0;
-
-void sys_timer_isr(){
-
-  IOWR_ALTERA_AVALON_TIMER_STATUS(TIMER_BASE, 0);
-
-  alt_up_accelerometer_spi_read_x_axis(acc_dev, & acc_x);
-  alt_up_accelerometer_spi_read_y_axis(acc_dev, & acc_y);
-  alt_up_accelerometer_spi_read_z_axis(acc_dev, & acc_z);
-  acc_x = acc_x - x_off;
-  acc_y = acc_y - y_off;
-  acc_z = acc_z - z_off;
-  printf("%d,%d,%d\n", acc_x, acc_y, acc_z);
-}
-
-void timer_init(void * isr) {
+void timer_init() {
     // clock is 50 MHz
     // 0x4C4B40 is one tick per tenth of a second
     // 0x7A120 one tick per 10 millisecond
     // 0xC350 ont tick every millisecond
     // 2FA F080 one per second
-    IOWR_ALTERA_AVALON_TIMER_CONTROL(TIMER_BASE, 0x0003);
+    IOWR_ALTERA_AVALON_TIMER_CONTROL(TIMER_BASE, 0x0002);
     IOWR_ALTERA_AVALON_TIMER_STATUS(TIMER_BASE, 0);
-    IOWR_ALTERA_AVALON_TIMER_PERIODL(TIMER_BASE, 0xA120);
-    IOWR_ALTERA_AVALON_TIMER_PERIODH(TIMER_BASE, 0x0007); 
-    alt_irq_register(TIMER_IRQ, 0, isr);
-    IOWR_ALTERA_AVALON_TIMER_CONTROL(TIMER_BASE, 0x0007); // 0b0...0111
+    // set initial value to the max ( counter counts down )
+    IOWR_ALTERA_AVALON_TIMER_PERIODL(TIMER_BASE, 0xFFFF);
+    IOWR_ALTERA_AVALON_TIMER_PERIODH(TIMER_BASE, 0xFFFF); 
+    // start the timer
+    IOWR_ALTERA_AVALON_TIMER_CONTROL(TIMER_BASE, 0x0006); // 0b0...0111
 
 }
 
-
+// timer is decreasing value every time
+// check if the time difference is small enough, in which case ignore the tap
 
 void accelerometer_isr(){
-  alt_putstr("received accelerometer interrupt!\n");
   alt_8 data;
-  alt_up_accelerometer_spi_read(acc_dev, 0x2B, &data);
-  // alt_printf("axis: x %x, y %x, z %x\n", (data & 0b100) >> 2, (data & 0b10) >> 1, data & 0b1);
-  alt_printf("axis: %x\n", data & 0b111);
-  data = 0;
-  alt_up_accelerometer_spi_read(acc_dev, 0x30, &data);
-  alt_printf("INT_SOURCE: %x, %x\n", data, tap_counter++);
+  alt_up_accelerometer_spi_read(acc_dev, 0x30, &data); // read INT source to clear interrupt
+  
+
+  // perform write operation to save a snapshot of counter value in snap reg
+  IOWR_ALTERA_AVALON_TIMER_SNAPH(TIMER_BASE, 0x1); // value of data doesn't matter
+  alt_32 curr_time = IORD_ALTERA_AVALON_TIMER_SNAPH(TIMER_BASE);
+  // printf("%u\n", curr_time);
+
+  if ( prev_time - curr_time > 15 ){ // valid tap
+    alt_putstr("tap\n");
+    tap_counter++;
+    printf("%d\n", tap_counter);
+  }
+
+  prev_time = curr_time;
 }
 
 int main()
@@ -173,9 +149,11 @@ int main()
   }
 
   // set bits to enable tap detection
-  alt_up_accelerometer_spi_write(acc_dev, 0x2A, 0b00000001); // enable tap on all axes
-  alt_up_accelerometer_spi_write(acc_dev, 0x21, 0x10); // set DUR (0x10 = 10ms for some reason)
-  alt_up_accelerometer_spi_write(acc_dev, 0x1D ,0x30); // set THRESH_TAP (0x30 = 3g)
+  alt_up_accelerometer_spi_write(acc_dev, 0x2A, 0b00000001); // enable tap on z axis only
+  alt_up_accelerometer_spi_write(acc_dev, 0x21, 0x10); // set DUR (0x10 = 10ms)
+  // alt_up_accelerometer_spi_write(acc_dev, 0x22, 0xFF); // set LATENT register (0x20 = 10ms)
+  // alt_up_accelerometer_spi_write(acc_dev, 0x23, 0xFF); // set WINDOW
+  alt_up_accelerometer_spi_write(acc_dev, 0x1D ,0x16); // set THRESH_TAP (0x30 = 3g)
 
   // set bits in the accel register to enable interrupts
   alt_up_accelerometer_spi_write(acc_dev, 0x2F, 0b10111111); // set SINGLE_TAP to INT_1 pin
@@ -184,9 +162,10 @@ int main()
   // set function to be executed on interrupt
   alt_irq_register(ACCELEROMETER_SPI_IRQ, 0, accelerometer_isr);
 
-  // timer_init(sys_timer_isr);
+  timer_init();
 
   while (1){
+    // printf("accel interrupts: %d\n", tap_counter);
   };
 
   return 0;
