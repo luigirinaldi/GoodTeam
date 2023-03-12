@@ -6,7 +6,11 @@
 			accelerometer_spi_external_interface_G_SENSOR_INT  : in    std_logic                    := 'X'; -- G_SENSOR_INT
 			clk_clk                                            : in    std_logic                    := 'X'; -- clk
 			led_external_connection_export                     : out   std_logic_vector(9 downto 0);        -- export
-			reset_reset_n                                      : in    std_logic                    := 'X'  -- reset_n
+			reset_reset_n                                      : in    std_logic                    := 'X'; -- reset_n
+			spi_external_MISO                                  : in    std_logic                    := 'X'; -- MISO
+			spi_external_MOSI                                  : out   std_logic;                           -- MOSI
+			spi_external_SCLK                                  : out   std_logic;                           -- SCLK
+			spi_external_SS_n                                  : out   std_logic                            -- SS_n
 		);
 	end component nios_accelerometer;
 

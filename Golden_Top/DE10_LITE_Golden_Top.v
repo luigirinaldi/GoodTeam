@@ -82,7 +82,11 @@ module DE10_LITE_Golden_Top(
 		.accelerometer_spi_external_interface_I2C_SDAT      (GSENSOR_SDI),      // accelerometer_spi_external_interface.I2C_SDAT
 		.accelerometer_spi_external_interface_I2C_SCLK      (GSENSOR_SCLK),      //                                     .I2C_SCLK
 		.accelerometer_spi_external_interface_G_SENSOR_CS_N (GSENSOR_CS_N), //                                     .G_SENSOR_CS_N
-		.accelerometer_spi_external_interface_G_SENSOR_INT  (GSENSOR_INT[1])   //                                     .G_SENSOR_INT
+		.accelerometer_spi_external_interface_G_SENSOR_INT  (GSENSOR_INT[1]),   //                                     .G_SENSOR_INT
+		.spi_external_MISO         (GPIO[2]),                     					 //                         spi_external.MISO
+		.spi_external_MOSI 			(GPIO[0]),                                 //                                     .MOSI
+		.spi_external_SCLK   		(GPIO[4]),                               	//                                     .SCLK
+		.spi_external_SS_n     		(GPIO[6])                            		 //                                     .SS_n
 	);
 
 

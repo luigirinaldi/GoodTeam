@@ -1,12 +1,12 @@
-Analysis & Synthesis Status : Successful - Fri Mar 10 18:36:15 2023
+Analysis & Synthesis Status : Successful - Sun Mar 12 17:44:45 2023
 Quartus Prime Version : 20.1.1 Build 720 11/11/2020 SJ Lite Edition
 Revision Name : DE10_LITE_Golden_Top
 Top-level Entity Name : DE10_LITE_Golden_Top
 Family : MAX 10
-Total logic elements : 2,241
-    Total combinational functions : 1,985
-    Dedicated logic registers : 1,228
-Total registers : 1228
+Total logic elements : 2,495
+    Total combinational functions : 2,152
+    Dedicated logic registers : 1,379
+Total registers : 1379
 Total pins : 185
 Total virtual pins : 0
 Total memory bits : 535,552

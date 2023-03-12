@@ -9,6 +9,7 @@
    <export preferredWidth="214" />
   </columns>
  </systemtable>
- <library expandedCategories="Project,Library" />
- <window width="1846" height="1053" x="74" y="27" />
+ <library
+   expandedCategories="Library,Project,Library/Memory Interfaces and Controllers/Flash,Library/Interface Protocols/Serial,Library/University Program,Library/Memory Interfaces and Controllers,Library/University Program/Generic IO,Library/Basic Functions/On Chip Memory,Library/Interface Protocols,Library/Processors and Peripherals/Peripherals,Library/Processors and Peripherals,Library/Basic Functions" />
+ <window width="1920" height="1101" x="0" y="27" />
 </preferences>
