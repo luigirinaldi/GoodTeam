@@ -59,11 +59,11 @@ while(True):
     # if no message has arrived add to time 
     time_elapsed += SAMPLE_TIME
 
-  if time_elapsed > 4:
+  if time_elapsed > 2:
     if len(timestamps) > 0:
       # pprint(timestamps)
       # convert to unix
-      timestamps = [ datetime.datetime.timestamp(x) * 1000 for x in timestamps]
+      timestamps = [ datetime.datetime.timestamp(x) for x in timestamps]
       json_data = {
           "test":"test_data",
           "taps": timestamps
