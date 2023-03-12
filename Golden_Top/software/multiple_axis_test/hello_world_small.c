@@ -126,9 +126,10 @@ void accelerometer_isr(){
   alt_32 curr_time = IORD_ALTERA_AVALON_TIMER_SNAPH(TIMER_BASE);
   // printf("%u\n", curr_time);
 
-  if ( prev_time - curr_time > 15 ){ // valid tap
+  if ( prev_time - curr_time > 15 ){ // valid tap about 20 ms
     alt_putstr("tap:");
-    printf("%d\n", prev_time - curr_time);
+    int elapsed_time = ((prev_time - curr_time) << 16 ) / 50e3; // time in milliseconds 
+    printf("%d\n", elapsed_time);
     // tap_counter++;
     // printf("%d\n", tap_counter);
   }

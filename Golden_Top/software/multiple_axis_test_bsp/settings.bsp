@@ -2,10 +2,10 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>Feb 26, 2023 3:39:38 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1677425978712</BspGeneratedUnixTimeStamp>
-        <BspGeneratedLocation>/home/youlittleperson/Documents/Imperial/GoodTeam/Golden_Top/software/multiple_axis_test_bsp</BspGeneratedLocation>
-        <BspSettingsFile>./settings.bsp</BspSettingsFile>
+        <BspGeneratedTimeStamp>12-Mar-2023 18:31:36</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1678645896998</BspGeneratedUnixTimeStamp>
+        <BspGeneratedLocation>./</BspGeneratedLocation>
+        <BspSettingsFile>../multiple_axis_test_bsp/settings.bsp</BspSettingsFile>
         <SopcDesignFile>../../nios_accelerometer.sopcinfo</SopcDesignFile>
         <JdiFile>default</JdiFile>
         <Cpu>cpu</Cpu>
