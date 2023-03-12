@@ -6,6 +6,7 @@
 #include "sys/alt_stdio.h"
 #include "sys/alt_irq.h"
 #include "alt_types.h"
+#include <altera_avalon_spi.h>
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -14,6 +15,8 @@
 int tap_counter = 0;
 
 alt_32 prev_time = 0;
+
+alt_u8 *tap_data;
 
 alt_up_accelerometer_spi_dev * acc_dev;
 
@@ -37,7 +40,7 @@ void timer_init() {
 // check if the time difference is small enough, in which case ignore the tap
 
 void accelerometer_isr(){
-  alt_8 data;
+  alt_u8 data;
   alt_up_accelerometer_spi_read(acc_dev, 0x30, &data); // read INT source to clear interrupt
 
 
@@ -50,13 +53,11 @@ void accelerometer_isr(){
 //   alt_16 time_diff_sec = time_diff_µsec/1000000;
   alt_16 time_diff_msec = time_diff_µsec/1000;
 
-  alt_u8* tap_data[2];
-  tap_data[0] = (time_diff_msec>>8) & 0xff; //top 8 bits of timestamp
-  tap_data[1] = time_diff_msec & 0xff; //bottom 8 bits of timestamp
 
+  if ( time_diff > 16 ){  // valid tap if 20ms have passed since last tap
 
-  if ( time_diff > 8 ){  // valid tap if 10ms have passed since last tap
-
+    tap_data[0] = (time_diff_msec>>8) & 0xff; //top 8 bits of timestamp
+    tap_data[1] = time_diff_msec & 0xff; //bottom 8 bits of timestamp
     alt_putstr("taps: ");
     tap_counter++;
     printf("%d\n", tap_counter);
@@ -66,12 +67,15 @@ void accelerometer_isr(){
     alt_avalon_spi_command(SPI_BASE, 0 ,0x2, tap_data, 0, 0, 0);
 
   }
-
+  
   prev_time = curr_time;
+
 }
 
 int main()
 { 
+  tap_data = (alt_u8*) malloc(2);
+
   alt_putstr("DETECTING TAPS: \n");
 
   acc_dev = alt_up_accelerometer_spi_open_dev("/dev/accelerometer_spi");

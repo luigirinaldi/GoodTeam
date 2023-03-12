@@ -5,11 +5,11 @@
  version="1.0"
  fabric="QSYS">
  <!-- Format version 20.1 720 (Future versions may contain additional information.) -->
- <!-- 2023.03.12.17:44:25 -->
+ <!-- 2023.03.12.19:32:47 -->
  <!-- A collection of modules and connections -->
  <parameter name="AUTO_GENERATION_ID">
   <type>java.lang.Integer</type>
-  <value>1678643065</value>
+  <value>1678649567</value>
   <derived>false</derived>
   <enabled>true</enabled>
   <visible>false</visible>
@@ -6822,7 +6822,7 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.TARGETCLOCK</name>
-   <value>10000u</value>
+   <value>1000u</value>
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.TARGETSSDELAY</name>
@@ -6926,7 +6926,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="targetClockRate">
    <type>long</type>
-   <value>10000</value>
+   <value>1000</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -6961,7 +6961,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="actualClockRate">
    <type>double</type>
-   <value>10000.0</value>
+   <value>1000.0</value>
    <derived>true</derived>
    <enabled>true</enabled>
    <visible>true</visible>

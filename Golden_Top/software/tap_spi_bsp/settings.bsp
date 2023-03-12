@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>Mar 12, 2023 5:55:15 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1678643715522</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>Mar 12, 2023 7:34:19 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1678649659248</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>/home/jalexandrou/Documents/InfoProcessing/project/tapdetect/GoodTeam/Golden_Top/software/tap_spi_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>../../nios_accelerometer.sopcinfo</SopcDesignFile>

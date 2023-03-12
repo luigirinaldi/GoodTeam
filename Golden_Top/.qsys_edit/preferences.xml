@@ -10,6 +10,6 @@
   </columns>
  </systemtable>
  <library
-   expandedCategories="Library,Project,Library/Memory Interfaces and Controllers/Flash,Library/Interface Protocols/Serial,Library/University Program,Library/Memory Interfaces and Controllers,Library/University Program/Generic IO,Library/Basic Functions/On Chip Memory,Library/Interface Protocols,Library/Processors and Peripherals/Peripherals,Library/Processors and Peripherals,Library/Basic Functions" />
+   expandedCategories="Library/Basic Functions/On Chip Memory,Library/Processors and Peripherals,Library/Interface Protocols,Library/Memory Interfaces and Controllers/Flash,Library/University Program/Generic IO,Project,Library/Basic Functions,Library,Library/Interface Protocols/Serial,Library/Processors and Peripherals/Peripherals,Library/University Program,Library/Memory Interfaces and Controllers" />
  <window width="1920" height="1101" x="0" y="27" />
 </preferences>

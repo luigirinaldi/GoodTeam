@@ -105,6 +105,14 @@
          type = "int";
       }
    }
+   element spi.irq
+   {
+      datum _tags
+      {
+         value = "";
+         type = "String";
+      }
+   }
    element spi.spi_control_port
    {
       datum baseAddress
@@ -433,7 +441,7 @@
   <parameter name="masterSPI" value="true" />
   <parameter name="numberOfSlaves" value="1" />
   <parameter name="syncRegDepth" value="2" />
-  <parameter name="targetClockRate" value="10000" />
+  <parameter name="targetClockRate" value="1000" />
   <parameter name="targetSlaveSelectToSClkDelay" value="0.0" />
  </module>
  <module name="timer" kind="altera_avalon_timer" version="20.1" enabled="1">

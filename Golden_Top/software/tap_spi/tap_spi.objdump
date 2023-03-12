@@ -35,43 +35,43 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   8 .debug_aranges 00000458  00000000  00000000  000023e0  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
-  9 .debug_info   00005bd2  00000000  00000000  00002838  2**0
+  9 .debug_info   00005bc6  00000000  00000000  00002838  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 10 .debug_abbrev 000020af  00000000  00000000  0000840a  2**0
+ 10 .debug_abbrev 000020af  00000000  00000000  000083fe  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 11 .debug_line   00002e48  00000000  00000000  0000a4b9  2**0
+ 11 .debug_line   00002e40  00000000  00000000  0000a4ad  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 12 .debug_frame  00000574  00000000  00000000  0000d304  2**2
+ 12 .debug_frame  00000574  00000000  00000000  0000d2f0  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 13 .debug_str    00001b40  00000000  00000000  0000d878  2**0
+ 13 .debug_str    00001b30  00000000  00000000  0000d864  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_loc    00001cfb  00000000  00000000  0000f3b8  2**0
+ 14 .debug_loc    00001cfb  00000000  00000000  0000f394  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_alt_sim_info 00000010  00000000  00000000  000110b4  2**2
+ 15 .debug_alt_sim_info 00000010  00000000  00000000  00011090  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_ranges 00000370  00000000  00000000  000110c8  2**3
+ 16 .debug_ranges 00000370  00000000  00000000  000110a0  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .thread_model 00000003  00000000  00000000  00012a9a  2**0
+ 17 .thread_model 00000003  00000000  00000000  00012a66  2**0
                   CONTENTS, READONLY
- 18 .cpu          00000003  00000000  00000000  00012a9d  2**0
+ 18 .cpu          00000003  00000000  00000000  00012a69  2**0
                   CONTENTS, READONLY
- 19 .qsys         00000001  00000000  00000000  00012aa0  2**0
+ 19 .qsys         00000001  00000000  00000000  00012a6c  2**0
                   CONTENTS, READONLY
- 20 .simulation_enabled 00000001  00000000  00000000  00012aa1  2**0
+ 20 .simulation_enabled 00000001  00000000  00000000  00012a6d  2**0
                   CONTENTS, READONLY
- 21 .stderr_dev   00000009  00000000  00000000  00012aa2  2**0
+ 21 .stderr_dev   00000009  00000000  00000000  00012a6e  2**0
                   CONTENTS, READONLY
- 22 .stdin_dev    00000009  00000000  00000000  00012aab  2**0
+ 22 .stdin_dev    00000009  00000000  00000000  00012a77  2**0
                   CONTENTS, READONLY
- 23 .stdout_dev   00000009  00000000  00000000  00012ab4  2**0
+ 23 .stdout_dev   00000009  00000000  00000000  00012a80  2**0
                   CONTENTS, READONLY
- 24 .sopc_system_name 00000012  00000000  00000000  00012abd  2**0
+ 24 .sopc_system_name 00000012  00000000  00000000  00012a89  2**0
                   CONTENTS, READONLY
- 25 .quartus_project_dir 00000050  00000000  00000000  00012acf  2**0
+ 25 .quartus_project_dir 00000050  00000000  00000000  00012a9b  2**0
                   CONTENTS, READONLY
- 26 .jdi          00004f70  00000000  00000000  00012b1f  2**0
+ 26 .jdi          00004f70  00000000  00000000  00012aeb  2**0
                   CONTENTS, READONLY
- 27 .sopcinfo     00044fd0  00000000  00000000  00017a8f  2**0
+ 27 .sopcinfo     00044fcd  00000000  00000000  00017a5b  2**0
                   CONTENTS, READONLY
 SYMBOL TABLE:
 00010000 l    d  .entry	00000000 .entry
@@ -95,7 +95,7 @@ SYMBOL TABLE:
 000101b8 l       .text	00000000 alt_after_alt_main
 00000000 l    df *ABS*	00000000 alt_irq_handler.c
 00000000 l    df *ABS*	00000000 alt_instruction_exception_entry.c
-00000000 l    df *ABS*	00000000 hello_world_small.c
+00000000 l    df *ABS*	00000000 tap_spi.c
 00000000 l    df *ABS*	00000000 lib2-divmod.c
 00000000 l    df *ABS*	00000000 lib2-mul.c
 00000000 l    df *ABS*	00000000 printf.c
@@ -591,7 +591,7 @@ alt_after_alt_main:
 // check if the time difference is small enough, in which case ignore the tap
 
 void accelerometer_isr(){
-  alt_8 data;
+  alt_u8 data;
   alt_up_accelerometer_spi_read(acc_dev, 0x30, &data); // read INT source to clear interrupt
    101bc:	d1206e17 	ldw	r4,-32328(gp)
 void accelerometer_isr(){
@@ -615,17 +615,21 @@ void accelerometer_isr(){
   alt_32 curr_time = IORD_ALTERA_AVALON_TIMER_SNAPH(TIMER_BASE);
    101e8:	14440d37 	ldwio	r17,4148(r2)
   // printf("%u\n", curr_time);
-  alt_32 time_diff = prev_time -curr_time;
+  alt_32 time_diff = prev_time - curr_time;
    101ec:	d4206f17 	ldw	r16,-32324(gp)
    101f0:	8461c83a 	sub	r16,r16,r17
-  alt_32 time_diff_µsec = time_diff * 1310;
-//   alt_16 time_diff_sec = time_diff_µsec/1000000;
-  alt_16 time_diff_msec = time_diff_µsec/1000;
 
-  if ( time_diff > 8 ){  // valid tap if 10ms have passed since last tap
-   101f4:	80800250 	cmplti	r2,r16,9
+
+//   alt_u8* tap_datap = (alt_u8*) &tap_data;
+
+
+  if ( time_diff > 16 ){  // valid tap if 10ms have passed since last tap
+   101f4:	80800450 	cmplti	r2,r16,17
    101f8:	10001b1e 	bne	r2,zero,10268 <accelerometer_isr+0xac>
 
+    // alt_u8 tap_data[2];
+    // tap_data[0] = (time_diff_msec>>8) & 0xff; //top 8 bits of timestamp
+    // tap_data[1] = time_diff_msec & 0xff; //bottom 8 bits of timestamp
     alt_putstr("taps: ");
    101fc:	01000074 	movhi	r4,1
    10200:	21046d04 	addi	r4,r4,4532
@@ -663,10 +667,13 @@ void accelerometer_isr(){
    1025c:	01000074 	movhi	r4,1
    10260:	21047704 	addi	r4,r4,4572
    10264:	0010d980 	call	10d98 <alt_putstr>
-  }
+    //alt_avalon_spi_command(SPI_BASE, 0 ,0x2, (alt_u8*) &tap_data, 0, 0, 0);
 
+  }
+  
   prev_time = curr_time;
    10268:	d4606f15 	stw	r17,-32324(gp)
+
 }
    1026c:	dfc00317 	ldw	ra,12(sp)
    10270:	dc400217 	ldw	r17,8(sp)

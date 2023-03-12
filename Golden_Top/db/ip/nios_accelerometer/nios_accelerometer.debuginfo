@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <EnsembleReport name="nios_accelerometer" kind="system" version="20.1" fabric="QSYS">
  <!-- Format version 20.1 720 (Future versions may contain additional information.) -->
- <!-- 2023.03.12.17:44:31 -->
+ <!-- 2023.03.12.19:32:52 -->
  <!-- A collection of modules and connections -->
  <parameter name="clockCrossingAdapter">
   <type>com.altera.sopcmodel.ensemble.EClockAdapter</type>
@@ -53,7 +53,7 @@
  </parameter>
  <parameter name="generationId">
   <type>int</type>
-  <value>1678643065</value>
+  <value>1678649567</value>
   <derived>false</derived>
   <enabled>true</enabled>
   <visible>true</visible>
@@ -6817,7 +6817,7 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.TARGETCLOCK</name>
-   <value>10000u</value>
+   <value>1000u</value>
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.TARGETSSDELAY</name>
@@ -6921,7 +6921,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="targetClockRate">
    <type>long</type>
-   <value>10000</value>
+   <value>1000</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -6956,7 +6956,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="actualClockRate">
    <type>double</type>
-   <value>10000.0</value>
+   <value>1000.0</value>
    <derived>true</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -14325,5 +14325,5 @@ parameters are a RESULT of the module parameters. -->
   <version>20.1</version>
  </plugin>
  <reportVersion>20.1 720</reportVersion>
- <uniqueIdentifier>E884A53DC3FE00000186D6EC7BB6</uniqueIdentifier>
+ <uniqueIdentifier>E884A53DC3FE00000186D74FAF3E</uniqueIdentifier>
 </EnsembleReport>
