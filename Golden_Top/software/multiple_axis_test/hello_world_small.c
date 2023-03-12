@@ -91,7 +91,7 @@
 
 // GLOBALS
 
-int tap_counter = 0;
+// int tap_counter = 0;
 
 alt_32 prev_time = 0;
 
@@ -127,9 +127,10 @@ void accelerometer_isr(){
   // printf("%u\n", curr_time);
 
   if ( prev_time - curr_time > 15 ){ // valid tap
-    alt_putstr("tap\n");
-    tap_counter++;
-    printf("%d\n", tap_counter);
+    alt_putstr("tap:");
+    printf("%d\n", prev_time - curr_time);
+    // tap_counter++;
+    // printf("%d\n", tap_counter);
   }
 
   prev_time = curr_time;
