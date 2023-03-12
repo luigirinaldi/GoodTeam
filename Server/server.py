@@ -1,7 +1,7 @@
 import asyncio
 import tornado.web
 import json
-from utils import MainHandler
+from .utils import MainHandler
 
 def make_app():
     return tornado.web.Application([
@@ -13,5 +13,5 @@ async def main():
     app.listen(8888)
     await asyncio.Event().wait()
 
-if __name__ == "__main__":
+def start():
     asyncio.run(main())

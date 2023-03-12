@@ -7,8 +7,4 @@ class TapHandler:
         self.tap_buffer = []
         self.message_out_buffer = []
     
-    def word_finished(self):
-        if len(self.tap_buffer) > 2:
-            start_time = self.tap_buffer[-2]
-            end_time = self.tap_buffer[-1]
-            
+    

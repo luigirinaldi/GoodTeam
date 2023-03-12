@@ -70,6 +70,7 @@ def splitTaps(taps,delay=100,var=0):
             split.append(sub)
             sub=[]
 def tapsToWord(taps, delay=100, var=0):
+    #actual useful function
     word = ""
     indexList=[]
     index = []
