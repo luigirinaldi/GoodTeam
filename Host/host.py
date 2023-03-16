@@ -10,6 +10,10 @@ import requests
 
 import utils
 
+def saveTapsToFile(taps, filename):
+  with open(f'sample_data/{filename}.json', 'w',encoding='utf-8') as f:
+    json.dump(taps, f)
+
 timestamps = []
 
 try:
@@ -62,13 +66,14 @@ while(True):
   if time_elapsed > 2:
     if len(timestamps) > 0:
       # pprint(timestamps)
-      # convert to unix
+      # convert to unix 
       timestamps = [ datetime.datetime.timestamp(x) for x in timestamps]
       json_data = {
           "test":"test_data",
           "taps": timestamps
       }
-
+      saveTapsToFile(json_data, 'Thexquickxbrownxfoxxjumpsxoverxthexlazyxdog_fastEnd')
+      print("saved to file")
       try:
         response = requests.get(SERVER_URL, data = json.dumps(json_data))
         print("Sent data, received response:", response)

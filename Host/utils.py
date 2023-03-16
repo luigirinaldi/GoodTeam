@@ -12,10 +12,13 @@ tapTable = [["A","B","C","D","E"],
 
 def letterToIndex(search,table):
     #searches for an input letter in a given table and returns the tap index 
-    for (y,row) in enumerate(table):
-        for (x,letter) in enumerate(row):
-            if search.strip().lower() == letter.lower():
-                return (y+1,x+1)
+    if (search.strip().lower() == "k"):
+        return (1, 3)
+    else:
+        for (y,row) in enumerate(table):
+            for (x,letter) in enumerate(row):
+                if search.strip().lower() == letter.lower():
+                    return (y+1,x+1)
 
 def indexToTap(index,delay=100,var=0,delayFactor=2):
     #takes a tap index and generates simulated tap data with delay between each tap and random range (ms)
@@ -47,7 +50,7 @@ def wordToTaps(word,table=tapTable,delay=100,var=0,delayFactor=2):
     for letter in word:
         index.extend(letterToIndex(letter,table))
     taps = indexToTap(index,delay=delay,var=var,delayFactor=delayFactor)
-    return taps
+    return index
 
 def indexToLetter(y,x,table=tapTable):
     #takes an index e.g(5,2) and returns the letter from a given table
