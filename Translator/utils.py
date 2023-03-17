@@ -2,6 +2,7 @@ from random import random
 from pprint import pprint
 import datetime
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 tapTable = [["A","B","C","D","E"],
@@ -51,7 +52,10 @@ def wordToTaps(word,table=tapTable,delay=100,var=0,delayFactor=2):
 
 def indexToLetter(y,x,table=tapTable):
     #takes an index e.g(5,2) and returns the letter from a given table
-    return table[y-1][x-1]
+    try:
+        return table[y-1][x-1]
+    except:
+        return "ඞ"
 
 def splitTaps(taps,delay=100,var=0):
     #takes taps, delay and variance and splits up the taps into letters 
@@ -74,7 +78,7 @@ def tapsToWord(taps, delay=100, var=0):
     word = ""
     indexList=[]
     index = []
-    taps = [len(x) for x in splitTaps(taps,var=20)]
+    taps = [len(x) for x in splitTaps(taps,delay=delay,var=var)]
     for tap in taps:
         if not len(index)%2 :
             index.append(tap)
@@ -86,9 +90,32 @@ def tapsToWord(taps, delay=100, var=0):
     if any(index):
         indexList.append(index)
     for l in indexList:
-        letter = indexToLetter(l[0],l[1])
-        word = word + letter
+        try:
+            letter = indexToLetter(l[0],l[1])
+            word = word + letter
+        except:
+            word = word 
     return word
-        
 
+def getDelay(taps,threshold=0.5):
+    taps = [tap['time'].timestamp() for tap in taps]
+    delays = [j-i for i, j in zip(taps[:-1], taps[1:])]
+    counts,bin = np.histogram(delays, bins=50, density=True)
+    new = []
+    total = 0
+    for val in counts:
+        total = val + total
+        new.append(total)
+    cum = [x/total for x in new]
+    #plt.stairs(cum,bin)
+    counts =[x/max(counts) for x in counts]
+    #plt.stairs(counts,bin)
+    for idx in range(len(cum)):
+        if cum[idx]>threshold and counts[idx]==0 :
+            delay = bin[idx]
+            print(f'delay = {delay} s')
+            break
+    #plt.axvline(x = delay, color = 'g', label = 'delay threshold')
+    #plt.show()
+    return delay*1000
 
