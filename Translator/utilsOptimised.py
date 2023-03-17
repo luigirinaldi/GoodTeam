@@ -4,11 +4,11 @@ import datetime
 import matplotlib.pyplot as plt
 
 
-tapTable = [["E","A","N","D","W"],
-            ["T","I","R","M","P"],
-            ["O","H","U","Y","J"],
-            ["S","C","G","V","Q"],
-            ["L","F","B","X","Z"]]
+tapTable = [["X","T","I","R","M"],
+            ["E","O","H","U","Y"],
+            ["A","S","C","G","V"],
+            ["N","L","F","B","Q"],
+            ["D","W","P","J","Z"]]
 
 def letterToIndex(search,table):
     #searches for an input letter in a given table and returns the tap index 
