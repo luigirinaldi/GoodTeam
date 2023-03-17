@@ -89,6 +89,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#define CHARLIM 256
+
+int getBin(char letter);
+void print7seg(const char letters[6]);
+
 // GLOBALS
 
 // int tap_counter = 0;
@@ -137,6 +142,47 @@ void accelerometer_isr(){
   prev_time = curr_time;
 }
 
+int compare_strings(char * string_1, char * string_2){
+    int i = 0;
+    while(string_1[i] != '\0' && string_2[i] != '\0'){
+        if(string_1[i] != string_2[i]) return 0;
+        i++;
+    }
+
+    return 1;
+}
+
+void readText(){
+    char newChar = alt_getchar();  // blocking function that waits for information by the python program
+    alt_up_accelerometer_spi_write(acc_dev, 0x2E, 0b00000000); // disble single tap to generate interrupts, stop the acceleometer from generating taps and possibly breaking the uart communication
+    char *text = calloc(CHARLIM, sizeof(char)); 
+    int i_txt = 0;
+    while (newChar != EOF && newChar != '\n' && i_txt < CHARLIM) <%
+        text[i_txt++] = newChar;
+        newChar = alt_getchar();
+    %>
+
+    text[i_txt] = '\0';
+
+
+    printf("I just received:'");
+    alt_putstr(text);
+    alt_putstr("'\n");
+
+    char letters[6];
+
+    for (int i = 0; i < i_txt; i++){
+      letters[i] = text[i];
+    }
+
+    print7seg(letters);
+
+    memset(text, 0, 2*CHARLIM);
+    alt_up_accelerometer_spi_write(acc_dev, 0x2E, 0b01000000); // enable single tap to generate interrupts
+    return;  
+}
+
+
 int main()
 { 
   alt_putstr("Hello from Nios II!\n");
@@ -168,7 +214,101 @@ int main()
 
   while (1){
     // printf("accel interrupts: %d\n", tap_counter);
+    readText();
   };
 
   return 0;
+}
+
+
+//Prints each of the letters out to the screen
+void print7seg(const char letters[6]){
+	//Takes the binary value for each letter and places it on each of the six 7-segment displays
+	IOWR_ALTERA_AVALON_PIO_DATA(HEX5_BASE, letters[5]);
+	IOWR_ALTERA_AVALON_PIO_DATA(HEX4_BASE, letters[4]);
+	IOWR_ALTERA_AVALON_PIO_DATA(HEX3_BASE, letters[3]);
+	IOWR_ALTERA_AVALON_PIO_DATA(HEX2_BASE, letters[2]);
+	IOWR_ALTERA_AVALON_PIO_DATA(HEX1_BASE, letters[1]);
+	IOWR_ALTERA_AVALON_PIO_DATA(HEX0_BASE, letters[0]);
+	return;
+}
+
+//Gets the binary representation of the character
+int getBin(char letter){
+	/*Based on the character entered, we convert to binary so the 7-segment knows which lights to turn on.
+	The 7-segment has inverted logic so a 0 means the light is on and a 1 means the light is off.
+	The rightmost bit starts the index at HEX#[0], and the leftmost bit is HEX#[6], the pattern
+	for the 7-segment is shown in the DE0_C5 User Manual*/
+	switch(letter){
+	case '0':
+		return 0b1000000;
+	case '1':
+		return 0b1111001;
+	case '2':
+		return 0b0100100;
+	case '3':
+		return 0b0110000;
+	case '4':
+		return 0b0011001;
+	case '5':
+		return 0b0010010; // jake's capping
+	case '6':
+		return 0b0000010;
+	case '7':
+		return 0b1111000;
+	case '8':
+		return 0b0000000;
+	case '9':
+		return 0b0010000;
+	case 'A':
+		return 0b0001000;
+	case 'B'://Lowercase
+		return 0b0000011;
+	case 'C':
+		return 0b1000110;
+	case 'D'://Lowercase
+		return 0b0100001;
+	case 'E':
+		return 0b0000110;
+	case 'F':
+		return 0b0001110;
+	case 'G':
+		return 0b0010000;
+	case 'H':
+		return 0b0001001;
+	case 'I':
+		return 0b1111001;
+	case 'J':
+		return 0b1110001;
+	case 'K':
+		return 0b0001010;
+	case 'L':
+		return 0b1000111;
+	case 'N':
+		return 0b0101011;
+	case 'O':
+		return 0b1000000;
+	case 'P':
+		return 0b0001100;
+	case 'Q':
+		return 0b0011000;
+	case 'R'://Lowercase
+		return 0b0101111;
+	case 'S':
+		return 0b0010010;
+	case 'T':
+		return 0b0000111;
+	case 'U':
+		return 0b1000001;
+	case 'V':
+		return 0b1100011;
+	case 'X':
+		return 0b0011011;
+	case 'Y':
+		return 0b0010001;
+	case 'Z':
+		return 0b0100100;
+	default:
+		return 0b1111111;
+	}
 }

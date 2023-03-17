@@ -316,6 +316,7 @@ int getBin(char letter){
 	case '4':
 		return 0b0011001;
 	case '5':
+		return 0b0010010; // jake's capping
 	case '6':
 		return 0b0000010;
 	case '7':

@@ -1,5 +1,7 @@
 {
 	"files.associations": {
-		"altera_up_avalon_accelerometer_spi.h": "c"
+		"*.flex": "lex",
+		"altera_up_avalon_accelerometer_spi.h": "c",
+		"seven_seg_display": "c"
 	}
 }
