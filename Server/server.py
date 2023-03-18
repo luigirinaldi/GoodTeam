@@ -1,12 +1,13 @@
 import asyncio
 import tornado.web
 import json
-from .utils import MainHandler, PingHandler
+from .utils import MainHandler, PingHandler, StatusHandler
 
 def make_app():
     return tornado.web.Application([
         (r"/", MainHandler),
         (r"/ping", PingHandler),
+        (r"/status", StatusHandler),
     ])
 
 async def main():
