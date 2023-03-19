@@ -113,7 +113,7 @@ alt_up_accelerometer_spi_dev * acc_dev;
 
 void updateTextISR() {
   IOWR_ALTERA_AVALON_TIMER_STATUS(TIMER_1_BASE, 0);
-  printf("printing %s of length %d\n", currMsg.text, currMsg.length);
+  // printf("printing %s of length %d\n", currMsg.text, currMsg.length);
   
   if (currMsg.length == 0){
     char buffer[6] = {0xFF,0xFF,0xFF,0xFF,0xFF,0xFF};
@@ -242,9 +242,9 @@ void readText(){
     
     currMsg.loopCount = 0;
 
-    printf("I just received:'");
-    alt_putstr(text);
-    alt_putstr("'\n");
+    // printf("I just received:'");
+    // alt_putstr(text);
+    // alt_putstr("'\n");
 
     memset(text, 0, 2*CHARLIM);
 
@@ -383,7 +383,7 @@ int getBin(char letter){
   case 'W':
     return 0b0010101;  // skunked W
 	case 'X':
-		return 0b0011011;
+		return 0b0011011;  // skunked X 
 	case 'Y':
 		return 0b0010001;
 	case 'Z':
