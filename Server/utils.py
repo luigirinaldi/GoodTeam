@@ -26,7 +26,8 @@ class PingHandler(tornado.web.RequestHandler):
         buffer = {'messages':messages}
         if buffer['messages']:
             for message in messages:
-                messageQueue.remove(message)
+                if not (message["to"] == -1 and message["from"] == pinger):
+                    messageQueue.remove(message)
             self.set_status(status_code=200)
             self.write(buffer)
         else:
