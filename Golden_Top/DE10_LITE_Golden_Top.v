@@ -82,7 +82,17 @@ module DE10_LITE_Golden_Top(
 		.accelerometer_spi_external_interface_I2C_SDAT      (GSENSOR_SDI),      // accelerometer_spi_external_interface.I2C_SDAT
 		.accelerometer_spi_external_interface_I2C_SCLK      (GSENSOR_SCLK),      //                                     .I2C_SCLK
 		.accelerometer_spi_external_interface_G_SENSOR_CS_N (GSENSOR_CS_N), //                                     .G_SENSOR_CS_N
-		.accelerometer_spi_external_interface_G_SENSOR_INT  (GSENSOR_INT[1])   //                                     .G_SENSOR_INT
+		.accelerometer_spi_external_interface_G_SENSOR_INT  (GSENSOR_INT[1]),   //                                     .G_SENSOR_INT                                 
+		.hex_0_external_connection_export(HEX0[7:0]),                   //            hex_0_external_connection.export
+		.hex_1_external_connection_export(HEX1[7:0]),                   //            hex_1_external_connection.export
+		.hex_2_external_connection_export(HEX2[7:0]),                   //            hex_2_external_connection.export
+		.hex_3_external_connection_export(HEX3[7:0]),                   //            hex_3_external_connection.export
+		.hex_4_external_connection_export(HEX4[7:0]),                   //            hex_4_external_connection.export
+		.hex_5_external_connection_export(HEX5[7:0]),                   //            hex_5_external_connection.export
+		.spi_external_MISO(GPIO[2]),                                  //                         spi_external.MISO
+		.spi_external_MOSI(GPIO[0]),                                  //                                     .MOSI
+		.spi_external_SCLK(GPIO[4]),                                  //                                     .SCLK
+		.spi_external_SS_n(GPIO[6])  
 	);
 
 

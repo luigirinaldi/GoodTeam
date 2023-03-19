@@ -4,7 +4,7 @@
  * Machine generated for CPU 'cpu' in SOPC Builder design 'nios_accelerometer'
  * SOPC Builder design path: ../../nios_accelerometer.sopcinfo
  *
- * Generated: Sun Feb 26 15:39:38 GMT 2023
+ * Generated: Sun Mar 19 15:54:14 GMT 2023
  */
 
 /*
@@ -136,6 +136,7 @@
 #define __ALTERA_AVALON_JTAG_UART
 #define __ALTERA_AVALON_ONCHIP_MEMORY2
 #define __ALTERA_AVALON_PIO
+#define __ALTERA_AVALON_SPI
 #define __ALTERA_AVALON_TIMER
 #define __ALTERA_NIOS2_GEN2
 #define __ALTERA_UP_AVALON_ACCELEROMETER_SPI
@@ -157,19 +158,19 @@
 #define ALT_NUM_INTERNAL_INTERRUPT_CONTROLLERS 1
 #define ALT_NUM_INTERRUPT_CONTROLLERS 1
 #define ALT_STDERR "/dev/jtag_uart"
-#define ALT_STDERR_BASE 0x21030
+#define ALT_STDERR_BASE 0x210b0
 #define ALT_STDERR_DEV jtag_uart
 #define ALT_STDERR_IS_JTAG_UART
 #define ALT_STDERR_PRESENT
 #define ALT_STDERR_TYPE "altera_avalon_jtag_uart"
 #define ALT_STDIN "/dev/jtag_uart"
-#define ALT_STDIN_BASE 0x21030
+#define ALT_STDIN_BASE 0x210b0
 #define ALT_STDIN_DEV jtag_uart
 #define ALT_STDIN_IS_JTAG_UART
 #define ALT_STDIN_PRESENT
 #define ALT_STDIN_TYPE "altera_avalon_jtag_uart"
 #define ALT_STDOUT "/dev/jtag_uart"
-#define ALT_STDOUT_BASE 0x21030
+#define ALT_STDOUT_BASE 0x210b0
 #define ALT_STDOUT_DEV jtag_uart
 #define ALT_STDOUT_IS_JTAG_UART
 #define ALT_STDOUT_PRESENT
@@ -182,7 +183,7 @@
  *
  */
 
-#define ACCELEROMETER_SPI_BASE 0x21038
+#define ACCELEROMETER_SPI_BASE 0x210b8
 #define ACCELEROMETER_SPI_IRQ 0
 #define ACCELEROMETER_SPI_IRQ_INTERRUPT_CONTROLLER_ID 0
 #define ACCELEROMETER_SPI_NAME "/dev/accelerometer_spi"
@@ -203,12 +204,174 @@
 
 
 /*
+ * hex_0 configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_hex_0 altera_avalon_pio
+#define HEX_0_BASE 0x21090
+#define HEX_0_BIT_CLEARING_EDGE_REGISTER 0
+#define HEX_0_BIT_MODIFYING_OUTPUT_REGISTER 0
+#define HEX_0_CAPTURE 0
+#define HEX_0_DATA_WIDTH 7
+#define HEX_0_DO_TEST_BENCH_WIRING 0
+#define HEX_0_DRIVEN_SIM_VALUE 0
+#define HEX_0_EDGE_TYPE "NONE"
+#define HEX_0_FREQ 50000000
+#define HEX_0_HAS_IN 0
+#define HEX_0_HAS_OUT 1
+#define HEX_0_HAS_TRI 0
+#define HEX_0_IRQ -1
+#define HEX_0_IRQ_INTERRUPT_CONTROLLER_ID -1
+#define HEX_0_IRQ_TYPE "NONE"
+#define HEX_0_NAME "/dev/hex_0"
+#define HEX_0_RESET_VALUE 0
+#define HEX_0_SPAN 16
+#define HEX_0_TYPE "altera_avalon_pio"
+
+
+/*
+ * hex_1 configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_hex_1 altera_avalon_pio
+#define HEX_1_BASE 0x21080
+#define HEX_1_BIT_CLEARING_EDGE_REGISTER 0
+#define HEX_1_BIT_MODIFYING_OUTPUT_REGISTER 0
+#define HEX_1_CAPTURE 0
+#define HEX_1_DATA_WIDTH 7
+#define HEX_1_DO_TEST_BENCH_WIRING 0
+#define HEX_1_DRIVEN_SIM_VALUE 0
+#define HEX_1_EDGE_TYPE "NONE"
+#define HEX_1_FREQ 50000000
+#define HEX_1_HAS_IN 0
+#define HEX_1_HAS_OUT 1
+#define HEX_1_HAS_TRI 0
+#define HEX_1_IRQ -1
+#define HEX_1_IRQ_INTERRUPT_CONTROLLER_ID -1
+#define HEX_1_IRQ_TYPE "NONE"
+#define HEX_1_NAME "/dev/hex_1"
+#define HEX_1_RESET_VALUE 0
+#define HEX_1_SPAN 16
+#define HEX_1_TYPE "altera_avalon_pio"
+
+
+/*
+ * hex_2 configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_hex_2 altera_avalon_pio
+#define HEX_2_BASE 0x21070
+#define HEX_2_BIT_CLEARING_EDGE_REGISTER 0
+#define HEX_2_BIT_MODIFYING_OUTPUT_REGISTER 0
+#define HEX_2_CAPTURE 0
+#define HEX_2_DATA_WIDTH 7
+#define HEX_2_DO_TEST_BENCH_WIRING 0
+#define HEX_2_DRIVEN_SIM_VALUE 0
+#define HEX_2_EDGE_TYPE "NONE"
+#define HEX_2_FREQ 50000000
+#define HEX_2_HAS_IN 0
+#define HEX_2_HAS_OUT 1
+#define HEX_2_HAS_TRI 0
+#define HEX_2_IRQ -1
+#define HEX_2_IRQ_INTERRUPT_CONTROLLER_ID -1
+#define HEX_2_IRQ_TYPE "NONE"
+#define HEX_2_NAME "/dev/hex_2"
+#define HEX_2_RESET_VALUE 0
+#define HEX_2_SPAN 16
+#define HEX_2_TYPE "altera_avalon_pio"
+
+
+/*
+ * hex_3 configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_hex_3 altera_avalon_pio
+#define HEX_3_BASE 0x21060
+#define HEX_3_BIT_CLEARING_EDGE_REGISTER 0
+#define HEX_3_BIT_MODIFYING_OUTPUT_REGISTER 0
+#define HEX_3_CAPTURE 0
+#define HEX_3_DATA_WIDTH 7
+#define HEX_3_DO_TEST_BENCH_WIRING 0
+#define HEX_3_DRIVEN_SIM_VALUE 0
+#define HEX_3_EDGE_TYPE "NONE"
+#define HEX_3_FREQ 50000000
+#define HEX_3_HAS_IN 0
+#define HEX_3_HAS_OUT 1
+#define HEX_3_HAS_TRI 0
+#define HEX_3_IRQ -1
+#define HEX_3_IRQ_INTERRUPT_CONTROLLER_ID -1
+#define HEX_3_IRQ_TYPE "NONE"
+#define HEX_3_NAME "/dev/hex_3"
+#define HEX_3_RESET_VALUE 0
+#define HEX_3_SPAN 16
+#define HEX_3_TYPE "altera_avalon_pio"
+
+
+/*
+ * hex_4 configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_hex_4 altera_avalon_pio
+#define HEX_4_BASE 0x21050
+#define HEX_4_BIT_CLEARING_EDGE_REGISTER 0
+#define HEX_4_BIT_MODIFYING_OUTPUT_REGISTER 0
+#define HEX_4_CAPTURE 0
+#define HEX_4_DATA_WIDTH 7
+#define HEX_4_DO_TEST_BENCH_WIRING 0
+#define HEX_4_DRIVEN_SIM_VALUE 0
+#define HEX_4_EDGE_TYPE "NONE"
+#define HEX_4_FREQ 50000000
+#define HEX_4_HAS_IN 0
+#define HEX_4_HAS_OUT 1
+#define HEX_4_HAS_TRI 0
+#define HEX_4_IRQ -1
+#define HEX_4_IRQ_INTERRUPT_CONTROLLER_ID -1
+#define HEX_4_IRQ_TYPE "NONE"
+#define HEX_4_NAME "/dev/hex_4"
+#define HEX_4_RESET_VALUE 0
+#define HEX_4_SPAN 16
+#define HEX_4_TYPE "altera_avalon_pio"
+
+
+/*
+ * hex_5 configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_hex_5 altera_avalon_pio
+#define HEX_5_BASE 0x21040
+#define HEX_5_BIT_CLEARING_EDGE_REGISTER 0
+#define HEX_5_BIT_MODIFYING_OUTPUT_REGISTER 0
+#define HEX_5_CAPTURE 0
+#define HEX_5_DATA_WIDTH 7
+#define HEX_5_DO_TEST_BENCH_WIRING 0
+#define HEX_5_DRIVEN_SIM_VALUE 0
+#define HEX_5_EDGE_TYPE "NONE"
+#define HEX_5_FREQ 50000000
+#define HEX_5_HAS_IN 0
+#define HEX_5_HAS_OUT 1
+#define HEX_5_HAS_TRI 0
+#define HEX_5_IRQ -1
+#define HEX_5_IRQ_INTERRUPT_CONTROLLER_ID -1
+#define HEX_5_IRQ_TYPE "NONE"
+#define HEX_5_NAME "/dev/hex_5"
+#define HEX_5_RESET_VALUE 0
+#define HEX_5_SPAN 16
+#define HEX_5_TYPE "altera_avalon_pio"
+
+
+/*
  * jtag_uart configuration
  *
  */
 
 #define ALT_MODULE_CLASS_jtag_uart altera_avalon_jtag_uart
-#define JTAG_UART_BASE 0x21030
+#define JTAG_UART_BASE 0x210b0
 #define JTAG_UART_IRQ 2
 #define JTAG_UART_IRQ_INTERRUPT_CONTROLLER_ID 0
 #define JTAG_UART_NAME "/dev/jtag_uart"
@@ -226,7 +389,7 @@
  */
 
 #define ALT_MODULE_CLASS_led altera_avalon_pio
-#define LED_BASE 0x21020
+#define LED_BASE 0x210a0
 #define LED_BIT_CLEARING_EDGE_REGISTER 0
 #define LED_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define LED_CAPTURE 0
@@ -277,13 +440,44 @@
 
 
 /*
+ * spi configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_spi altera_avalon_spi
+#define SPI_BASE 0x21000
+#define SPI_CLOCKMULT 1
+#define SPI_CLOCKPHASE 0
+#define SPI_CLOCKPOLARITY 0
+#define SPI_CLOCKUNITS "Hz"
+#define SPI_DATABITS 8
+#define SPI_DATAWIDTH 16
+#define SPI_DELAYMULT "1.0E-9"
+#define SPI_DELAYUNITS "ns"
+#define SPI_EXTRADELAY 0
+#define SPI_INSERT_SYNC 0
+#define SPI_IRQ 3
+#define SPI_IRQ_INTERRUPT_CONTROLLER_ID 0
+#define SPI_ISMASTER 1
+#define SPI_LSBFIRST 0
+#define SPI_NAME "/dev/spi"
+#define SPI_NUMSLAVES 1
+#define SPI_PREFIX "spi_"
+#define SPI_SPAN 32
+#define SPI_SYNC_REG_DEPTH 2
+#define SPI_TARGETCLOCK 1000u
+#define SPI_TARGETSSDELAY "0.0"
+#define SPI_TYPE "altera_avalon_spi"
+
+
+/*
  * timer configuration
  *
  */
 
 #define ALT_MODULE_CLASS_timer altera_avalon_timer
 #define TIMER_ALWAYS_RUN 0
-#define TIMER_BASE 0x21000
+#define TIMER_BASE 0x21020
 #define TIMER_COUNTER_SIZE 32
 #define TIMER_FIXED_PERIOD 0
 #define TIMER_FREQ 50000000

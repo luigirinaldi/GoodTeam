@@ -224,12 +224,12 @@ int main()
 //Prints each of the letters out to the screen
 void print7seg(const char letters[6]){
 	//Takes the binary value for each letter and places it on each of the six 7-segment displays
-	IOWR_ALTERA_AVALON_PIO_DATA(HEX5_BASE, letters[5]);
-	IOWR_ALTERA_AVALON_PIO_DATA(HEX4_BASE, letters[4]);
-	IOWR_ALTERA_AVALON_PIO_DATA(HEX3_BASE, letters[3]);
-	IOWR_ALTERA_AVALON_PIO_DATA(HEX2_BASE, letters[2]);
-	IOWR_ALTERA_AVALON_PIO_DATA(HEX1_BASE, letters[1]);
-	IOWR_ALTERA_AVALON_PIO_DATA(HEX0_BASE, letters[0]);
+	IOWR_ALTERA_AVALON_PIO_DATA(HEX_5_BASE, getBin(letters[5]));
+	IOWR_ALTERA_AVALON_PIO_DATA(HEX_4_BASE, getBin(letters[4]));
+	IOWR_ALTERA_AVALON_PIO_DATA(HEX_3_BASE, getBin(letters[3]));
+	IOWR_ALTERA_AVALON_PIO_DATA(HEX_2_BASE, getBin(letters[2]));
+	IOWR_ALTERA_AVALON_PIO_DATA(HEX_1_BASE, getBin(letters[1]));
+	IOWR_ALTERA_AVALON_PIO_DATA(HEX_0_BASE, getBin(letters[0]));
 	return;
 }
 
@@ -251,7 +251,7 @@ int getBin(char letter){
 	case '4':
 		return 0b0011001;
 	case '5':
-		return 0b0010010; // jake's capping
+		return 0b0010010; 
 	case '6':
 		return 0b0000010;
 	case '7':
@@ -284,6 +284,8 @@ int getBin(char letter){
 		return 0b0001010;
 	case 'L':
 		return 0b1000111;
+  case 'M':
+    return 0b0101010; // shitty M
 	case 'N':
 		return 0b0101011;
 	case 'O':
@@ -302,6 +304,8 @@ int getBin(char letter){
 		return 0b1000001;
 	case 'V':
 		return 0b1100011;
+  case 'W':
+    return 0b0010101;  // skunked W
 	case 'X':
 		return 0b0011011;
 	case 'Y':

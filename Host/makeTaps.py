@@ -1,6 +1,6 @@
 from utils import *
 
-word = "The quick brown fox jumps over the lazy dog"
+word = "Good team"
 word = word.replace(" ", "x")
 print(word)
 
