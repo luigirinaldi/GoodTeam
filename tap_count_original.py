@@ -11,7 +11,8 @@ messages = [
     "How's work/school going?",
     "What did you do over the weekend?",
     "What's new with you?",
-    "Hey there, gorgeous/handsome. How's your day going?",
+    "Hey there, gorgeous. How's your day going?",
+    "Hey there, handsome. How's your day going?",
     "I can't stop thinking about you.",
     "You looked amazing today.",
     "What are you wearing?",
@@ -31,6 +32,7 @@ messages = [
     "Can we talk about what happened?",
     "I want to make things right.",
     "Please don't be mad at me.",
+    "I have a question...",
     "Just wanted to check in and see how you're doing.",
     "I'm so grateful for our friendship.",
     "Thanks for always being there for me.",
@@ -41,15 +43,19 @@ messages = [
     "I appreciate your honesty.",
     "You're like a sibling to me.",
     "You make my life better just by being in it.",
-    "How's mom/dad/sister/brother doing?",
+    "How's your mum doing?",
+    "How's your dad doing?",
+    "How's your sister doing?",
+    "How's your brother doing?",
     "Just wanted to say I love you.",
     "Thinking of you today.",
-    "Have you talked to [family member] recently?",
+    "Have you spoken to grandma recently?",
+    "Have you spoken to grandad recently?",
     "I'm proud of you.",
     "Thanks for everything you've done for me.",
-    "Can't wait to see you at [holiday/event].",
+    "Can't wait to see you at the party!",
     "Let's plan a family vacation soon.",
-    "You're the best [family member] anyone could ask for.",
+    "You're the best friend anyone could ask for.",
     "I'm grateful to have you in my life.",
     "What time are we meeting up?",
     "Where should we go for dinner tonight?",
@@ -66,11 +72,36 @@ messages = [
     "You look great today.",
     "I'm so proud of you.",
     "You're so talented.",
-    "Congrats on the engagement/marriage/baby.",
+    "Congrats on the engagement.",
+    "Congrats on the marriage.",
+    "Congrats on the baby.",
     "You're an inspiration to me.",
-    "You're so kind/generous/thoughtful.",
+    "You're so kind.",
+    "You're so thoughtful.",
+    "You're so generous.",
     "I admire your strength.",
     "You make the world a better place."
+    "What's your favorite movie/book/song?",
+    "Do you have any pets?",
+    "How many siblings do you have?",
+    "What's your job?",
+    "Where are you from?",
+    "What's your favorite food?",
+    "What's your favorite hobby?",
+    "How old are you?",
+    "What's your favorite color?",
+    "What's your favorite season?",
+    "Do you like sports?",
+    "Are you a morning person or a night owl?",
+    "Do you prefer tea or coffee?",
+    "Do you have any allergies?",
+    "What's your favorite TV show?",
+    "Nice new hair cut, bro!",
+    "Chem floor 6? Which room?",
+    "Fancy getting a drink later ;)",
+    "Want to grab a cup of coffee?",
+    "Am running late",
+    "I'm in the EEE bottom floor labs rn, want to cry"
 
 ]
 
@@ -109,30 +140,37 @@ letter_counts = {}
 for i in range(len(messages)):
 
     my_message = messages[i]
-    print(my_message)
-
+    
+    #replaces spaces with x
     my_message=my_message.replace(' ', "x")
 
+    #removes all special characters and numbers
     special_characters=['@','#','$','*','&','!','"','%',"'",'(',')','+',',','-','.','/','<',':',';','=','>','?', '[','\\',']','^','_','`','{','}','|','~','1','2','3','4','5','6','7','8','9','0']
     for j in special_characters:
         my_message = my_message.replace(j,"")
         
+    #makes all letters upper case
     my_message=my_message.upper()
+
+    print(my_message)
 
     for letter in my_message:
 
-        # Create a dictionary to hold the letter counts for this message
+        # Creates a dictionary to hold the letter counts for this message
         if letter in letter_counts:
             letter_counts[letter] += 1
         else:
             letter_counts[letter] = 1
+    
+    num_letters = len(my_message)
+    print(num_letters)
 
     taps_count = 0
 
-    # Print the letter counts for each letter
+    # Prints the letter counts for each letter
     for letter, count in letter_counts.items():
         taps_count += switcher[letter] * count
-        print(f"{letter}: {count}")
+        #print(f"{letter}: {count}")
     print("Tap count:", taps_count)
 
     letter_counts = {}
