@@ -29,9 +29,15 @@ SAMPLE_TIME = 0.001
 
 ################## CHANGE URL ####################
 SERVER_URL = "http://54.90.46.38:8888/" 
-SERVER_PING = "http://54.90.46.38:8888/ping" 
+SERVER_PING = SERVER_URL+"ping"
+SERVER_START = SERVER_URL+"start"
+SERVER_STATUS = SERVER_URL+"status" 
 ##################################################
 
+deviceID = 42
+start_res = requests.get(url=SERVER_START)
+if start_res.status_code==200:
+   deviceID = start_res.json()["deviceID"]
 isFirstMessage = True
 timestamp = datetime.datetime.now()
 unixtimestamp = time.mktime(timestamp.timetuple()) * 1000
@@ -40,7 +46,8 @@ time_elapsed = 0
 
 
 while(True):
-  response = requests.get(SERVER_PING) # ALWAYS check server 
+  ping_data = {"DeviceID" : deviceID}
+  response = requests.get(SERVER_PING, data = ping_data) # ALWAYS check server 
   time.sleep(SAMPLE_TIME)
   b = nios.read().decode()
   if b != '':
@@ -65,18 +72,18 @@ while(True):
     time_elapsed += SAMPLE_TIME
 
   if time_elapsed > 2: #user stop tapping
-     '''
-      1. Always pinging the main server at SERVER_PING using the requests library
-        a. If user is sending data then stop pinging and wait for 5 seconds. 
-        b. Else GET data from server --> Status: Busy 
-      2. Save received data and convert to bytes 
-      3. Send data to FPGA using intel.write(data)
-      4. Set --> Status: Available 
-      5. Go back to step 1
+    '''
+    1. Always pinging the main server at SERVER_PING using the requests library
+      a. If user is sending data then stop pinging and wait for 5 seconds. 
+      b. Else GET data from server --> Status: Busy 
+    2. Save received data and convert to bytes 
+    3. Send data to FPGA using intel.write(data)
+    4. Set --> Status: Available 
+    5. Go back to step 1
 
-      check if stuff to send to server |OK|
-      check if stuff to send to user   |OK|
-      '''
+    check if stuff to send to server |OK|
+    check if stuff to send to user   |OK|
+    '''
     # Send to user
     if response.status_code == 200:
       if not response.text:  # if no data is being sent --> server finished sending
@@ -89,7 +96,9 @@ while(True):
       timestamps = [ datetime.datetime.timestamp(x) for x in timestamps] # convert to unix 
       json_data = {
           "test":"test_data",
-          "taps": timestamps
+          "taps": timestamps,
+          "DeviceID" : deviceID,
+          "RecipientID" : -1
       }
       try:
         response = requests.get(SERVER_URL, data = json.dumps(json_data))
