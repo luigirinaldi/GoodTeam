@@ -1,162 +1,132 @@
-import subprocess
-import time
+import intel_jtag_uart
 import sys
-import matplotlib.pyplot as plt
-import numpy as np
-import math
-import queue
-from datetime import datetime, timedelta
+import time
+import datetime
+import matplotlib.pyplot
+import matplotlib.dates
+import json
+from pprint import pprint
+import requests
 
-Accel = []
-Magnitude = []
-Magn_filt = []
-X_time = []
-Taps = []
+import utils
 
-TAP_SIZE = 2
-TAP_THRESH = 7
-
-def main():
-    with subprocess.Popen(
-        [
-            "nios2-terminal"
-        ],
-        stdin = subprocess.PIPE,
-        stdout = subprocess.PIPE
-    ) as process:
-        
-        delta_t = 1e-3 # 100 microseconds
-        damp = 0.005
-
-        num_samples = 0
-        prevTap = 0
-
-        isTapping = False
-        numTaps = 0
-
-        # moving average
-        AVG_SIZE = 3
-        avg_vals = queue.Queue(AVG_SIZE)
-
-        end_t = time.time()
-        start_time = datetime.now()
-        
-        prevResult = ""
-
-        while True:
-
-            result = process.stdout.readline().decode("utf-8").strip()
-            
-            if result != prevResult:            
-                accs = result.split(",")
-                # print(result)
-
-                try:
-                    a = [int(x) for x in accs]
-                    Accel.append(a)
-
-                    magn = math.sqrt(a[0]**2 + a[1]**2 + a[2]**2)
-                    Magnitude.append(magn)
-
-                    # # print(f"{magn:.2f}", a)
-                    # if (magn >= TAP_SIZE):
-                    #     Taps.append(100)
-                    #     print(datetime.now(), "normal Tap")
-                    # else:
-                    #     Taps.append(-TAP_SIZE)
+def saveTapsToFile(taps, filename):
+	with open(f'sample_data/{filename}.json', 'w',encoding='utf-8') as f:
+		json.dump(taps, f)
 
 
-                    # FILTERING
-                    # compute moving average
-                    if avg_vals.full(): # remove extra vals
-                        avg_vals.get()
-                    avg_vals.put(magn) # add new value
+try:
+	nios = intel_jtag_uart.intel_jtag_uart()
+except Exception as e:
+	print(e)
+	sys.exit(0)
+	
+print(nios.get_info())
 
-                    filt_magn = 0
-                    # # print(list(x_vals.queue))
-                    for i, val in enumerate(list(avg_vals.queue)):
-                        filt_magn += val 
-                    filt_magn /= AVG_SIZE
-
-                    
-
-                    if isTapping:
-                        numTaps += 1
-                        Taps.append(40)
-                        # picks up the moment the signal goes from above to below the threshold ( falling edge )
-                        if (prevTap >= TAP_THRESH and filt_magn < TAP_THRESH):
-                            isTapping = False
-                            if numTaps >= TAP_SIZE:
-                                print(datetime.now(), "Tap!", numTaps)
-                    else:
-                        Taps.append(TAP_THRESH)
-                        # picks up Rising edge
-                        if ( filt_magn >= TAP_THRESH and prevTap < TAP_THRESH):
-                            print("Start tapping")
-                            isTapping = True
-                            numTaps = 0
+SAMPLE_TIME = 0.01
 
 
-                    prevTap = filt_magn
 
-                    Magn_filt.append(filt_magn)
-                    
-                    X_time.append(num_samples * delta_t)
+################## CHANGE URL ####################
+SERVER_IP = "52.91.126.247"
+SERVER_URL = "http://52.91.126.247:8888/"
+SERVER_PING = SERVER_URL+"ping"
+SERVER_START = SERVER_URL+"start"
+SERVER_STATUS = SERVER_URL+"status" 
+##################################################
 
-                    num_samples += 1
+deviceID = 42
+start_res = requests.get(url=SERVER_START)
+if start_res.status_code==200:
+   deviceID = start_res.json()["deviceID"]
 
-                except:
-                    print("no data yet")
-            
-            prevResult = result
-                
-            # end_t = time.time()
-            # star_t = time.time()
-        
+timestamps = []
 
-# coeffs = [-0.0117,    0.0018,    0.0017,    0.0016,    0.0015,    0.0014,    0.0014,    0.0013,    0.0013,    0.0013,    0.0012,    0.0012,    0.0012,    0.0011,    0.0011,    0.0010,    0.0009,    0.0009,    0.0008,    0.0007,    0.0006,    0.0005,    0.0003,    0.0002,    0.0001,   -0.0001,   -0.0003,   -0.0004,   -0.0006,   -0.0008,   -0.0010,   -0.0011,   -0.0013,   -0.0015,   -0.0016,   -0.0018,   -0.0019,   -0.0021,   -0.0022,   -0.0023,   -0.0023,   -0.0024,   -0.0024,   -0.0024,   -0.0023,   -0.0022,   -0.0021,   -0.0020,   -0.0018,   -0.0016,   -0.0014,   -0.0011,   -0.0008,   -0.0005,   -0.0002,    0.0002,    0.0006,    0.0010,    0.0014,    0.0018,    0.0022,    0.0027,    0.0031,    0.0035,    0.0039,    0.0043,    0.0046,    0.0049,    0.0052,    0.0054,    0.0056,    0.0057,    0.0058,    0.0058,    0.0058,    0.0057,    0.0055,    0.0052,    0.0048,    0.0044,    0.0039,    0.0033,    0.0026,    0.0019,    0.0010,    0.0001,   -0.0009,   -0.0019,   -0.0030,   -0.0042,   -0.0055,   -0.0068,   -0.0081,   -0.0095,   -0.0108,   -0.0123,   -0.0137,   -0.0151,   -0.0166,   -0.0180,   -0.0194,   -0.0207,   -0.0221,   -0.0233,   -0.0246,   -0.0257,   -0.0268,   -0.0278,   -0.0287,   -0.0295,   -0.0303,   -0.0309,   -0.0314,   -0.0318,   -0.0321,   -0.0323,    0.9677,   -0.0323,   -0.0321,   -0.0318,   -0.0314,   -0.0309,   -0.0303,   -0.0295,   -0.0287,   -0.0278,   -0.0268,   -0.0257,   -0.0246,   -0.0233,   -0.0221,   -0.0207,   -0.0194,   -0.0180,   -0.0166,   -0.0151,   -0.0137,   -0.0123,   -0.0108,   -0.0095,   -0.0081,   -0.0068,   -0.0055,   -0.0042,   -0.0030,   -0.0019,   -0.0009,    0.0001,    0.0010,    0.0019,    0.0026,    0.0033,    0.0039,    0.0044,    0.0048,    0.0052,    0.0055,    0.0057,    0.0058,    0.0058,    0.0058,    0.0057,    0.0056,    0.0054,    0.0052,    0.0049,    0.0046,    0.0043,    0.0039,    0.0035,    0.0031,    0.0027,    0.0022,    0.0018,    0.0014,    0.0010,    0.0006,    0.0002,   -0.0002,   -0.0005,   -0.0008,   -0.0011,   -0.0014,   -0.0016,   -0.0018,   -0.0020,   -0.0021,   -0.0022,   -0.0023,   -0.0024,   -0.0024,   -0.0024,   -0.0023,   -0.0023,   -0.0022,   -0.0021,   -0.0019,   -0.0018,   -0.0016,   -0.0015,   -0.0013,   -0.0011,   -0.0010,   -0.0008,   -0.0006,   -0.0004,   -0.0003,   -0.0001,    0.0001,    0.0002,    0.0003,    0.0005,    0.0006,    0.0007,    0.0008,    0.0009,    0.0009,    0.0010,    0.0011,    0.0011,    0.0012,    0.0012,    0.0012,    0.0013,    0.0013, 0.0013,    0.0014,    0.0014,    0.0015,    0.0016,    0.0017,    0.0018,   -0.0117]
+isFirstMessage = True
+timestamp = datetime.datetime.now()
+unixtimestamp = time.mktime(timestamp.timetuple()) * 1000
 
-if __name__ == '__main__':
-    
-    try:
-        start_t = time.time()
-        main()
-    except KeyboardInterrupt:
-        print("interrupted")
-        
+time_elapsed = 0
 
-        fig = plt.figure()
-        fig.set_size_inches(15,9)
-        ax = fig.add_subplot(1,1,1)
+ping_json = {"DeviceID":deviceID}
 
-        # ax.plot(X_time, [pt[0] for pt in Accel], label='x')
-        # ax.plot(X_time, [pt[1] for pt in Accel], label='y')
-        # ax.plot(X_time, [pt[2] for pt in Accel], label='z')
+while(True):
+	time.sleep(SAMPLE_TIME)
+	
+	b = nios.read().decode()
+	
+	if b != '': # recevied a tap
+		time_elapsed = 0 # reset time elapsed since new tap has been received
+
+		if ( isFirstMessage ):
+			# get the initial start time
+			timestamp = datetime.datetime.now() 
+			isFirstMessage = False
+
+		b = b.split('\n') # obtain array of "tap:delay" values
+
+		for val in b:
+			if val != '': # check array value is not empty
+				# val is in val:time_elapsed format
+				tap, timedelta = val.split(":")
+				print(tap, timedelta)
+
+				# add elapsed time
+				timestamp += datetime.timedelta(milliseconds=int(timedelta))
+
+				timestamps.append(timestamp)
+	else:
+		# if no message has arrived add to time 
+		time_elapsed += SAMPLE_TIME
 
 
-        # ax.plot(X_time, Magnitude, '-', label='magnitude')
-        ax.plot(X_time, Magn_filt, '-m', label='magnitude filt')
+	if time_elapsed > 2: #user stop tapping
+		'''
+		1. Always pinging the main server at SERVER_PING using the requests library
+		a. If user is sending data then stop pinging and wait for 5 seconds. 
+		b. Else GET data from server --> Status: Busy 
+		2. Save received data and convert to bytes 
+		3. Send data to FPGA using intel.write(data)
+		4. Set --> Status: Available 
+		5. Go back to step 1
 
-        ax.plot(X_time, Taps, '-', label="Taps")
-        # ax1 = ax.twinx()
-        # ax1.plot(X_s, X_damping, '-y', label='damping')
-        # ax1.plot(X_s, X_v, '-r', label='velocity')
-        # ax1.plot(X_s, X_p, '-g', label='position')
+		check if stuff to send to server |OK|
+		check if stuff to send to user   |OK|
+		'''
+		# Send to server 
+		if len(timestamps) > 0: 
+			timestamps = [ datetime.datetime.timestamp(x) for x in timestamps] # convert to unix 
+			json_data = {
+				"DeviceID":deviceID,
+				"RecipientID":deviceID,
+				"taps": timestamps
+			}
 
-        # sample_p = 1e-3
-        # num_samples = len(X_s)
+			try:
+				response = requests.get(SERVER_URL, data =json.dumps(json_data))
+				print("Sent data, received response:", response)
+				pprint(json.dumps(json_data))
+			except Exception:
+				print("Sending data failed :(", Exception)
+			
+		time_elapsed = 0
+		timestamps = []
 
-        # x_fft = np.linspace(0.0, 1.0/(2.0*sample_p), len(X_s)//2)
+		response = requests.get(SERVER_PING, data=json.dumps(ping_json)) # ALWAYS check server 
+		if response.status_code == 200:	
+			# if not response.text:  # if no data is being sent --> server finished sending
+			pprint(response.text)
 
-        # y_fft = np.fft.fft(X_raw_a)
+			data = response.json()
+			print(data['messages'][0]['message'])
+			string_message = data['messages'][0]['message'] + '\n'
+			nios.write(string_message.encode('utf-8'))
+			# print(data)
 
-        # fig2 = plt.figure()
-        # fig2.set_size_inches(15,9)
 
-        # fft = fig2.add_subplot(1,1,1)
-        # fft.plot(x_fft, np.abs(y_fft[:len(X_s)//2]))
+ 
+		
 
-        plt.legend()
-        plt.show()
 
-        # exit()
+
+
