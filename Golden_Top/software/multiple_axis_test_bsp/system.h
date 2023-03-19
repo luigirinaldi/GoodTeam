@@ -4,7 +4,7 @@
  * Machine generated for CPU 'cpu' in SOPC Builder design 'nios_accelerometer'
  * SOPC Builder design path: ../../nios_accelerometer.sopcinfo
  *
- * Generated: Sun Mar 19 15:54:14 GMT 2023
+ * Generated: Sun Mar 19 16:54:09 GMT 2023
  */
 
 /*
@@ -158,19 +158,19 @@
 #define ALT_NUM_INTERNAL_INTERRUPT_CONTROLLERS 1
 #define ALT_NUM_INTERRUPT_CONTROLLERS 1
 #define ALT_STDERR "/dev/jtag_uart"
-#define ALT_STDERR_BASE 0x210b0
+#define ALT_STDERR_BASE 0x210d0
 #define ALT_STDERR_DEV jtag_uart
 #define ALT_STDERR_IS_JTAG_UART
 #define ALT_STDERR_PRESENT
 #define ALT_STDERR_TYPE "altera_avalon_jtag_uart"
 #define ALT_STDIN "/dev/jtag_uart"
-#define ALT_STDIN_BASE 0x210b0
+#define ALT_STDIN_BASE 0x210d0
 #define ALT_STDIN_DEV jtag_uart
 #define ALT_STDIN_IS_JTAG_UART
 #define ALT_STDIN_PRESENT
 #define ALT_STDIN_TYPE "altera_avalon_jtag_uart"
 #define ALT_STDOUT "/dev/jtag_uart"
-#define ALT_STDOUT_BASE 0x210b0
+#define ALT_STDOUT_BASE 0x210d0
 #define ALT_STDOUT_DEV jtag_uart
 #define ALT_STDOUT_IS_JTAG_UART
 #define ALT_STDOUT_PRESENT
@@ -183,7 +183,7 @@
  *
  */
 
-#define ACCELEROMETER_SPI_BASE 0x210b8
+#define ACCELEROMETER_SPI_BASE 0x210d8
 #define ACCELEROMETER_SPI_IRQ 0
 #define ACCELEROMETER_SPI_IRQ_INTERRUPT_CONTROLLER_ID 0
 #define ACCELEROMETER_SPI_NAME "/dev/accelerometer_spi"
@@ -209,11 +209,11 @@
  */
 
 #define ALT_MODULE_CLASS_hex_0 altera_avalon_pio
-#define HEX_0_BASE 0x21090
+#define HEX_0_BASE 0x210b0
 #define HEX_0_BIT_CLEARING_EDGE_REGISTER 0
 #define HEX_0_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define HEX_0_CAPTURE 0
-#define HEX_0_DATA_WIDTH 7
+#define HEX_0_DATA_WIDTH 8
 #define HEX_0_DO_TEST_BENCH_WIRING 0
 #define HEX_0_DRIVEN_SIM_VALUE 0
 #define HEX_0_EDGE_TYPE "NONE"
@@ -236,11 +236,11 @@
  */
 
 #define ALT_MODULE_CLASS_hex_1 altera_avalon_pio
-#define HEX_1_BASE 0x21080
+#define HEX_1_BASE 0x210a0
 #define HEX_1_BIT_CLEARING_EDGE_REGISTER 0
 #define HEX_1_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define HEX_1_CAPTURE 0
-#define HEX_1_DATA_WIDTH 7
+#define HEX_1_DATA_WIDTH 8
 #define HEX_1_DO_TEST_BENCH_WIRING 0
 #define HEX_1_DRIVEN_SIM_VALUE 0
 #define HEX_1_EDGE_TYPE "NONE"
@@ -263,11 +263,11 @@
  */
 
 #define ALT_MODULE_CLASS_hex_2 altera_avalon_pio
-#define HEX_2_BASE 0x21070
+#define HEX_2_BASE 0x21090
 #define HEX_2_BIT_CLEARING_EDGE_REGISTER 0
 #define HEX_2_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define HEX_2_CAPTURE 0
-#define HEX_2_DATA_WIDTH 7
+#define HEX_2_DATA_WIDTH 8
 #define HEX_2_DO_TEST_BENCH_WIRING 0
 #define HEX_2_DRIVEN_SIM_VALUE 0
 #define HEX_2_EDGE_TYPE "NONE"
@@ -290,11 +290,11 @@
  */
 
 #define ALT_MODULE_CLASS_hex_3 altera_avalon_pio
-#define HEX_3_BASE 0x21060
+#define HEX_3_BASE 0x21080
 #define HEX_3_BIT_CLEARING_EDGE_REGISTER 0
 #define HEX_3_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define HEX_3_CAPTURE 0
-#define HEX_3_DATA_WIDTH 7
+#define HEX_3_DATA_WIDTH 8
 #define HEX_3_DO_TEST_BENCH_WIRING 0
 #define HEX_3_DRIVEN_SIM_VALUE 0
 #define HEX_3_EDGE_TYPE "NONE"
@@ -317,11 +317,11 @@
  */
 
 #define ALT_MODULE_CLASS_hex_4 altera_avalon_pio
-#define HEX_4_BASE 0x21050
+#define HEX_4_BASE 0x21070
 #define HEX_4_BIT_CLEARING_EDGE_REGISTER 0
 #define HEX_4_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define HEX_4_CAPTURE 0
-#define HEX_4_DATA_WIDTH 7
+#define HEX_4_DATA_WIDTH 8
 #define HEX_4_DO_TEST_BENCH_WIRING 0
 #define HEX_4_DRIVEN_SIM_VALUE 0
 #define HEX_4_EDGE_TYPE "NONE"
@@ -344,11 +344,11 @@
  */
 
 #define ALT_MODULE_CLASS_hex_5 altera_avalon_pio
-#define HEX_5_BASE 0x21040
+#define HEX_5_BASE 0x21060
 #define HEX_5_BIT_CLEARING_EDGE_REGISTER 0
 #define HEX_5_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define HEX_5_CAPTURE 0
-#define HEX_5_DATA_WIDTH 7
+#define HEX_5_DATA_WIDTH 8
 #define HEX_5_DO_TEST_BENCH_WIRING 0
 #define HEX_5_DRIVEN_SIM_VALUE 0
 #define HEX_5_EDGE_TYPE "NONE"
@@ -371,7 +371,7 @@
  */
 
 #define ALT_MODULE_CLASS_jtag_uart altera_avalon_jtag_uart
-#define JTAG_UART_BASE 0x210b0
+#define JTAG_UART_BASE 0x210d0
 #define JTAG_UART_IRQ 2
 #define JTAG_UART_IRQ_INTERRUPT_CONTROLLER_ID 0
 #define JTAG_UART_NAME "/dev/jtag_uart"
@@ -389,7 +389,7 @@
  */
 
 #define ALT_MODULE_CLASS_led altera_avalon_pio
-#define LED_BASE 0x210a0
+#define LED_BASE 0x210c0
 #define LED_BIT_CLEARING_EDGE_REGISTER 0
 #define LED_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define LED_CAPTURE 0
@@ -471,28 +471,54 @@
 
 
 /*
- * timer configuration
+ * timer_0 configuration
  *
  */
 
-#define ALT_MODULE_CLASS_timer altera_avalon_timer
-#define TIMER_ALWAYS_RUN 0
-#define TIMER_BASE 0x21020
-#define TIMER_COUNTER_SIZE 32
-#define TIMER_FIXED_PERIOD 0
-#define TIMER_FREQ 50000000
-#define TIMER_IRQ 1
-#define TIMER_IRQ_INTERRUPT_CONTROLLER_ID 0
-#define TIMER_LOAD_VALUE 49999
-#define TIMER_MULT 0.001
-#define TIMER_NAME "/dev/timer"
-#define TIMER_PERIOD 1
-#define TIMER_PERIOD_UNITS "ms"
-#define TIMER_RESET_OUTPUT 0
-#define TIMER_SNAPSHOT 1
-#define TIMER_SPAN 32
-#define TIMER_TICKS_PER_SEC 1000
-#define TIMER_TIMEOUT_PULSE_OUTPUT 0
-#define TIMER_TYPE "altera_avalon_timer"
+#define ALT_MODULE_CLASS_timer_0 altera_avalon_timer
+#define TIMER_0_ALWAYS_RUN 0
+#define TIMER_0_BASE 0x21040
+#define TIMER_0_COUNTER_SIZE 32
+#define TIMER_0_FIXED_PERIOD 0
+#define TIMER_0_FREQ 50000000
+#define TIMER_0_IRQ 1
+#define TIMER_0_IRQ_INTERRUPT_CONTROLLER_ID 0
+#define TIMER_0_LOAD_VALUE 49999
+#define TIMER_0_MULT 0.001
+#define TIMER_0_NAME "/dev/timer_0"
+#define TIMER_0_PERIOD 1
+#define TIMER_0_PERIOD_UNITS "ms"
+#define TIMER_0_RESET_OUTPUT 0
+#define TIMER_0_SNAPSHOT 1
+#define TIMER_0_SPAN 32
+#define TIMER_0_TICKS_PER_SEC 1000
+#define TIMER_0_TIMEOUT_PULSE_OUTPUT 0
+#define TIMER_0_TYPE "altera_avalon_timer"
+
+
+/*
+ * timer_1 configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_timer_1 altera_avalon_timer
+#define TIMER_1_ALWAYS_RUN 0
+#define TIMER_1_BASE 0x21020
+#define TIMER_1_COUNTER_SIZE 32
+#define TIMER_1_FIXED_PERIOD 0
+#define TIMER_1_FREQ 50000000
+#define TIMER_1_IRQ 4
+#define TIMER_1_IRQ_INTERRUPT_CONTROLLER_ID 0
+#define TIMER_1_LOAD_VALUE 49999
+#define TIMER_1_MULT 0.001
+#define TIMER_1_NAME "/dev/timer_1"
+#define TIMER_1_PERIOD 1
+#define TIMER_1_PERIOD_UNITS "ms"
+#define TIMER_1_RESET_OUTPUT 0
+#define TIMER_1_SNAPSHOT 1
+#define TIMER_1_SPAN 32
+#define TIMER_1_TICKS_PER_SEC 1000
+#define TIMER_1_TIMEOUT_PULSE_OUTPUT 0
+#define TIMER_1_TYPE "altera_avalon_timer"
 
 #endif /* __SYSTEM_H_ */

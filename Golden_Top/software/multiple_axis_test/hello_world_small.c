@@ -90,6 +90,13 @@
 #include <stdio.h>
 
 #define CHARLIM 256
+#define BLANK_SPACES 3
+
+struct Message{
+  char *text;
+  int length;
+  int loopCount; 
+};
 
 int getBin(char letter);
 void print7seg(const char letters[6]);
@@ -98,24 +105,82 @@ void print7seg(const char letters[6]);
 
 // int tap_counter = 0;
 
+struct Message currMsg;
+
 alt_32 prev_time = 0;
 
 alt_up_accelerometer_spi_dev * acc_dev;
 
-void timer_init() {
+void updateTextISR() {
+  IOWR_ALTERA_AVALON_TIMER_STATUS(TIMER_1_BASE, 0);
+  printf("printing %s of length %d\n", currMsg.text, currMsg.length);
+  
+  if (currMsg.length == 0){
+    char buffer[6] = {0xFF,0xFF,0xFF,0xFF,0xFF,0xFF};
+    print7seg(buffer);
+  } else if (currMsg.length <= 6){
+    // static
+
+    char buffer[6] = {0xFF,0xFF,0xFF,0xFF,0xFF,0xFF};
+
+    for (int i = 0; i < currMsg.length; i++){
+      buffer[i] = getBin(currMsg.text[i]) | 0b10000000;
+    }
+
+    buffer[currMsg.length - 1] &= 0b01111111; // add dot at the end of the message
+
+    print7seg(buffer);
+  } else {
+    char buffer[6];
+
+    for (int i = 0; i < 6; i++){
+      if (currMsg.loopCount + i < currMsg.length) {
+        buffer[i] = getBin(currMsg.text[currMsg.loopCount + i]) | 0b10000000;
+      } else {
+        buffer[i] = getBin(currMsg.text[currMsg.loopCount + i - currMsg.length ]) | 0b10000000; 
+      }
+
+      if (currMsg.loopCount + i == currMsg.length - 1 - BLANK_SPACES) buffer[i] &= 0b01111111; // add the full stop
+    }
+
+    print7seg(buffer);
+
+    if (currMsg.loopCount < currMsg.length) currMsg.loopCount++;
+    else currMsg.loopCount = 0;
+  }
+}
+
+void timer_0_init() {
     // clock is 50 MHz
     // 0x4C4B40 is one tick per tenth of a second
     // 0x7A120 one tick per 10 millisecond
     // 0xC350 ont tick every millisecond
     // 2FA F080 one per second
-    IOWR_ALTERA_AVALON_TIMER_CONTROL(TIMER_BASE, 0x0002);
-    IOWR_ALTERA_AVALON_TIMER_STATUS(TIMER_BASE, 0);
+    IOWR_ALTERA_AVALON_TIMER_CONTROL(TIMER_0_BASE, 0x0002);
+    IOWR_ALTERA_AVALON_TIMER_STATUS(TIMER_0_BASE, 0);
     // set initial value to the max ( counter counts down )
-    IOWR_ALTERA_AVALON_TIMER_PERIODL(TIMER_BASE, 0xFFFF);
-    IOWR_ALTERA_AVALON_TIMER_PERIODH(TIMER_BASE, 0xFFFF); 
+    IOWR_ALTERA_AVALON_TIMER_PERIODL(TIMER_0_BASE, 0xFFFF);
+    IOWR_ALTERA_AVALON_TIMER_PERIODH(TIMER_0_BASE, 0xFFFF); 
     // start the timer
-    IOWR_ALTERA_AVALON_TIMER_CONTROL(TIMER_BASE, 0x0006); // 0b0...0111
+    IOWR_ALTERA_AVALON_TIMER_CONTROL(TIMER_0_BASE, 0x0006); // 0b0...0111
 
+}
+
+void timer_1_init() {
+  // clock is 50 MHz
+  // 0x4C4B40 is one tick per tenth of a second
+  // 0x7A120 one tick per 10 millisecond
+  // 0xC350 ont tick every millisecond
+  // 2FA F080 one per second
+  IOWR_ALTERA_AVALON_TIMER_CONTROL(TIMER_1_BASE, 0x0003);
+  IOWR_ALTERA_AVALON_TIMER_STATUS(TIMER_1_BASE, 0);
+  // set initial value to the max ( counter counts down )
+  // 0x17D7840 // every half a second
+  IOWR_ALTERA_AVALON_TIMER_PERIODL(TIMER_1_BASE, 0x7840);
+  IOWR_ALTERA_AVALON_TIMER_PERIODH(TIMER_1_BASE, 0x017D); 
+  alt_irq_register(TIMER_1_IRQ, 0, updateTextISR);
+  // start the timer
+  IOWR_ALTERA_AVALON_TIMER_CONTROL(TIMER_1_BASE, 0x0007); // 0b0...0111
 }
 
 // timer is decreasing value every time
@@ -127,8 +192,8 @@ void accelerometer_isr(){
   
 
   // perform write operation to save a snapshot of counter value in snap reg
-  IOWR_ALTERA_AVALON_TIMER_SNAPH(TIMER_BASE, 0x1); // value of data doesn't matter
-  alt_32 curr_time = IORD_ALTERA_AVALON_TIMER_SNAPH(TIMER_BASE);
+  IOWR_ALTERA_AVALON_TIMER_SNAPH(TIMER_0_BASE, 0x1); // value of data doesn't matter
+  alt_32 curr_time = IORD_ALTERA_AVALON_TIMER_SNAPH(TIMER_0_BASE);
   // printf("%u\n", curr_time);
 
   if ( prev_time - curr_time > 15 ){ // valid tap about 20 ms
@@ -155,6 +220,8 @@ int compare_strings(char * string_1, char * string_2){
 void readText(){
     char newChar = alt_getchar();  // blocking function that waits for information by the python program
     alt_up_accelerometer_spi_write(acc_dev, 0x2E, 0b00000000); // disble single tap to generate interrupts, stop the acceleometer from generating taps and possibly breaking the uart communication
+    IOWR_ALTERA_AVALON_TIMER_CONTROL(TIMER_1_BASE, 0x000b); // 0b...1011; stop the timer while reading values 
+    
     char *text = calloc(CHARLIM, sizeof(char)); 
     int i_txt = 0;
     while (newChar != EOF && newChar != '\n' && i_txt < CHARLIM) <%
@@ -162,29 +229,37 @@ void readText(){
         newChar = alt_getchar();
     %>
 
-    text[i_txt] = '\0';
+    text[i_txt] = '\0'; // string terminator
 
+
+    for (int i = 0; i < CHARLIM; i++) currMsg.text[i] = 0;
+
+    // for (int i = 0; i < i_txt; i++) currMsg.text[i] = text[i];
+
+    memcpy(currMsg.text, text, i_txt * sizeof(char)); // copy data
+    if (i_txt > 6) currMsg.length = i_txt + BLANK_SPACES; // add blanks
+    else currMsg.length = i_txt;
+    
+    currMsg.loopCount = 0;
 
     printf("I just received:'");
     alt_putstr(text);
     alt_putstr("'\n");
 
-    char letters[6];
-
-    for (int i = 0; i < i_txt; i++){
-      letters[i] = text[i];
-    }
-
-    print7seg(letters);
-
     memset(text, 0, 2*CHARLIM);
+
     alt_up_accelerometer_spi_write(acc_dev, 0x2E, 0b01000000); // enable single tap to generate interrupts
+    IOWR_ALTERA_AVALON_TIMER_CONTROL(TIMER_1_BASE, 0x0007); // 0b...1011; start the timer up again
+
     return;  
 }
 
 
 int main()
 { 
+  currMsg.text = calloc(CHARLIM, sizeof(char)); 
+
+
   alt_putstr("Hello from Nios II!\n");
   alt_putstr("Printing 3 axis accelerometer info:\n");
   
@@ -210,7 +285,8 @@ int main()
   // set function to be executed on interrupt
   alt_irq_register(ACCELEROMETER_SPI_IRQ, 0, accelerometer_isr);
 
-  timer_init();
+  timer_0_init();
+  timer_1_init();
 
   while (1){
     // printf("accel interrupts: %d\n", tap_counter);
@@ -224,12 +300,12 @@ int main()
 //Prints each of the letters out to the screen
 void print7seg(const char letters[6]){
 	//Takes the binary value for each letter and places it on each of the six 7-segment displays
-	IOWR_ALTERA_AVALON_PIO_DATA(HEX_5_BASE, getBin(letters[5]));
-	IOWR_ALTERA_AVALON_PIO_DATA(HEX_4_BASE, getBin(letters[4]));
-	IOWR_ALTERA_AVALON_PIO_DATA(HEX_3_BASE, getBin(letters[3]));
-	IOWR_ALTERA_AVALON_PIO_DATA(HEX_2_BASE, getBin(letters[2]));
-	IOWR_ALTERA_AVALON_PIO_DATA(HEX_1_BASE, getBin(letters[1]));
-	IOWR_ALTERA_AVALON_PIO_DATA(HEX_0_BASE, getBin(letters[0]));
+	IOWR_ALTERA_AVALON_PIO_DATA(HEX_5_BASE, letters[0]);
+	IOWR_ALTERA_AVALON_PIO_DATA(HEX_4_BASE, letters[1]);
+	IOWR_ALTERA_AVALON_PIO_DATA(HEX_3_BASE, letters[2]);
+	IOWR_ALTERA_AVALON_PIO_DATA(HEX_2_BASE, letters[3]);
+	IOWR_ALTERA_AVALON_PIO_DATA(HEX_1_BASE, letters[4]);
+  IOWR_ALTERA_AVALON_PIO_DATA(HEX_0_BASE, letters[5]);
 	return;
 }
 
@@ -313,6 +389,6 @@ int getBin(char letter){
 	case 'Z':
 		return 0b0100100;
 	default:
-		return 0b1111111;
+		return 0b11111111;
 	}
 }
