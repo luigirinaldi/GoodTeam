@@ -4,6 +4,7 @@ from Translator.utils import tapsToWord, getDelay
 import datetime
 
 messageQueue = []
+deviceIDs = []
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
         data_in = self.request.body
@@ -26,12 +27,22 @@ class PingHandler(tornado.web.RequestHandler):
         if buffer['messages']:
             for message in messages:
                 messageQueue.remove(message)
-            self.write(buffer)
             self.set_status(status_code=200)
+            self.write(buffer)
         else:
             self.set_status(status_code=206)
             self.write(buffer)
 
+class StartupHandler(tornado.web.RequestHandler):
+    def get(self):
+        ip = self.request.remote_ip
+        if ip not in deviceIDs:
+            deviceIDs.append(ip)
+            data = {"deviceID":deviceIDs.index(ip)}
+            self.write(data)
+        else:
+            data = {"deviceID":deviceIDs.index(ip)}
+            self.write(data)
 
 class StatusHandler(tornado.web.RequestHandler):
     def get(self):
