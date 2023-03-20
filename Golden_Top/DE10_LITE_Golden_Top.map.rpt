@@ -1,5 +1,5 @@
 Analysis & Synthesis report for DE10_LITE_Golden_Top
-Sun Mar 19 16:52:14 2023
+Mon Mar 20 00:16:44 2023
 Quartus Prime Version 20.1.0 Build 711 06/05/2020 SJ Lite Edition
 
 
@@ -263,10 +263,9 @@ Quartus Prime Version 20.1.0 Build 711 06/05/2020 SJ Lite Edition
 255. Port Connectivity Checks: "nios_accelerometer:u0|nios_accelerometer_accelerometer_spi:accelerometer_spi|altera_up_accelerometer_spi_auto_init_ctrl:Auto_Init_Controller"
 256. Port Connectivity Checks: "nios_accelerometer:u0"
 257. Post-Synthesis Netlist Statistics for Top Partition
-258. Post-Synthesis Netlist Statistics for Partition sld_hub:auto_hub
-259. Elapsed Time Per Partition
-260. Analysis & Synthesis Messages
-261. Analysis & Synthesis Suppressed Messages
+258. Elapsed Time Per Partition
+259. Analysis & Synthesis Messages
+260. Analysis & Synthesis Suppressed Messages
 
 
 
@@ -293,7 +292,7 @@ https://fpgasoftware.intel.com/eula.
 +----------------------------------------------------------------------------------+
 ; Analysis & Synthesis Summary                                                     ;
 +------------------------------------+---------------------------------------------+
-; Analysis & Synthesis Status        ; Successful - Sun Mar 19 16:52:14 2023       ;
+; Analysis & Synthesis Status        ; Successful - Mon Mar 20 00:16:44 2023       ;
 ; Quartus Prime Version              ; 20.1.0 Build 711 06/05/2020 SJ Lite Edition ;
 ; Revision Name                      ; DE10_LITE_Golden_Top                        ;
 ; Top-level Entity Name              ; DE10_LITE_Golden_Top                        ;
@@ -412,8 +411,8 @@ https://fpgasoftware.intel.com/eula.
 ; Usage by Processor         ; % Time Used ;
 ;     Processor 1            ; 100.0%      ;
 ;     Processor 2            ;   0.1%      ;
-;     Processor 3            ;   0.0%      ;
-;     Processor 4            ;   0.0%      ;
+;     Processor 3            ;   0.1%      ;
+;     Processor 4            ;   0.1%      ;
 +----------------------------+-------------+
 
 
@@ -1846,14 +1845,6 @@ Encoding Type:  One-Hot
 ; 4:1                ; 4 bits    ; 8 LEs         ; 8 LEs                ; 0 LEs                  ; No         ; |DE10_LITE_Golden_Top|nios_accelerometer:u0|nios_accelerometer_cpu:cpu|nios_accelerometer_cpu_cpu:cpu|W_rf_wr_data[4]                                                                                                                                                                                                                                                                  ;
 ; 4:1                ; 5 bits    ; 10 LEs        ; 10 LEs               ; 0 LEs                  ; No         ; |DE10_LITE_Golden_Top|nios_accelerometer:u0|nios_accelerometer_cpu:cpu|nios_accelerometer_cpu_cpu:cpu|D_dst_regnum[0]                                                                                                                                                                                                                                                                  ;
 ; 13:1               ; 2 bits    ; 16 LEs        ; 2 LEs                ; 14 LEs                 ; No         ; |DE10_LITE_Golden_Top|nios_accelerometer:u0|nios_accelerometer_mm_interconnect_0:mm_interconnect_0|nios_accelerometer_mm_interconnect_0_router:router|src_channel[3]                                                                                                                                                                                                                   ;
-; 3:1                ; 3 bits    ; 6 LEs         ; 3 LEs                ; 3 LEs                  ; Yes        ; |DE10_LITE_Golden_Top|sld_hub:auto_hub|alt_sld_fab_with_jtag_input:\instrumentation_fabric_with_node_gen:fabric_gen_new_way:with_jtag_input_gen:instrumentation_fabric|alt_sld_fab:instrumentation_fabric|alt_sld_fab_alt_sld_fab:alt_sld_fab|alt_sld_fab_alt_sld_fab_sldfabric:sldfabric|sld_jtag_hub:\jtag_hub_gen:real_sld_jtag_hub|irsr_reg[4]                                     ;
-; 3:1                ; 2 bits    ; 4 LEs         ; 2 LEs                ; 2 LEs                  ; Yes        ; |DE10_LITE_Golden_Top|sld_hub:auto_hub|alt_sld_fab_with_jtag_input:\instrumentation_fabric_with_node_gen:fabric_gen_new_way:with_jtag_input_gen:instrumentation_fabric|alt_sld_fab:instrumentation_fabric|alt_sld_fab_alt_sld_fab:alt_sld_fab|alt_sld_fab_alt_sld_fab_sldfabric:sldfabric|sld_jtag_hub:\jtag_hub_gen:real_sld_jtag_hub|shadow_irf_reg[1][1]                            ;
-; 3:1                ; 4 bits    ; 8 LEs         ; 4 LEs                ; 4 LEs                  ; Yes        ; |DE10_LITE_Golden_Top|sld_hub:auto_hub|alt_sld_fab_with_jtag_input:\instrumentation_fabric_with_node_gen:fabric_gen_new_way:with_jtag_input_gen:instrumentation_fabric|alt_sld_fab:instrumentation_fabric|alt_sld_fab_alt_sld_fab:alt_sld_fab|alt_sld_fab_alt_sld_fab_sldfabric:sldfabric|sld_jtag_hub:\jtag_hub_gen:real_sld_jtag_hub|hub_minor_ver_reg[3]                            ;
-; 3:1                ; 2 bits    ; 4 LEs         ; 2 LEs                ; 2 LEs                  ; Yes        ; |DE10_LITE_Golden_Top|sld_hub:auto_hub|alt_sld_fab_with_jtag_input:\instrumentation_fabric_with_node_gen:fabric_gen_new_way:with_jtag_input_gen:instrumentation_fabric|alt_sld_fab:instrumentation_fabric|alt_sld_fab_alt_sld_fab:alt_sld_fab|alt_sld_fab_alt_sld_fab_sldfabric:sldfabric|sld_jtag_hub:\jtag_hub_gen:real_sld_jtag_hub|irf_reg[1][0]                                   ;
-; 4:1                ; 5 bits    ; 10 LEs        ; 5 LEs                ; 5 LEs                  ; Yes        ; |DE10_LITE_Golden_Top|sld_hub:auto_hub|alt_sld_fab_with_jtag_input:\instrumentation_fabric_with_node_gen:fabric_gen_new_way:with_jtag_input_gen:instrumentation_fabric|alt_sld_fab:instrumentation_fabric|alt_sld_fab_alt_sld_fab:alt_sld_fab|alt_sld_fab_alt_sld_fab_sldfabric:sldfabric|sld_jtag_hub:\jtag_hub_gen:real_sld_jtag_hub|mixer_addr_reg_internal[0]                      ;
-; 4:1                ; 5 bits    ; 10 LEs        ; 5 LEs                ; 5 LEs                  ; Yes        ; |DE10_LITE_Golden_Top|sld_hub:auto_hub|alt_sld_fab_with_jtag_input:\instrumentation_fabric_with_node_gen:fabric_gen_new_way:with_jtag_input_gen:instrumentation_fabric|alt_sld_fab:instrumentation_fabric|alt_sld_fab_alt_sld_fab:alt_sld_fab|alt_sld_fab_alt_sld_fab_sldfabric:sldfabric|sld_jtag_hub:\jtag_hub_gen:real_sld_jtag_hub|sld_rom_sr:hub_info_reg|word_counter[2]         ;
-; 34:1               ; 4 bits    ; 88 LEs        ; 56 LEs               ; 32 LEs                 ; Yes        ; |DE10_LITE_Golden_Top|sld_hub:auto_hub|alt_sld_fab_with_jtag_input:\instrumentation_fabric_with_node_gen:fabric_gen_new_way:with_jtag_input_gen:instrumentation_fabric|alt_sld_fab:instrumentation_fabric|alt_sld_fab_alt_sld_fab:alt_sld_fab|alt_sld_fab_alt_sld_fab_sldfabric:sldfabric|sld_jtag_hub:\jtag_hub_gen:real_sld_jtag_hub|design_hash_reg[1]                              ;
-; 28:1               ; 4 bits    ; 72 LEs        ; 48 LEs               ; 24 LEs                 ; Yes        ; |DE10_LITE_Golden_Top|sld_hub:auto_hub|alt_sld_fab_with_jtag_input:\instrumentation_fabric_with_node_gen:fabric_gen_new_way:with_jtag_input_gen:instrumentation_fabric|alt_sld_fab:instrumentation_fabric|alt_sld_fab_alt_sld_fab:alt_sld_fab|alt_sld_fab_alt_sld_fab_sldfabric:sldfabric|sld_jtag_hub:\jtag_hub_gen:real_sld_jtag_hub|sld_rom_sr:hub_info_reg|WORD_SR[0]              ;
 +--------------------+-----------+---------------+----------------------+------------------------+------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 
@@ -6820,44 +6811,13 @@ Note: In order to hide this table in the UI and the text report file, please set
 +-----------------------+-----------------------------+
 
 
-+------------------------------------------------------------------+
-; Post-Synthesis Netlist Statistics for Partition sld_hub:auto_hub ;
-+-----------------------+------------------------------------------+
-; Type                  ; Count                                    ;
-+-----------------------+------------------------------------------+
-; boundary_port         ; 141                                      ;
-; cycloneiii_ff         ; 83                                       ;
-;     CLR               ; 7                                        ;
-;     ENA               ; 16                                       ;
-;     ENA CLR           ; 21                                       ;
-;     ENA CLR SLD       ; 2                                        ;
-;     ENA SCLR          ; 5                                        ;
-;     ENA SLD           ; 9                                        ;
-;     SCLR              ; 7                                        ;
-;     plain             ; 16                                       ;
-; cycloneiii_lcell_comb ; 146                                      ;
-;     arith             ; 8                                        ;
-;         2 data inputs ; 8                                        ;
-;     normal            ; 138                                      ;
-;         0 data inputs ; 1                                        ;
-;         1 data inputs ; 6                                        ;
-;         2 data inputs ; 28                                       ;
-;         3 data inputs ; 34                                       ;
-;         4 data inputs ; 69                                       ;
-;                       ;                                          ;
-; Max LUT depth         ; 4.00                                     ;
-; Average LUT depth     ; 2.11                                     ;
-+-----------------------+------------------------------------------+
-
-
-+---------------------------------+
-; Elapsed Time Per Partition      ;
-+------------------+--------------+
-; Partition Name   ; Elapsed Time ;
-+------------------+--------------+
-; Top              ; 00:00:05     ;
-; sld_hub:auto_hub ; 00:00:00     ;
-+------------------+--------------+
++-------------------------------+
+; Elapsed Time Per Partition    ;
++----------------+--------------+
+; Partition Name ; Elapsed Time ;
++----------------+--------------+
+; Top            ; 00:00:06     ;
++----------------+--------------+
 
 
 +-------------------------------+
@@ -6866,7 +6826,7 @@ Note: In order to hide this table in the UI and the text report file, please set
 Info: *******************************************************************
 Info: Running Quartus Prime Analysis & Synthesis
     Info: Version 20.1.0 Build 711 06/05/2020 SJ Lite Edition
-    Info: Processing started: Sun Mar 19 16:51:42 2023
+    Info: Processing started: Mon Mar 20 00:16:09 2023
 Info: Command: quartus_map --read_settings_files=on --write_settings_files=off DE10_LITE_Golden_Top -c DE10_LITE_Golden_Top
 Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
 Info (20030): Parallel compilation is enabled and will use 4 of the 4 processors detected
@@ -7258,7 +7218,7 @@ Info (12128): Elaborating entity "altera_reset_controller" for hierarchy "nios_a
 Info (12128): Elaborating entity "altera_reset_synchronizer" for hierarchy "nios_accelerometer:u0|altera_reset_controller:rst_controller|altera_reset_synchronizer:alt_rst_sync_uq1" File: /home/youlittleperson/Documents/Imperial/GoodTeam/Golden_Top/nios_accelerometer/synthesis/submodules/altera_reset_controller.v Line: 208
 Info (12128): Elaborating entity "altera_reset_synchronizer" for hierarchy "nios_accelerometer:u0|altera_reset_controller:rst_controller|altera_reset_synchronizer:alt_rst_req_sync_uq1" File: /home/youlittleperson/Documents/Imperial/GoodTeam/Golden_Top/nios_accelerometer/synthesis/submodules/altera_reset_controller.v Line: 220
 Info (11170): Starting IP generation for the debug fabric: alt_sld_fab.
-Info (11172): 2023.03.19.16:51:57 Progress: Loading sldf0979fd2/alt_sld_fab_wrapper_hw.tcl
+Info (11172): 2023.03.20.00:16:25 Progress: Loading sldf0979fd2/alt_sld_fab_wrapper_hw.tcl
 Info (11172): Alt_sld_fab.alt_sld_fab: SLD fabric agents which did not specify prefer_host were connected to JTAG
 Info (11172): Alt_sld_fab: Generating alt_sld_fab "alt_sld_fab" for QUARTUS_SYNTH
 Info (11172): Alt_sld_fab: "alt_sld_fab" instantiated alt_sld_fab "alt_sld_fab"
@@ -7400,9 +7360,6 @@ Warning (13024): Output pins are stuck at VCC or GND
     Warning (13410): Pin "VGA_VS" is stuck at GND File: /home/youlittleperson/Documents/Imperial/GoodTeam/Golden_Top/DE10_LITE_Golden_Top.v Line: 48
 Info (286031): Timing-Driven Synthesis is running on partition "Top"
 Info (17049): 185 registers lost all their fanouts during netlist optimizations.
-Info (13000): Registers with preset signals will power-up high File: /home/youlittleperson/intelFPGA_lite/20.1/quartus/libraries/megafunctions/sld_jtag_hub.vhd Line: 386
-Info (13003): DEV_CLRn pin will set, and not reset, register with preset signal due to NOT Gate Push-Back
-Info (286031): Timing-Driven Synthesis is running on partition "sld_hub:auto_hub"
 Info (144001): Generated suppressed messages file /home/youlittleperson/Documents/Imperial/GoodTeam/Golden_Top/DE10_LITE_Golden_Top.map.smsg
 Info (16010): Generating hard_block partition "hard_block:auto_generated_inst"
     Info (16011): Adding 0 node(s), including 0 DDIO, 0 PLL, 0 transceiver and 0 LCELL
@@ -7429,10 +7386,10 @@ Info (21057): Implemented 3355 device resources after synthesis - the final reso
     Info (21061): Implemented 2989 logic cells
     Info (21064): Implemented 176 RAM segments
 Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 157 warnings
-    Info: Peak virtual memory: 565 megabytes
-    Info: Processing ended: Sun Mar 19 16:52:14 2023
-    Info: Elapsed time: 00:00:32
-    Info: Total CPU time (on all processors): 00:00:54
+    Info: Peak virtual memory: 572 megabytes
+    Info: Processing ended: Mon Mar 20 00:16:44 2023
+    Info: Elapsed time: 00:00:35
+    Info: Total CPU time (on all processors): 00:00:59
 
 
 +------------------------------------------+
