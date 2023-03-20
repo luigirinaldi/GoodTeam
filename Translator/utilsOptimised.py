@@ -2,6 +2,7 @@ from random import random
 from pprint import pprint
 import datetime
 import matplotlib.pyplot as plt
+from autocorrect import * 
 
 
 tapTable = [["X","T","I","R","M"],
@@ -88,7 +89,9 @@ def tapsToWord(taps, delay=100, var=0):
     for l in indexList:
         letter = indexToLetter(l[0],l[1])
         word = word + letter
-    return word
+    
+    corrected_word = my_autocorrect(word)
+    return corrected_word
         
 
 
