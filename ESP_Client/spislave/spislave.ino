@@ -2,6 +2,7 @@
 #include <ArduinoJson.h>
 #include <WiFi.h>
 
+
 const char* ssid = "";
 const char* password = "";
 
@@ -11,7 +12,7 @@ float timestamps[32];
 
 ESP32SPISlave slave;
 
-static constexpr uint32_t BUFFER_SIZE {32};
+static constexpr uint32_t BUFFER_SIZE {2};
 uint8_t spi_slave_tx_buf[BUFFER_SIZE];
 uint8_t spi_slave_rx_buf[BUFFER_SIZE];
 
@@ -59,16 +60,34 @@ void setup() {
 }
 
 
+String msg = "CARPO DIEM";
+
 void loop() {
     // block until the transaction comes from master
-    // slave.wait(spi_slave_rx_buf, spi_slave_tx_buf, BUFFER_SIZE);
 
-    uint8_t tmp = 69;
-    spi_slave_tx_buf[0] = tmp;
+    if (msg.length() > 0){
+      spi_slave_tx_buf[0] = 255;
+      spi_slave_tx_buf[1] = msg.length(); // assuming lengths is less than 256
 
-    if (slave.remained() == 0) {
-      slave.queue(spi_slave_rx_buf, spi_slave_tx_buf, BUFFER_SIZE);
+      slave.wait(spi_slave_rx_buf, spi_slave_tx_buf, BUFFER_SIZE); // send number of chars
+      
+      while (slave.available()) { slave.pop(); }
+
+      for (int i = 0; i < msg.length(); i ++){
+        spi_slave_tx_buf[0] = 0;
+        spi_slave_tx_buf[1] = msg[i]; 
+        slave.wait(spi_slave_rx_buf, spi_slave_tx_buf, BUFFER_SIZE); // send each char
+        while (slave.available()) { slave.pop(); }
+      }
     }
+    
+    spi_slave_tx_buf[0] = 0;
+    spi_slave_tx_buf[1] = 0;
+    slave.wait(spi_slave_rx_buf, spi_slave_tx_buf, BUFFER_SIZE);
+
+    // if (slave.remained() == 0) {
+      // slave.queue(spi_slave_rx_buf, spi_slave_tx_buf, BUFFER_SIZE);
+    // }
 
     // if transaction has completed from master,
     // available() returns size of results of transaction,
@@ -76,13 +95,18 @@ void loop() {
     
          
     while (slave.available()) {
-        // do something with `spi_slave_rx_buf`
-        int16_t tap_data = (spi_slave_rx_buf[0] << 8 | spi_slave_rx_buf[1]); // reconstruct data 
+      // do something with `spi_slave_rx_buf
+      int16_t tap_data;
+      if (spi_slave_rx_buf[0] & 0x80) { // check MSbit to be one
+        tap_data = (spi_slave_rx_buf[0] << 8 | spi_slave_rx_buf[1]) & 0x7FFF; // reconstruct data, ignore the MSbit
         // convertTime(tap_data);
         printf("Tap detected ");
-        printf("Time since last tap: ");
         printf("%d\n", tap_data);
-        slave.pop();
+        // printf("Time since last tap: ");
+        // printf("%d\n",   tap_data);          
+        // printf("%d, %d\n", spi_slave_rx_buf[0], spi_slave_rx_buf[1]);
+      }
+      slave.pop();
     }
 
 

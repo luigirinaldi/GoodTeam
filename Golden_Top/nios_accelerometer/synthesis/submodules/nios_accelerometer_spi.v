@@ -29,8 +29,8 @@
 //6         end-of-packet-value r/w
 //INPUT_CLOCK: 50000000
 //ISMASTER: 1
-//DATABITS: 8
-//TARGETCLOCK: 1000
+//DATABITS: 16
+//TARGETCLOCK: 100000
 //NUMSLAVES: 1
 //CPOL: 0
 //CPHA: 0
@@ -115,25 +115,25 @@ wire             p1_data_rd_strobe;
 wire    [ 15: 0] p1_data_to_cpu;
 wire             p1_data_wr_strobe;
 wire             p1_rd_strobe;
-wire    [ 14: 0] p1_slowcount;
+wire    [  7: 0] p1_slowcount;
 wire             p1_wr_strobe;
 reg              rd_strobe;
 wire             readyfordata;
-reg     [  7: 0] rx_holding_reg;
-reg     [  7: 0] shift_reg;
+reg     [ 15: 0] rx_holding_reg;
+reg     [ 15: 0] shift_reg;
 wire             slaveselect_wr_strobe;
 wire             slowclock;
-reg     [ 14: 0] slowcount;
+reg     [  7: 0] slowcount;
 wire    [ 10: 0] spi_control;
 reg     [ 15: 0] spi_slave_select_holding_reg;
 reg     [ 15: 0] spi_slave_select_reg;
 wire    [ 10: 0] spi_status;
-reg     [  4: 0] state;
+reg     [  5: 0] state;
 reg              stateZero;
 wire             status_wr_strobe;
 reg              transmitting;
 reg              tx_holding_primed;
-reg     [  7: 0] tx_holding_reg;
+reg     [ 15: 0] tx_holding_reg;
 reg              wr_strobe;
 wire             write_shift_reg;
 wire             write_tx_holding;
@@ -255,11 +255,11 @@ wire             write_tx_holding;
     end
 
 
-  // slowclock is active once every 25000 system clock pulses.
-  assign slowclock = slowcount == 15'h61A7;
+  // slowclock is active once every 250 system clock pulses.
+  assign slowclock = slowcount == 8'hF9;
 
-  assign p1_slowcount = ({15 {(transmitting && !slowclock)}} & (slowcount + 1)) |
-    ({15 {(~((transmitting && !slowclock)))}} & 0);
+  assign p1_slowcount = ({8 {(transmitting && !slowclock)}} & (slowcount + 1)) |
+    ({8 {(~((transmitting && !slowclock)))}} & 0);
 
   // Divide counter for SPI clock.
   always @(posedge clk or negedge reset_n)
@@ -298,7 +298,7 @@ wire             write_tx_holding;
     end
 
 
-  // 'state' counts from 0 to 17.
+  // 'state' counts from 0 to 33.
   always @(posedge clk or negedge reset_n)
     begin
       if (reset_n == 0)
@@ -308,8 +308,8 @@ wire             write_tx_holding;
         end
       else if (transmitting & slowclock)
         begin
-          stateZero <= state == 17;
-          if (state == 17)
+          stateZero <= state == 33;
+          if (state == 33)
               state <= 0;
           else 
             state <= state + 1;
@@ -318,7 +318,7 @@ wire             write_tx_holding;
 
 
   assign enableSS = transmitting & ~stateZero;
-  assign MOSI = shift_reg[7];
+  assign MOSI = shift_reg[15];
   assign SS_n = (enableSS | SSO_reg) ? ~spi_slave_select_reg : {1 {1'b1} };
   assign SCLK = SCLK_reg;
   // As long as there's an empty spot somewhere,
@@ -359,7 +359,7 @@ wire             write_tx_holding;
               TOE <= 1;
 
           // EOP must be updated by the last (2nd) cycle of access.
-          if ((p1_data_rd_strobe && (rx_holding_reg == endofpacketvalue_reg)) || (p1_data_wr_strobe && (data_from_cpu[7 : 0] == endofpacketvalue_reg)))
+          if ((p1_data_rd_strobe && (rx_holding_reg == endofpacketvalue_reg)) || (p1_data_wr_strobe && (data_from_cpu == endofpacketvalue_reg)))
               EOP <= 1;
           if (write_shift_reg)
             begin
@@ -385,7 +385,7 @@ wire             write_tx_holding;
             end
           if (slowclock)
             begin
-              if (state == 17)
+              if (state == 33)
                 begin
                   transmitting <= 0;
                   RRDY <= 1;
@@ -400,7 +400,7 @@ wire             write_tx_holding;
               if (SCLK_reg ^ 0 ^ 0)
                 begin
                   if (1)
-                      shift_reg <= {shift_reg[6 : 0], MISO_reg};
+                      shift_reg <= {shift_reg[14 : 0], MISO_reg};
                 end
               else 
                 MISO_reg <= ds_MISO;

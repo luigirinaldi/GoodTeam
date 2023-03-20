@@ -1,5 +1,6 @@
 #include "altera_up_avalon_accelerometer_spi.h"
 #include "altera_avalon_timer_regs.h"
+#include "altera_avalon_spi_regs.h"
 #include "altera_avalon_pio_regs.h"
 #include "altera_avalon_timer.h"
 #include <altera_avalon_spi.h>
@@ -8,6 +9,7 @@
 #include "alt_types.h"
 #include "system.h"
 #include <stdlib.h>
+#include <unistd.h>
 #include <stdio.h>
 
 #define CHARLIM 256
@@ -29,9 +31,11 @@ void print7seg(const char letters[6]);
 
 struct Message currMsg;
 
-alt_u8 *tap_data;  // SPI buffer
+// ##### SPI data #####
+char newTapData = 0;
+__uint16_t send_spi;
+// ####################
 
-alt_u8 *rx_spi_data;
 
 
 alt_32 prev_time = 0;
@@ -130,23 +134,16 @@ void accelerometer_isr(){
   alt_16 time_diff_msec = time_diff_usec/1000;
 
   if ( time_diff > 15 ){ // valid tap about 20 ms
-    tap_data[0] = (time_diff_msec>>8) & 0xff; //top 8 bits of timestamp
-    tap_data[1] = time_diff_msec & 0xff; //bottom 8 bits of timestamp
+    // tap_data[0] = (time_diff_msec>>8) & 0xff; //top 8 bits of timestamp
+    // tap_data[1] = time_diff_msec & 0xff; //bottom 8 bits of timestamp
+
+    send_spi = time_diff_msec | 0x8000;
 
     alt_putstr("tap:");
     printf("%d\n", time_diff_msec);
 
-    alt_avalon_spi_command(SPI_BASE, 0 ,SPI_BUFFER_SIZE, tap_data, SPI_BUFFER_SIZE, rx_spi_data, 0);
-    // alt_avalon_spi_command(SPI_BASE, 0 ,0x2, tap_data, 0, 0, 0);
-
-    alt_u8 test = rx_spi_data[0];
-    printf("read SPI data: ");
-          alt_printf("%x,", test);
-
-    // for (int i = 0; i < SPI_BUFFER_SIZE; i++) {
-    //   alt_printf("%x,", rx_spi_data[i]);
-    // }
-    putchar('\n');
+    newTapData = 1; // indicate that there is data to send
+    send_spi = time_diff_msec; // set data to send
   }
 
   prev_time = curr_time;
@@ -202,9 +199,9 @@ void readText(){
 
 int main()
 { 
-  tap_data = (alt_u8*) malloc(SPI_BUFFER_SIZE);
+  // tap_data = (alt_u8*) malloc(SPI_BUFFER_SIZE);
 
-  rx_spi_data = (alt_u8*) malloc(SPI_BUFFER_SIZE);
+  // rx_spi_data = (alt_u8*) malloc(SPI_BUFFER_SIZE);
 
   currMsg.text = calloc(CHARLIM, sizeof(char));
 
@@ -233,9 +230,57 @@ int main()
   timer_0_init();
   timer_1_init();
 
+  printf("Entered Main\n");
+
+  alt_16 rcvd_spi;
+
   while (1){
-    // printf("accel interrupts: %d\n", tap_counter);
-    readText();
+    
+    if (newTapData) IOWR_ALTERA_AVALON_SPI_TXDATA(SPI_BASE, send_spi | 0x8000);
+    else IOWR_ALTERA_AVALON_SPI_TXDATA(SPI_BASE, 0 );
+    // IOWR_ALTERA_AVALON_SPI_TXDATA(SPI_BASE, send_spi | ((newTapData & 0b1) << 15)); // send the data setting the MSbit if there is new data to send
+    newTapData = 0; // reset new data
+
+    usleep(75); // delay to send data
+
+    rcvd_spi = IORD_ALTERA_AVALON_SPI_RXDATA(SPI_BASE); // read incoming data
+
+    if ((rcvd_spi >> 8) == -1) {
+      alt_up_accelerometer_spi_write(acc_dev, 0x2E, 0b00000000); // disble single tap to generate interrupts, stop the acceleometer from generating taps and possibly breaking the uart communication
+      IOWR_ALTERA_AVALON_TIMER_CONTROL(TIMER_1_BASE, 0x000b); // disable timer interrupt
+      
+      alt_8 num_char = rcvd_spi & 0xFF; // extract bottom 8 bits
+      // printf("about to receive %d chars\n", num_char);
+
+      char *inc_msg = calloc(sizeof(char), 255);
+
+      for (int i = 0; i < num_char; i++){
+        IOWR_ALTERA_AVALON_SPI_TXDATA(SPI_BASE, 0 ); // write nothing just to get resposne
+        usleep(75); // wait for resposne
+
+        rcvd_spi = IORD_ALTERA_AVALON_SPI_RXDATA(SPI_BASE); // read data
+        usleep(75); // wait a bit
+        // char tmp = rcvd_spi;
+        inc_msg[i] = rcvd_spi;// save char 
+        // printf("%d %c ", tmp,inc_msg[i]);
+        // alt_putchar(tmp);
+
+      } 
+      // inc_msg[num_char] = '\0'; // null tersminator
+      // printf("Received: %s\n", inc_msg);
+      alt_putstr(inc_msg);
+      // printf("%s",inc_msg);
+      putchar('\n');
+      free(inc_msg);
+
+      alt_up_accelerometer_spi_write(acc_dev, 0x2E, 0b01000000); // enable single tap to generate interrupts
+      IOWR_ALTERA_AVALON_TIMER_CONTROL(TIMER_1_BASE, 0x0007); // 0b...1011; start the timer up again
+    }
+    // second_lot = IORD_ALTERA_AVALON_SPI_RXDATA(SPI_BASE + 1);
+
+    // printf("sent: %i \treceived: %i %d\n", send_S, rcvd_S);
+
+    usleep(10000);
   };
 
   return 0;

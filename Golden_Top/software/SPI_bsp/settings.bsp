@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>Mar 20, 2023 12:22:35 AM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1679271755125</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>Mar 20, 2023 9:19:32 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1679347172154</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>/home/youlittleperson/Documents/Imperial/GoodTeam/Golden_Top/software/SPI_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>../../nios_accelerometer.sopcinfo</SopcDesignFile>

@@ -650,7 +650,7 @@
   <parameter name="avalonSpec" value="2.0" />
   <parameter name="clockPhase" value="0" />
   <parameter name="clockPolarity" value="0" />
-  <parameter name="dataWidth" value="8" />
+  <parameter name="dataWidth" value="16" />
   <parameter name="disableAvalonFlowControl" value="false" />
   <parameter name="inputClockRate" value="50000000" />
   <parameter name="insertDelayBetweenSlaveSelectAndSClk" value="false" />
@@ -659,7 +659,7 @@
   <parameter name="masterSPI" value="true" />
   <parameter name="numberOfSlaves" value="1" />
   <parameter name="syncRegDepth" value="2" />
-  <parameter name="targetClockRate" value="1000" />
+  <parameter name="targetClockRate" value="100000" />
   <parameter name="targetSlaveSelectToSClkDelay" value="0.0" />
  </module>
  <module name="timer_0" kind="altera_avalon_timer" version="20.1" enabled="1">

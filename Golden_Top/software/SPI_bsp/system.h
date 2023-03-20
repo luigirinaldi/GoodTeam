@@ -4,7 +4,7 @@
  * Machine generated for CPU 'cpu' in SOPC Builder design 'nios_accelerometer'
  * SOPC Builder design path: ../../nios_accelerometer.sopcinfo
  *
- * Generated: Mon Mar 20 00:19:43 GMT 2023
+ * Generated: Mon Mar 20 21:19:32 GMT 2023
  */
 
 /*
@@ -450,7 +450,7 @@
 #define SPI_CLOCKPHASE 0
 #define SPI_CLOCKPOLARITY 0
 #define SPI_CLOCKUNITS "Hz"
-#define SPI_DATABITS 8
+#define SPI_DATABITS 16
 #define SPI_DATAWIDTH 16
 #define SPI_DELAYMULT "1.0E-9"
 #define SPI_DELAYUNITS "ns"
@@ -465,7 +465,7 @@
 #define SPI_PREFIX "spi_"
 #define SPI_SPAN 32
 #define SPI_SYNC_REG_DEPTH 2
-#define SPI_TARGETCLOCK 1000u
+#define SPI_TARGETCLOCK 100000u
 #define SPI_TARGETSSDELAY "0.0"
 #define SPI_TYPE "altera_avalon_spi"
 
