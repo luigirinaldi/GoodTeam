@@ -3,6 +3,7 @@ from pprint import pprint
 import datetime
 import matplotlib.pyplot as plt
 import numpy as np
+from autocorrect import * 
 
 
 tapTable = [["A","B","C","D","E"],
@@ -94,8 +95,10 @@ def tapsToWord(taps, delay=100, var=0):
             letter = indexToLetter(l[0],l[1])
             word = word + letter
         except:
-            word = word 
-    return word
+            word = word
+
+    corrected_word = my_autocorrect(word)
+    return corrected_word 
 
 def getDelay(taps,threshold=0.5):
     taps = [tap['time'].timestamp() for tap in taps]
