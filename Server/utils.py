@@ -14,7 +14,7 @@ class MainHandler(tornado.web.RequestHandler):
         corrected_word, original_word, confidence = tapsToWord(timestamps, delay=getDelay(timestamps))
         sender = data_in["DeviceID"]
         recieve = data_in["RecipientID"]
-        messageQueue.append({"to":recieve,"from":sender,"message":word})
+        messageQueue.append({"to":recieve,"from":sender,"message":corrected_word, "original":original, "confidence":confidence})
         self.write(word)
 
 class PingHandler(tornado.web.RequestHandler):

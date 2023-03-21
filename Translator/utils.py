@@ -1,8 +1,3 @@
-from random import random
-from pprint import pprint
-import datetime
-import matplotlib.pyplot as plt
-import numpy as np
 import re  
 from collections import Counter
 import textdistance 
@@ -51,6 +46,7 @@ def my_autocorrect(input_word):
         best_correction = output.iat[0,0]
         confidence = output.iat[0,3]
         return(best_correction.upper(), input_word.upper(), confidence)
+    
     
 
 tapTable = [["A","B","C","D","E"],
@@ -144,8 +140,8 @@ def tapsToWord(taps, delay=100, var=0):
         except:
             word = word
 
-    corrected_word = my_autocorrect(word)
-    return corrected_word 
+    corrected_word, original_word, confidence = my_autocorrect(word)
+    return (corrected_word, original_word, confidence)
 
 def getDelay(taps,threshold=0.5):
     taps = [tap['time'].timestamp() for tap in taps]
