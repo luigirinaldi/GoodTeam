@@ -1,3 +1,8 @@
+from random import random
+from pprint import pprint
+import datetime
+import matplotlib.pyplot as plt
+import numpy as np
 import re  
 from collections import Counter
 import textdistance 
@@ -10,8 +15,8 @@ with open('big.txt','r',encoding="utf8") as f:
     w = re.findall('\w+', file_name_data)
 
 v = set(w) #vocabulary
-print(f"The first 10 words in our dictionary are: \n{w[0:10]}")
-print(f"The dictionary has {len(v)} words ")
+#print(f"The first 10 words in our dictionary are: \n{w[0:10]}")
+#print(f"The dictionary has {len(v)} words ")
 
 
 def get_count(words):
@@ -19,7 +24,7 @@ def get_count(words):
         word_freq = Counter(words)
         return word_freq
 word_freq = get_count(w)
-print("Most common words in the dataset are: ", word_freq.most_common()[0:10])
+#print("Most common words in the dataset are: ", word_freq.most_common()[0:10])
 
 def get_probs(word_count_dict):
     probs = {}
