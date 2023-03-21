@@ -1,12 +1,19 @@
+#include <ArduinoJson.h>
+#include <ArduinoJson.hpp>
+
 #include <ESP32SPISlave.h>
 #include <ArduinoJson.h>
 #include <WiFi.h>
 
+// GLOBALS
 
 const char* ssid = "";
 const char* password = "";
 
 const char* server_ip = "http://54.90.46.38:8888/";
+
+String msg = "CARPO DIEM"; // Message that gets printed to the FPGA
+int count =0;
 
 float timestamps[32];
 
@@ -35,7 +42,13 @@ float convertTime(int16_t timestamp){
   return standard_time;
 }
 
+void IRAM_ATTR HTTP_request_ISR(){
+  Serial.print("TEST");
+  Serial.println(count);
+  msg = "TEST" + String(count++);  
+}
 
+hw_timer_t *Timer0_Cfg = NULL;
 
 void setup() {
     // HSPI = CS: 15, CLK: 14, MOSI: 13, MISO: 12 -> default
@@ -55,17 +68,24 @@ void setup() {
     // }
 
 
+
+
     slave.setDataMode(SPI_MODE0);
     slave.begin(HSPI);
+
+    // INTERRUPT ROUTINE FOR POLLING THE SERVER
+    Timer0_Cfg = timerBegin(0, 80, true); // use timer 0, prescaler of 80 and count up
+    timerAttachInterrupt(Timer0_Cfg, &HTTP_request_ISR, true); // att ach interrupt
+    timerAlarmWrite(Timer0_Cfg, 1000000, true);  // set the period
+    timerAlarmEnable(Timer0_Cfg); // start the timeer
+
 }
 
 
-String msg = "CARPO DIEM";
+
 
 void loop() {
-    // block until the transaction comes from master
-
-    if (msg.length() > 0){
+    if (msg.length() > 0){  // when new message send to the FPGA
       spi_slave_tx_buf[0] = 255;
       spi_slave_tx_buf[1] = msg.length(); // assuming lengths is less than 256
 

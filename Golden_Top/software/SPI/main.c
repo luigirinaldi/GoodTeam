@@ -149,54 +149,6 @@ void accelerometer_isr(){
   prev_time = curr_time;
 }
 
-int compare_strings(char * string_1, char * string_2){
-    int i = 0;
-    while(string_1[i] != '\0' && string_2[i] != '\0'){
-        if(string_1[i] != string_2[i]) return 0;
-        i++;
-    }
-
-    return 1;
-}
-
-void readText(){
-    char newChar = alt_getchar();  // blocking function that waits for information by the python program
-    alt_up_accelerometer_spi_write(acc_dev, 0x2E, 0b00000000); // disble single tap to generate interrupts, stop the acceleometer from generating taps and possibly breaking the uart communication
-    IOWR_ALTERA_AVALON_TIMER_CONTROL(TIMER_1_BASE, 0x000b); // 0b...1011; stop the timer while reading values
-
-    char *text = calloc(CHARLIM, sizeof(char));
-    int i_txt = 0;
-    while (newChar != EOF && newChar != '\n' && i_txt < CHARLIM) <%
-        text[i_txt++] = newChar;
-        newChar = alt_getchar();
-    %>
-
-    text[i_txt] = '\0'; // string terminator
-
-
-    for (int i = 0; i < CHARLIM; i++) currMsg.text[i] = 0;
-
-    // for (int i = 0; i < i_txt; i++) currMsg.text[i] = text[i];
-
-    memcpy(currMsg.text, text, i_txt * sizeof(char)); // copy data
-    if (i_txt > 6) currMsg.length = i_txt + BLANK_SPACES; // add blanks
-    else currMsg.length = i_txt;
-
-    currMsg.loopCount = 0;
-
-    // printf("I just received:'");
-    // alt_putstr(text);
-    // alt_putstr("'\n");
-
-    memset(text, 0, 2*CHARLIM);
-
-    alt_up_accelerometer_spi_write(acc_dev, 0x2E, 0b01000000); // enable single tap to generate interrupts
-    IOWR_ALTERA_AVALON_TIMER_CONTROL(TIMER_1_BASE, 0x0007); // 0b...1011; start the timer up again
-
-    return;
-}
-
-
 int main()
 { 
   // tap_data = (alt_u8*) malloc(SPI_BUFFER_SIZE);
