@@ -259,18 +259,21 @@ int main()
         usleep(75); // wait for resposne
 
         rcvd_spi = IORD_ALTERA_AVALON_SPI_RXDATA(SPI_BASE); // read data
-        usleep(75); // wait a bit
-        // char tmp = rcvd_spi;
+        usleep(75); // wait a bit IMPORTANT!!!! FOR SOME REASON
+
         inc_msg[i] = rcvd_spi;// save char 
-        // printf("%d %c ", tmp,inc_msg[i]);
-        // alt_putchar(tmp);
 
       } 
-      // inc_msg[num_char] = '\0'; // null tersminator
-      // printf("Received: %s\n", inc_msg);
       alt_putstr(inc_msg);
-      // printf("%s",inc_msg);
       putchar('\n');
+
+      // Write to the HEX digits
+      memcpy(currMsg.text, inc_msg, num_char * sizeof(char)); // copy data
+      if (num_char > 6) currMsg.length = num_char + BLANK_SPACES; // add blanks
+      else currMsg.length = num_char;
+
+      currMsg.loopCount = 0;
+
       free(inc_msg);
 
       alt_up_accelerometer_spi_write(acc_dev, 0x2E, 0b01000000); // enable single tap to generate interrupts

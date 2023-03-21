@@ -79,6 +79,8 @@ void loop() {
         slave.wait(spi_slave_rx_buf, spi_slave_tx_buf, BUFFER_SIZE); // send each char
         while (slave.available()) { slave.pop(); }
       }
+      
+      msg = "";      
     }
     
     spi_slave_tx_buf[0] = 0;
