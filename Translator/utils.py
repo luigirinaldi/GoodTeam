@@ -8,6 +8,11 @@ from collections import Counter
 import textdistance 
 import pandas as pd
 
+
+
+#####################################################################
+# Auto-correct 
+#####################################################################
 w = [] #words
 with open('big.txt','r',encoding="utf8") as f:
     file_name_data = f.read()
@@ -15,16 +20,12 @@ with open('big.txt','r',encoding="utf8") as f:
     w = re.findall('\w+', file_name_data)
 
 v = set(w) #vocabulary
-#print(f"The first 10 words in our dictionary are: \n{w[0:10]}")
-#print(f"The dictionary has {len(v)} words ")
-
 
 def get_count(words):
         word_freq = {}  
         word_freq = Counter(words)
         return word_freq
 word_freq = get_count(w)
-#print("Most common words in the dataset are: ", word_freq.most_common()[0:10])
 
 def get_probs(word_count_dict):
     probs = {}
@@ -33,12 +34,12 @@ def get_probs(word_count_dict):
         probs[key] = word_count_dict[key] / m
     return probs
 
-
 probs = get_probs(word_freq)
 
 def my_autocorrect(input_word):
     input_word = input_word.lower()
     if input_word in v:
+            print("Word: ",input_word.upper(), "Original word: ", input_word.upper(), "Confidence 100%, word exists: ", "1")
             return(input_word.upper(),input_word.upper(),"1")
     else:
         sim = [1-(textdistance.Jaccard(qval=2).distance(v,input_word)) for v in word_freq.keys()]
@@ -50,10 +51,17 @@ def my_autocorrect(input_word):
         
         best_correction = output.iat[0,0]
         confidence = output.iat[0,3]
-        print("Corrected message: ", best_correction.upper(), "Original message: ", input_word.upper(), "Confidence coef: ", confidence)
-        return(best_correction.upper(), input_word.upper(), str(confidence))
-    
-    
+
+        if (confidence < 0.3):
+            print("Message: ", input_word.upper(), "Input: ",input_word.upper(), "Confidence coef too low: ",  confidence)
+            return(input_word.upper(),input_word.upper(),"0")
+        else:
+            print("Corrected message: ", best_correction.upper(), "Original message: ", input_word.upper(), "Confidence coef: ", confidence)
+            return(best_correction.upper(), input_word.upper(), str(confidence))
+  
+#####################################################################    
+#Translator    
+#####################################################################
 
 tapTable = [["A","B","C","D","E"],
             ["F","G","H","I","J"],
@@ -178,7 +186,5 @@ def tapsToWord(taps, delay=100, var=0):
         original_words.append(original_w)
         confidences.append(conf)
 
-    
     return (corrected_words, original_words, confidences)
-
 
