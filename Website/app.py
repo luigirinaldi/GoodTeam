@@ -10,7 +10,7 @@ def average(string):
     return round(sum([float(i) for i in string.split(" ")])/len(string.split(" ")),2)
 
 def getTime(epoch):
-    time = datetime.fromtimestamp(epoch)
+    time = datetime.fromtimestamp(float(epoch))
     time = time.strftime("%H:%M:%S-%m/%d/%Y")
     return time
 
@@ -26,4 +26,4 @@ def home():
     return render_template("dash.html", nodes = ips,len = len(ips), messages = messages)
 
 app.jinja_env.globals.update(average=average, getTime = getTime)
-app.run(debug=True, port=8080)
+app.run(debug=True, port=8080, host="0.0.0.0")
