@@ -18,7 +18,7 @@ def sql_connection():
 
 def sql_table(con):
     cursorObj = con.cursor()
-    cursorObj.execute("CREATE TABLE IF NOT EXISTS GoodDB(CompositeKey text PRIMARY KEY, DeviceId integer, message text, original text, receive integer, confidence text, timestamps text )")
+    cursorObj.execute("CREATE TABLE IF NOT EXISTS GoodDB(TimeKey text PRIMARY KEY, DeviceId integer, message text, original text, receive integer, confidence text, timestamps text )")
     con.commit()
 
 def sql_insert(con, entities):
@@ -56,7 +56,7 @@ class MainHandler(tornado.web.RequestHandler):
         ts = str(ct.timestamp())
 
 
-        entities = ( (ts + " ".join(confidence)),  int(sender), " ".join(corrected_word), " ".join(original_word), int(receive), " ".join(confidence), comma_sep)
+        entities = (ts,  int(sender), " ".join(corrected_word), " ".join(original_word), int(receive), " ".join(confidence), comma_sep)
         sql_insert(con, entities)
         self.write({"to":receive,"from":sender,"message":corrected_word, "original":original_word, "confidence":confidence})
 
@@ -79,7 +79,7 @@ class TestHandler(tornado.web.RequestHandler):
         ct = datetime.datetime.now()
         ts = str(ct.timestamp())
 
-        entities = ((ts + " ".join(confidence)), int(sender), " ".join(corrected_word), " ".join(original_word), int(receive), " ".join(confidence), comma_sep)
+        entities = (ts, int(sender), " ".join(corrected_word), " ".join(original_word), int(receive), " ".join(confidence), comma_sep)
         sql_insert(con, entities)
         self.write({"corrected":corrected_word,"original": original_word,"confidence": confidence})
 
