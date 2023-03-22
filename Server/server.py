@@ -2,7 +2,7 @@ import asyncio
 import tornado.web
 import json
 from .utils import MainHandler, PingHandler, StatusHandler, StartupHandler, TestHandler
-from .webutils import NodeHandler
+from .webutils import NodeHandler, MessageHandler
 
 def make_app():
     return tornado.web.Application([
@@ -12,6 +12,7 @@ def make_app():
         (r"/test", TestHandler),
         (r"/start", StartupHandler),
         (r"/getNodes", NodeHandler),
+        (r"/getMessages", MessageHandler),
     ])
 
 async def main():
