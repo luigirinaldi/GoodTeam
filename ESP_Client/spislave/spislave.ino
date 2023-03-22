@@ -1,16 +1,20 @@
-#include <ArduinoJson.h>
-#include <ArduinoJson.hpp>
-
 #include <ESP32SPISlave.h>
 #include <ArduinoJson.h>
 #include <WiFi.h>
 #include <HTTPClient.h>
 
 // GLOBALS
+int valid_tap_time = -1;
+int time_since_valid;
 
 // SERVER STUFF
 const char* ssid = "iPhone di Luigi";
 const char* password = "chungusVBD";
+
+const std::string DeviceID = "test";
+
+const std::string RecipientID = "-1";
+
 
 String server_ip = "http://54.237.83.228:8888/";
 String SERVER_PING = server_ip + "ping";
@@ -24,7 +28,9 @@ int deviceID = 0;
 String msg = "CARPO DIEM"; // Message that gets printed to the FPGA
 int count =0;
 
-float timestamps[32];
+float array_timestamps[256];
+
+int count_timestamps = 0; //the number of timestamps that have been added to array_timestamp
 
 ESP32SPISlave slave;
 
@@ -66,13 +72,33 @@ void connectToServer() {
 
 float convertTime(int16_t timestamp){
   float standard_time = (float) timestamp/1000;
+  array_timestamps[count_timestamps++] = standard_time;
   return standard_time;
 }
 
+void sendJSON(float array_timestamps[]){
+  DynamicJsonDocument request(2048);
+
+  request["DeviceID"] = DeviceID;
+  request["RecipientID"] = RecipientID;
+
+  JsonArray timestamps = request.createNestedArray("Timestamps");
+
+  timestamps.add(0);
+
+  for(int i=1; i < count_timestamps; i++){
+        timestamps.add(array_timestamps[i]); // Add floats to JSON array starting from second, first value 0;
+  }
+  
+  serializeJsonPretty(request, Serial);
+  count_timestamps = 0;
+}
+
+
 void IRAM_ATTR HTTP_request_ISR(){
-  Serial.print("TEST");
-  Serial.println(count);
-  msg = "TEST" + String(count++);  
+  // Serial.print("TEST");
+  // Serial.println(count);
+  // msg = "TEST" + String(count++);  
 
   // http.begin(SERVER_SUSSY.c_str());
   // int response = http.GET(); // send GET request
@@ -101,7 +127,7 @@ void setup() {
 
     Serial.begin(115200);
 
-    initWIFI();
+    // initWIFI();
 
     // WiFiClient client;
 
@@ -112,7 +138,7 @@ void setup() {
     //   return;
     // }
 
-    connectToServer();
+    // connectToServer();
 
 
 
@@ -132,6 +158,7 @@ void setup() {
 
 
 void loop() {
+
     if (msg.length() > 0){  // when new message send to the FPGA
       spi_slave_tx_buf[0] = 255;
       spi_slave_tx_buf[1] = msg.length(); // assuming lengths is less than 256
@@ -150,8 +177,12 @@ void loop() {
       msg = "";      
     }
     
+
     spi_slave_tx_buf[0] = 0;
     spi_slave_tx_buf[1] = 0;
+
+
+
     slave.wait(spi_slave_rx_buf, spi_slave_tx_buf, BUFFER_SIZE);
 
     // if (slave.remained() == 0) {
@@ -165,16 +196,31 @@ void loop() {
          
     while (slave.available()) {
       // do something with `spi_slave_rx_buf
+      time_since_valid = millis();
+
+      if((valid_tap_time != -1) && (time_since_valid - valid_tap_time > 2000)){
+        //send HTTP request
+        Serial.println("Exceeded 2 sec, send request");
+        sendJSON(array_timestamps);
+
+        valid_tap_time = -1;
+      }
+
       int16_t tap_data;
       if (spi_slave_rx_buf[0] & 0x80) { // check MSbit to be one
+
+        valid_tap_time = millis(); // Take time when valid tap received
+
         tap_data = (spi_slave_rx_buf[0] << 8 | spi_slave_rx_buf[1]) & 0x7FFF; // reconstruct data, ignore the MSbit
-        // convertTime(tap_data);
+        convertTime(tap_data);
         printf("Tap detected ");
         printf("%d\n", tap_data);
         // printf("Time since last tap: ");
         // printf("%d\n",   tap_data);          
         // printf("%d, %d\n", spi_slave_rx_buf[0], spi_slave_rx_buf[1]);
       }
+
+
       slave.pop();
     }
 
