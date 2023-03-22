@@ -2,7 +2,35 @@ import tornado.web
 import json
 from Translator.utils import tapsToWord, getDelay
 import datetime
+import sqlite3
+from sqlite3 import Error
 
+#####################################################################
+# DataBase:
+#####################################################################
+def sql_connection():
+    try:
+        con = sqlite3.connect('mydatabase.db')
+        return con
+    except Error:
+        print(Error)
+
+def sql_table(con):
+    cursorObj = con.cursor()
+    cursorObj.execute("CREATE TABLE IF NOT EXISTS GoodDB(CompositeKey text PRIMARY KEY, DeviceId integer, message text, original text, receive integer, confidence text)")
+    con.commit()
+
+def sql_insert(con, entities):
+    cursorObj = con.cursor()   
+    cursorObj.execute('''INSERT INTO GoodDB(CompositeKey, DeviceId, message, original, receive, confidence) VALUES(?, ?, ?, ?, ?, ?)''', entities)   
+    con.commit()
+
+con = sql_connection()
+sql_table(con)
+
+#####################################################################
+# Handlers
+#####################################################################
 messageQueue = []
 deviceIDs = []
 class MainHandler(tornado.web.RequestHandler):
@@ -13,10 +41,13 @@ class MainHandler(tornado.web.RequestHandler):
         timestamps = [{'time':datetime.datetime.fromtimestamp(x)} for x in timestamps]
         corrected_word, original_word, confidence = tapsToWord(timestamps, delay=getDelay(timestamps))
         sender = data_in["DeviceID"]
-        recieve = data_in["RecipientID"]
-        messageQueue.append({"to":recieve,"from":sender,"message":corrected_word, "original":original_word, "confidence":confidence})
-        self.write({"corrected":corrected_word,"original": original_word,"confidence": confidence})
+        receive = data_in["RecipientID"]
+        messageQueue.append({"to":receive,"from":sender,"message":corrected_word, "original":original_word, "confidence":confidence})
 
+        entities = ((str(int(sender)) + " ".join(confidence)),  int(sender), " ".join(corrected_word), " ".join(original_word), int(receive), " ".join(confidence))
+        sql_insert(con, entities)
+
+        self.write({"corrected":corrected_word,"original": original_word,"confidence": confidence})
 
 class TestHandler(tornado.web.RequestHandler):
     def get(self):
@@ -25,11 +56,11 @@ class TestHandler(tornado.web.RequestHandler):
         timestamps = [{'time':datetime.datetime.fromtimestamp(x)} for x in timestamps]
         corrected_word, original_word, confidence = tapsToWord(timestamps, delay=getDelay(timestamps))
         sender = 1
-        recieve = 1
-        messageQueue.append({"to":recieve,"from":sender,"message":corrected_word, "original":original_word, "confidence":confidence})
-        self.write(corrected_word)
-        self.write(original_word)
-        self.write(confidence)
+        receive = 1
+        entities = ((str(int(sender)) + " ".join(confidence)), int(sender), " ".join(corrected_word), " ".join(original_word), int(receive), " ".join(confidence))
+        sql_insert(con, entities)
+        messageQueue.append({"to":receive,"from":sender,"message":corrected_word, "original":original_word, "confidence":confidence})
+        self.write({"corrected":corrected_word,"original": original_word,"confidence": confidence})
 
 class PingHandler(tornado.web.RequestHandler):
     def get(self):
