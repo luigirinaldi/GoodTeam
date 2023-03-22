@@ -4,13 +4,22 @@
 #include <ESP32SPISlave.h>
 #include <ArduinoJson.h>
 #include <WiFi.h>
+#include <HTTPClient.h>
 
 // GLOBALS
 
-const char* ssid = "";
-const char* password = "";
+// SERVER STUFF
+const char* ssid = "iPhone di Luigi";
+const char* password = "chungusVBD";
 
-const char* server_ip = "http://54.90.46.38:8888/";
+String server_ip = "http://54.237.83.228:8888/";
+String SERVER_PING = server_ip + "ping";
+String SERVER_START = server_ip + "start";
+String SERVER_SUSSY = server_ip + "status";
+
+HTTPClient http;
+
+int deviceID = 0;
 
 String msg = "CARPO DIEM"; // Message that gets printed to the FPGA
 int count =0;
@@ -25,7 +34,6 @@ uint8_t spi_slave_rx_buf[BUFFER_SIZE];
 
 
 void initWIFI() {
-  Serial.begin(115200);
   Serial.println("Attempting to connect...");
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
@@ -37,6 +45,25 @@ void initWIFI() {
   Serial.println(WiFi.localIP());
 }
 
+void connectToServer() {
+  http.begin(SERVER_START.c_str());
+  int response = http.GET(); // send GET request
+  
+  if (response == 200){
+    Serial.print("Successfull Startup request!");
+    String payload = http.getString();
+    Serial.println(payload);
+  } else {
+    Serial.print("Error: ");
+    Serial.println(response);
+    String payload = http.getString();
+    Serial.println(payload);
+  }
+
+  // Free resources
+  // http.end();
+}
+
 float convertTime(int16_t timestamp){
   float standard_time = (float) timestamp/1000;
   return standard_time;
@@ -46,6 +73,24 @@ void IRAM_ATTR HTTP_request_ISR(){
   Serial.print("TEST");
   Serial.println(count);
   msg = "TEST" + String(count++);  
+
+  // http.begin(SERVER_SUSSY.c_str());
+  // int response = http.GET(); // send GET request
+
+
+  // if (response == 200){
+  //   Serial.println("Successfull Startup request!");
+  //   String payload = http.getString();
+  //   Serial.println(payload);
+  // } else {
+  //   Serial.print("Error: ");
+  //   Serial.println(response);
+  //   String payload = http.getString();
+  //   Serial.println(payload);
+  // }
+
+  // // Free resources
+  // // http.end();
 }
 
 hw_timer_t *Timer0_Cfg = NULL;
@@ -56,7 +101,7 @@ void setup() {
 
     Serial.begin(115200);
 
-    // initWIFI();
+    initWIFI();
 
     // WiFiClient client;
 
@@ -66,6 +111,8 @@ void setup() {
     //   Serial.println(F("Connection failed"));
     //   return;
     // }
+
+    connectToServer();
 
 
 
