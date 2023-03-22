@@ -51,7 +51,7 @@ def my_autocorrect(input_word):
         best_correction = output.iat[0,0]
         confidence = output.iat[0,3]
         print("Corrected message: ", best_correction.upper(), "Original message: ", input_word.upper(), "Confidence coef: ", confidence)
-        return(best_correction.upper(), input_word.upper(), confidence)
+        return(best_correction.upper(), input_word.upper(), str(confidence))
     
     
 
