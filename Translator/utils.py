@@ -122,6 +122,29 @@ def splitTaps(taps,delay=100,var=0):
             sub.append(taps[i])
             split.append(sub)
             sub=[]
+
+def getDelay(taps,threshold=0.5):
+    taps = [tap['time'].timestamp() for tap in taps]
+    delays = [j-i for i, j in zip(taps[:-1], taps[1:])]
+    counts,bin = np.histogram(delays, bins=50, density=True)
+    new = []
+    total = 0
+    for val in counts:
+        total = val + total
+        new.append(total)
+    cum = [x/total for x in new]
+    #plt.stairs(cum,bin)
+    counts =[x/max(counts) for x in counts]
+    #plt.stairs(counts,bin)
+    for idx in range(len(cum)):
+        if cum[idx]>threshold and counts[idx]==0 :
+            delay = bin[idx]
+            print(f'delay = {delay} s')
+            break
+    #plt.axvline(x = delay, color = 'g', label = 'delay threshold')
+    #plt.show()
+    return delay*1000
+
 def tapsToWord(taps, delay=100, var=0):
     #actual useful function
     word = ""
@@ -147,26 +170,3 @@ def tapsToWord(taps, delay=100, var=0):
 
     corrected_word, original_word, confidence = my_autocorrect(word)
     return (corrected_word, original_word, confidence)
-
-def getDelay(taps,threshold=0.5):
-    taps = [tap['time'].timestamp() for tap in taps]
-    delays = [j-i for i, j in zip(taps[:-1], taps[1:])]
-    counts,bin = np.histogram(delays, bins=50, density=True)
-    new = []
-    total = 0
-    for val in counts:
-        total = val + total
-        new.append(total)
-    cum = [x/total for x in new]
-    #plt.stairs(cum,bin)
-    counts =[x/max(counts) for x in counts]
-    #plt.stairs(counts,bin)
-    for idx in range(len(cum)):
-        if cum[idx]>threshold and counts[idx]==0 :
-            delay = bin[idx]
-            print(f'delay = {delay} s')
-            break
-    #plt.axvline(x = delay, color = 'g', label = 'delay threshold')
-    #plt.show()
-    return delay*1000
-
