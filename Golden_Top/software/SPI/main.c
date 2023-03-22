@@ -333,6 +333,8 @@ int getBin(char letter){
 		return 0b0010001;
 	case 'Z':
 		return 0b0100100;
+  case ':':
+    return 0b0111111;
 	default:
 		return 0b11111111;
 	}
