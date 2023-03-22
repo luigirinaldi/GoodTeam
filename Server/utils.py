@@ -51,6 +51,10 @@ class PingHandler(tornado.web.RequestHandler):
 class StartupHandler(tornado.web.RequestHandler):
     def get(self):
         ip = self.request.remote_ip
+        data_in = self.request.body
+        if data_in:
+            data_in = json.loads(data_in)
+            deviceIDs.append(data_in["ip"])
         if ip not in deviceIDs:
             deviceIDs.append(ip)
             data = {"deviceID":deviceIDs.index(ip)}

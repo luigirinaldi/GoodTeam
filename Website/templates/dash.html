@@ -1,0 +1,129 @@
+<!-- Container for demo purpose -->
+{% extends "base.html" %}
+{% block navbar %}
+<nav class="bg-white px-4 sm:px-4 py-2.5 bg-gray-700 fixed w-full top-0 left-0
+    border-b border-gray-200 dark:border-gray-600">
+    <div class="container flex flex-wrap md:space-x-10 mx-auto">
+        <span class="text-3xl text-purple-600 font-bold tracking-tight ">TapTalk</span>
+        <div class="flex items-center w-full md:flex md:w-auto md:order-1"
+            id="navbar-sticky">
+            <ul class="flex flex-col py-2 px-4 border rounded-lg md:flex-row
+                md:space-x-10 md:mt-0 md:text-lg md:font-medium md:border-0
+                md:bg-gray-500">
+                <li>
+                    <a href="#" class="block px-3 text-white rounded
+                        hover:bg-gray-800 md:text-gray-100 "
+                        aria-current="page">Home</a>
+                </li>
+                <li>
+                    <a href="#" class="block px-3 text-gray-700 rounded
+                        hover:bg-gray-800 md:hover:text-gray-400 "> Messages
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="block px-3 text-gray-700 rounded
+                        hover:bg-gray-800 md:hover:text-gray-400 "> Nodes </a>
+                </li>
+                <li>
+                    <a href="#" class="block px-3 text-gray-700 rounded
+                        hover:bg-gray-800 md:hover:text-gray-400 "> Analysis
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+{% block content %}
+<div class="flex grid grid-cols-3 grid-rows-1 items-start gap-5 mt-20 mx-10">
+    <div class="col-start-3 row-start-1">
+        <div class="w-full max-w-md p-4 bg-white border border-gray-200
+            rounded-lg shadow sm:p-8 ">
+            <div class="flex items-center mb-4">
+                <div class="flex-shrink-0">
+                    <img class="w-16 h-16 rounded-full"
+                        src="static/src/assets/hex.svg"
+                        alt="node image">
+                </div>
+                <h5 class="text-xl font-bold leading-none text-gray-900">Active
+                    Nodes</h5>
+            </div>
+            <div class="flow-root">
+                <ul role="list" class="divide-y divide-gray-200">
+                    {%for i in range(0,len)%}
+                    <li class="py-3 sm:py-4">
+                        <div class="flex items-center space-x-5">
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium text-gray-900
+                                    truncate ">
+                                    Node Ip
+                                </p>
+                                <p class="text-sm text-gray-500 truncate
+                                    ">
+                                    {{nodes[i]}}
+                                </p>
+                            </div>
+                            <div class="iflex-1 min-w-0">
+                                <p class="text-sm font-medium text-gray-900
+                                    truncate ">
+                                    Node Device ID
+                                </p>
+                                <p class="text-sm text-gray-500 truncate
+                                    ">
+                                    {{i}}
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                    {%endfor%}
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-start-1 row-start-1 col-span-2">
+        <div class="w-full max-w-md p-4 bg-white border border-gray-200
+            rounded-lg shadow sm:p-8 ">
+            <div class="flex items-center mb-4">
+                <img class="w-8 h-8 mr-3"
+                    src="static/src/assets/message.svg"
+                    alt="node image">
+                <h5 class="text-xl font-bold leading-none text-gray-900">Messages</h5>
+            </div>
+            <div class="flow-root">
+                <ul role="list" class="divide-y divide-gray-200">
+                    <li class="flex grid-cols-3 grid-rows-1 justify-between">
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-medium text-gray-900
+                                truncate ">
+                                Corrected Message
+                            </p>
+                            <p class="text-sm text-gray-500 truncate
+                                ">
+                            </p>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-medium text-gray-900
+                                truncate ">
+                                Original Message
+                            </p>
+                            <p class="text-sm text-gray-500 truncate
+                                ">
+                            </p>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-medium text-gray-900
+                                truncate ">
+                                Confidence
+                            </p>
+                            <p class="text-sm text-gray-500 truncate
+                                ">
+                            </p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
