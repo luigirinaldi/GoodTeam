@@ -1,7 +1,7 @@
 import asyncio
 import tornado.web
 import json
-from .utils import MainHandler, PingHandler, StatusHandler, StartupHandler
+from .utils import MainHandler, PingHandler, StatusHandler, StartupHandler, TestHandler
 
 def make_app():
     return tornado.web.Application([
