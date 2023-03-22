@@ -58,7 +58,7 @@ class MainHandler(tornado.web.RequestHandler):
 
         entities = ( (ts + " ".join(confidence)),  int(sender), " ".join(corrected_word), " ".join(original_word), int(receive), " ".join(confidence), comma_sep)
         sql_insert(con, entities)
-        self.write({"corrected":corrected_word,"original": original_word,"confidence": confidence})
+        self.write({"to":receive,"from":sender,"message":corrected_word, "original":original_word, "confidence":confidence})
 
 class TestHandler(tornado.web.RequestHandler):
     def get(self):
