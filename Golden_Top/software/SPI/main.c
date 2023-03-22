@@ -139,8 +139,8 @@ void accelerometer_isr(){
 
     send_spi = time_diff_msec | 0x8000;
 
-    alt_putstr("tap:");
-    printf("%d\n", time_diff_msec);
+    // alt_putstr("tap:");
+    // printf("%d\n", time_diff_msec);
 
     newTapData = 1; // indicate that there is data to send
     send_spi = time_diff_msec; // set data to send
@@ -182,7 +182,7 @@ int main()
   timer_0_init();
   timer_1_init();
 
-  printf("Entered Main\n");
+  // printf("Entered Main\n");
 
   alt_16 rcvd_spi;
 
@@ -216,8 +216,8 @@ int main()
         inc_msg[i] = rcvd_spi;// save char 
 
       } 
-      alt_putstr(inc_msg);
-      putchar('\n');
+      // alt_putstr(inc_msg);
+      // putchar('\n');
 
       // Write to the HEX digits
       memcpy(currMsg.text, inc_msg, (num_char + BLANK_SPACES) * sizeof(char)); // copy data

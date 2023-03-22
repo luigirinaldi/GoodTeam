@@ -11,7 +11,7 @@ int time_since_valid;
 const char* ssid = "iPhone di Luigi";
 const char* password = "chungusVBD";
 
-const char* host = "100.26.142.78";
+const char* host = "100.25.36.15";
 const int httpPort = 8888;
 
 // RECEIVE MESSAGE
@@ -23,12 +23,13 @@ const int httpPort = 8888;
 TaskHandle_t ServerRequestTask;
 
 int DeviceID = 0;
-int RecipientID = 0;
+int RecipientID = -1;
 
 String msg = "READY TO SEND"; // Message that gets printed to the FPGA
 int count =0;
 
 float array_timestamps[256];
+float rolling_timestamp = 0;
 
 int count_timestamps = 0; //the number of timestamps that have been added to array_timestamp
 
@@ -74,6 +75,7 @@ bool pingServer(int deviceID, String &ReceivedMsg) {
       return false;
     }
     int sender = doc["messages"][0]["from"];
+
     JsonArray message = doc["messages"][0]["message"].as<JsonArray>();
 
     ReceivedMsg = String(sender) + ":";
@@ -149,7 +151,7 @@ bool connectToServer() {
 
 float convertTime(int16_t timestamp){
   float standard_time = (float) timestamp/1000;
-  array_timestamps[count_timestamps++] = standard_time;
+  array_timestamps[count_timestamps++] = rolling_timestamp += standard_time;
   return standard_time;
 }
 
@@ -161,9 +163,9 @@ void sendJSON(float array_timestamps[]){
 
   JsonArray timestamps = request.createNestedArray("taps");
 
-  timestamps.add(0);
+  // timestamps.add(0);
 
-  for(int i=1; i < count_timestamps; i++){
+  for(int i=0; i < count_timestamps; i++){
         timestamps.add(array_timestamps[i]); // Add floats to JSON array starting from second value, first value 0;
   }
   
@@ -191,6 +193,7 @@ void sendJSON(float array_timestamps[]){
   
   // reset counter 
   count_timestamps = 0;
+  rolling_timestamp = 0;
 }
 
 
@@ -209,6 +212,8 @@ void setup() {
       Serial.println("Trying to connect to the server");
       delay(1000);
     }
+
+    RecipientID = DeviceID;
 
     Serial.println("Connected to server with ID" + String(DeviceID));
 

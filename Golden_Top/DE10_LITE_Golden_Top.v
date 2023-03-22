@@ -92,7 +92,9 @@ module DE10_LITE_Golden_Top(
 		.spi_external_MISO(GPIO[2]),                                  //                         spi_external.MISO
 		.spi_external_MOSI(GPIO[0]),                                  //                                     .MOSI
 		.spi_external_SCLK(GPIO[4]),                                  //                                     .SCLK
-		.spi_external_SS_n(GPIO[6])  
+		.spi_external_SS_n(GPIO[6]),
+		.switches_external_connection_export                (SW[9:0])                 //         switches_external_connection.export
+
 	);
 
 

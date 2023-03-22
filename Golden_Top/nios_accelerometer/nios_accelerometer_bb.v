@@ -16,7 +16,8 @@ module nios_accelerometer (
 	spi_external_MISO,
 	spi_external_MOSI,
 	spi_external_SCLK,
-	spi_external_SS_n);	
+	spi_external_SS_n,
+	switches_external_connection_export);	
 
 	inout		accelerometer_spi_external_interface_I2C_SDAT;
 	output		accelerometer_spi_external_interface_I2C_SCLK;
@@ -35,4 +36,5 @@ module nios_accelerometer (
 	output		spi_external_MOSI;
 	output		spi_external_SCLK;
 	output		spi_external_SS_n;
+	input	[9:0]	switches_external_connection_export;
 endmodule

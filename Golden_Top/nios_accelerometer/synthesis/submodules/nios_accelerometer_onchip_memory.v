@@ -36,6 +36,9 @@ module nios_accelerometer_onchip_memory (
                                         )
 ;
 
+  parameter INIT_FILE = "/home/youlittleperson/Documents/Imperial/GoodTeam/Golden_Top/software/SPI/mem_init/nios_accelerometer_onchip_memory.hex";
+
+
   output  [ 31: 0] readdata;
   input   [ 13: 0] address;
   input   [  3: 0] byteenable;
@@ -66,7 +69,7 @@ wire             wren;
     );
 
   defparam the_altsyncram.byte_size = 8,
-           the_altsyncram.init_file = "UNUSED",
+           the_altsyncram.init_file = INIT_FILE,
            the_altsyncram.lpm_type = "altsyncram",
            the_altsyncram.maximum_depth = 16384,
            the_altsyncram.numwords_a = 16384,

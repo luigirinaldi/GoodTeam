@@ -15,6 +15,7 @@
 		.spi_external_MISO                                  (<connected-to-spi_external_MISO>),                                  //                         spi_external.MISO
 		.spi_external_MOSI                                  (<connected-to-spi_external_MOSI>),                                  //                                     .MOSI
 		.spi_external_SCLK                                  (<connected-to-spi_external_SCLK>),                                  //                                     .SCLK
-		.spi_external_SS_n                                  (<connected-to-spi_external_SS_n>)                                   //                                     .SS_n
+		.spi_external_SS_n                                  (<connected-to-spi_external_SS_n>),                                  //                                     .SS_n
+		.switches_external_connection_export                (<connected-to-switches_external_connection_export>)                 //         switches_external_connection.export
 	);
 

@@ -20,7 +20,8 @@ module nios_accelerometer (
 		input  wire       spi_external_MISO,                                  //                         spi_external.MISO
 		output wire       spi_external_MOSI,                                  //                                     .MOSI
 		output wire       spi_external_SCLK,                                  //                                     .SCLK
-		output wire       spi_external_SS_n                                   //                                     .SS_n
+		output wire       spi_external_SS_n,                                  //                                     .SS_n
+		input  wire [9:0] switches_external_connection_export                 //         switches_external_connection.export
 	);
 
 	wire  [31:0] cpu_data_master_readdata;                                                            // mm_interconnect_0:cpu_data_master_readdata -> cpu:d_readdata
@@ -109,6 +110,8 @@ module nios_accelerometer (
 	wire   [2:0] mm_interconnect_0_timer_1_s1_address;                                                // mm_interconnect_0:timer_1_s1_address -> timer_1:address
 	wire         mm_interconnect_0_timer_1_s1_write;                                                  // mm_interconnect_0:timer_1_s1_write -> timer_1:write_n
 	wire  [15:0] mm_interconnect_0_timer_1_s1_writedata;                                              // mm_interconnect_0:timer_1_s1_writedata -> timer_1:writedata
+	wire  [31:0] mm_interconnect_0_switches_s1_readdata;                                              // switches:readdata -> mm_interconnect_0:switches_s1_readdata
+	wire   [1:0] mm_interconnect_0_switches_s1_address;                                               // mm_interconnect_0:switches_s1_address -> switches:address
 	wire         mm_interconnect_0_spi_spi_control_port_chipselect;                                   // mm_interconnect_0:spi_spi_control_port_chipselect -> spi:spi_select
 	wire  [15:0] mm_interconnect_0_spi_spi_control_port_readdata;                                     // spi:data_to_cpu -> mm_interconnect_0:spi_spi_control_port_readdata
 	wire   [2:0] mm_interconnect_0_spi_spi_control_port_address;                                      // mm_interconnect_0:spi_spi_control_port_address -> spi:mem_addr
@@ -121,7 +124,7 @@ module nios_accelerometer (
 	wire         irq_mapper_receiver3_irq;                                                            // spi:irq -> irq_mapper:receiver3_irq
 	wire         irq_mapper_receiver4_irq;                                                            // timer_1:irq -> irq_mapper:receiver4_irq
 	wire  [31:0] cpu_irq_irq;                                                                         // irq_mapper:sender_irq -> cpu:irq
-	wire         rst_controller_reset_out_reset;                                                      // rst_controller:reset_out -> [accelerometer_spi:reset, cpu:reset_n, hex_0:reset_n, hex_1:reset_n, hex_2:reset_n, hex_3:reset_n, hex_4:reset_n, hex_5:reset_n, irq_mapper:reset, jtag_uart:rst_n, led:reset_n, mm_interconnect_0:cpu_reset_reset_bridge_in_reset_reset, onchip_memory:reset, rst_translator:in_reset, spi:reset_n, timer_0:reset_n, timer_1:reset_n]
+	wire         rst_controller_reset_out_reset;                                                      // rst_controller:reset_out -> [accelerometer_spi:reset, cpu:reset_n, hex_0:reset_n, hex_1:reset_n, hex_2:reset_n, hex_3:reset_n, hex_4:reset_n, hex_5:reset_n, irq_mapper:reset, jtag_uart:rst_n, led:reset_n, mm_interconnect_0:cpu_reset_reset_bridge_in_reset_reset, onchip_memory:reset, rst_translator:in_reset, spi:reset_n, switches:reset_n, timer_0:reset_n, timer_1:reset_n]
 	wire         rst_controller_reset_out_reset_req;                                                  // rst_controller:reset_req -> [cpu:reset_req, onchip_memory:reset_req, rst_translator:reset_req_in]
 
 	nios_accelerometer_accelerometer_spi accelerometer_spi (
@@ -290,6 +293,14 @@ module nios_accelerometer (
 		.SS_n          (spi_external_SS_n)                                  //                 .export
 	);
 
+	nios_accelerometer_switches switches (
+		.clk      (clk_clk),                                //                 clk.clk
+		.reset_n  (~rst_controller_reset_out_reset),        //               reset.reset_n
+		.address  (mm_interconnect_0_switches_s1_address),  //                  s1.address
+		.readdata (mm_interconnect_0_switches_s1_readdata), //                    .readdata
+		.in_port  (switches_external_connection_export)     // external_connection.export
+	);
+
 	nios_accelerometer_timer_0 timer_0 (
 		.clk        (clk_clk),                                 //   clk.clk
 		.reset_n    (~rst_controller_reset_out_reset),         // reset.reset_n
@@ -397,6 +408,8 @@ module nios_accelerometer (
 		.spi_spi_control_port_readdata                                     (mm_interconnect_0_spi_spi_control_port_readdata),                                     //                                                      .readdata
 		.spi_spi_control_port_writedata                                    (mm_interconnect_0_spi_spi_control_port_writedata),                                    //                                                      .writedata
 		.spi_spi_control_port_chipselect                                   (mm_interconnect_0_spi_spi_control_port_chipselect),                                   //                                                      .chipselect
+		.switches_s1_address                                               (mm_interconnect_0_switches_s1_address),                                               //                                           switches_s1.address
+		.switches_s1_readdata                                              (mm_interconnect_0_switches_s1_readdata),                                              //                                                      .readdata
 		.timer_0_s1_address                                                (mm_interconnect_0_timer_0_s1_address),                                                //                                            timer_0_s1.address
 		.timer_0_s1_write                                                  (mm_interconnect_0_timer_0_s1_write),                                                  //                                                      .write
 		.timer_0_s1_readdata                                               (mm_interconnect_0_timer_0_s1_readdata),                                               //                                                      .readdata

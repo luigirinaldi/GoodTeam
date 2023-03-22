@@ -1,5 +1,5 @@
 Info: Starting: Create block symbol file (.bsf)
-Info: qsys-generate /home/youlittleperson/Documents/Imperial/GoodTeam/Golden_Top/nios_accelerometer.qsys --block-symbol-file --output-directory=/home/youlittleperson/Documents/Imperial/GoodTeam/Golden_Top/nios_accelerometer --family="MAX 10" --part=10M50DAF484C7G
+Info: qsys-generate /home/youlittleperson/Documents/Imperial/GoodTeam/Golden_Top/nios_accelerometer.qsys --block-symbol-file --output-directory=/home/youlittleperson/Documents/Imperial/GoodTeam/Golden_Top/nios_accelerometer --family="MAX 10" --part=10M50DAF484C6GES
 Progress: Loading Golden_Top/nios_accelerometer.qsys
 Progress: Reading input file
 Progress: Adding accelerometer_spi [altera_up_avalon_accelerometer_spi 18.0]
@@ -28,6 +28,8 @@ Progress: Adding onchip_memory [altera_avalon_onchip_memory2 20.1]
 Progress: Parameterizing module onchip_memory
 Progress: Adding spi [altera_avalon_spi 20.1]
 Progress: Parameterizing module spi
+Progress: Adding switches [altera_avalon_pio 20.1]
+Progress: Parameterizing module switches
 Progress: Adding timer_0 [altera_avalon_timer 20.1]
 Progress: Parameterizing module timer_0
 Progress: Adding timer_1 [altera_avalon_timer 20.1]
@@ -37,11 +39,12 @@ Progress: Parameterizing connections
 Progress: Validating
 Progress: Done reading input file
 Info: nios_accelerometer.jtag_uart: JTAG UART IP input clock need to be at least double (2x) the operating frequency of JTAG TCK on board
+Info: nios_accelerometer.switches: PIO inputs are not hardwired in test bench. Undefined values will be read from PIO inputs during simulation.
 Info: qsys-generate succeeded.
 Info: Finished: Create block symbol file (.bsf)
 Info: 
 Info: Starting: Create HDL design files for synthesis
-Info: qsys-generate /home/youlittleperson/Documents/Imperial/GoodTeam/Golden_Top/nios_accelerometer.qsys --synthesis=VERILOG --output-directory=/home/youlittleperson/Documents/Imperial/GoodTeam/Golden_Top/nios_accelerometer/synthesis --family="MAX 10" --part=10M50DAF484C7G
+Info: qsys-generate /home/youlittleperson/Documents/Imperial/GoodTeam/Golden_Top/nios_accelerometer.qsys --synthesis=VERILOG --output-directory=/home/youlittleperson/Documents/Imperial/GoodTeam/Golden_Top/nios_accelerometer/synthesis --family="MAX 10" --part=10M50DAF484C6GES
 Progress: Loading Golden_Top/nios_accelerometer.qsys
 Progress: Reading input file
 Progress: Adding accelerometer_spi [altera_up_avalon_accelerometer_spi 18.0]
@@ -70,6 +73,8 @@ Progress: Adding onchip_memory [altera_avalon_onchip_memory2 20.1]
 Progress: Parameterizing module onchip_memory
 Progress: Adding spi [altera_avalon_spi 20.1]
 Progress: Parameterizing module spi
+Progress: Adding switches [altera_avalon_pio 20.1]
+Progress: Parameterizing module switches
 Progress: Adding timer_0 [altera_avalon_timer 20.1]
 Progress: Parameterizing module timer_0
 Progress: Adding timer_1 [altera_avalon_timer 20.1]
@@ -79,32 +84,37 @@ Progress: Parameterizing connections
 Progress: Validating
 Progress: Done reading input file
 Info: nios_accelerometer.jtag_uart: JTAG UART IP input clock need to be at least double (2x) the operating frequency of JTAG TCK on board
+Info: nios_accelerometer.switches: PIO inputs are not hardwired in test bench. Undefined values will be read from PIO inputs during simulation.
 Info: nios_accelerometer: Generating nios_accelerometer "nios_accelerometer" for QUARTUS_SYNTH
 Info: accelerometer_spi: Starting Generation of the Accelerometer Controller in SPI mode
 Info: accelerometer_spi: "nios_accelerometer" instantiated altera_up_avalon_accelerometer_spi "accelerometer_spi"
 Info: cpu: "nios_accelerometer" instantiated altera_nios2_gen2 "cpu"
 Info: hex_0: Starting RTL generation for module 'nios_accelerometer_hex_0'
-Info: hex_0:   Generation command is [exec /home/youlittleperson/intelFPGA_lite/20.1/quartus/linux64/perl/bin/perl -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/linux64/perl/lib -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/sopc_builder/bin/europa -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/sopc_builder/bin -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/sopc_builder_ip/common -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_pio -- /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_pio/generate_rtl.pl --name=nios_accelerometer_hex_0 --dir=/tmp/alt9436_5108721693617325004.dir/0003_hex_0_gen/ --quartus_dir=/home/youlittleperson/intelFPGA_lite/20.1/quartus --verilog --config=/tmp/alt9436_5108721693617325004.dir/0003_hex_0_gen//nios_accelerometer_hex_0_component_configuration.pl  --do_build_sim=0  ]
+Info: hex_0:   Generation command is [exec /home/youlittleperson/intelFPGA_lite/20.1/quartus/linux64/perl/bin/perl -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/linux64/perl/lib -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/sopc_builder/bin/europa -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/sopc_builder/bin -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/sopc_builder_ip/common -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_pio -- /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_pio/generate_rtl.pl --name=nios_accelerometer_hex_0 --dir=/tmp/alt9438_5318849348252989048.dir/0003_hex_0_gen/ --quartus_dir=/home/youlittleperson/intelFPGA_lite/20.1/quartus --verilog --config=/tmp/alt9438_5318849348252989048.dir/0003_hex_0_gen//nios_accelerometer_hex_0_component_configuration.pl  --do_build_sim=0  ]
 Info: hex_0: Done RTL generation for module 'nios_accelerometer_hex_0'
 Info: hex_0: "nios_accelerometer" instantiated altera_avalon_pio "hex_0"
 Info: jtag_uart: Starting RTL generation for module 'nios_accelerometer_jtag_uart'
-Info: jtag_uart:   Generation command is [exec /home/youlittleperson/intelFPGA_lite/20.1/quartus/linux64/perl/bin/perl -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/linux64/perl/lib -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/sopc_builder/bin/europa -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/sopc_builder/bin -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/sopc_builder_ip/common -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_jtag_uart -- /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_jtag_uart/generate_rtl.pl --name=nios_accelerometer_jtag_uart --dir=/tmp/alt9436_5108721693617325004.dir/0004_jtag_uart_gen/ --quartus_dir=/home/youlittleperson/intelFPGA_lite/20.1/quartus --verilog --config=/tmp/alt9436_5108721693617325004.dir/0004_jtag_uart_gen//nios_accelerometer_jtag_uart_component_configuration.pl  --do_build_sim=0  ]
+Info: jtag_uart:   Generation command is [exec /home/youlittleperson/intelFPGA_lite/20.1/quartus/linux64/perl/bin/perl -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/linux64/perl/lib -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/sopc_builder/bin/europa -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/sopc_builder/bin -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/sopc_builder_ip/common -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_jtag_uart -- /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_jtag_uart/generate_rtl.pl --name=nios_accelerometer_jtag_uart --dir=/tmp/alt9438_5318849348252989048.dir/0004_jtag_uart_gen/ --quartus_dir=/home/youlittleperson/intelFPGA_lite/20.1/quartus --verilog --config=/tmp/alt9438_5318849348252989048.dir/0004_jtag_uart_gen//nios_accelerometer_jtag_uart_component_configuration.pl  --do_build_sim=0  ]
 Info: jtag_uart: Done RTL generation for module 'nios_accelerometer_jtag_uart'
 Info: jtag_uart: "nios_accelerometer" instantiated altera_avalon_jtag_uart "jtag_uart"
 Info: led: Starting RTL generation for module 'nios_accelerometer_led'
-Info: led:   Generation command is [exec /home/youlittleperson/intelFPGA_lite/20.1/quartus/linux64/perl/bin/perl -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/linux64/perl/lib -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/sopc_builder/bin/europa -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/sopc_builder/bin -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/sopc_builder_ip/common -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_pio -- /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_pio/generate_rtl.pl --name=nios_accelerometer_led --dir=/tmp/alt9436_5108721693617325004.dir/0005_led_gen/ --quartus_dir=/home/youlittleperson/intelFPGA_lite/20.1/quartus --verilog --config=/tmp/alt9436_5108721693617325004.dir/0005_led_gen//nios_accelerometer_led_component_configuration.pl  --do_build_sim=0  ]
+Info: led:   Generation command is [exec /home/youlittleperson/intelFPGA_lite/20.1/quartus/linux64/perl/bin/perl -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/linux64/perl/lib -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/sopc_builder/bin/europa -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/sopc_builder/bin -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/sopc_builder_ip/common -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_pio -- /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_pio/generate_rtl.pl --name=nios_accelerometer_led --dir=/tmp/alt9438_5318849348252989048.dir/0005_led_gen/ --quartus_dir=/home/youlittleperson/intelFPGA_lite/20.1/quartus --verilog --config=/tmp/alt9438_5318849348252989048.dir/0005_led_gen//nios_accelerometer_led_component_configuration.pl  --do_build_sim=0  ]
 Info: led: Done RTL generation for module 'nios_accelerometer_led'
 Info: led: "nios_accelerometer" instantiated altera_avalon_pio "led"
 Info: onchip_memory: Starting RTL generation for module 'nios_accelerometer_onchip_memory'
-Info: onchip_memory:   Generation command is [exec /home/youlittleperson/intelFPGA_lite/20.1/quartus/linux64/perl/bin/perl -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/linux64/perl/lib -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/sopc_builder/bin/europa -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/sopc_builder/bin -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/sopc_builder_ip/common -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_onchip_memory2 -- /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_onchip_memory2/generate_rtl.pl --name=nios_accelerometer_onchip_memory --dir=/tmp/alt9436_5108721693617325004.dir/0006_onchip_memory_gen/ --quartus_dir=/home/youlittleperson/intelFPGA_lite/20.1/quartus --verilog --config=/tmp/alt9436_5108721693617325004.dir/0006_onchip_memory_gen//nios_accelerometer_onchip_memory_component_configuration.pl  --do_build_sim=0  ]
+Info: onchip_memory:   Generation command is [exec /home/youlittleperson/intelFPGA_lite/20.1/quartus/linux64/perl/bin/perl -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/linux64/perl/lib -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/sopc_builder/bin/europa -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/sopc_builder/bin -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/sopc_builder_ip/common -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_onchip_memory2 -- /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_onchip_memory2/generate_rtl.pl --name=nios_accelerometer_onchip_memory --dir=/tmp/alt9438_5318849348252989048.dir/0006_onchip_memory_gen/ --quartus_dir=/home/youlittleperson/intelFPGA_lite/20.1/quartus --verilog --config=/tmp/alt9438_5318849348252989048.dir/0006_onchip_memory_gen//nios_accelerometer_onchip_memory_component_configuration.pl  --do_build_sim=0  ]
 Info: onchip_memory: Done RTL generation for module 'nios_accelerometer_onchip_memory'
 Info: onchip_memory: "nios_accelerometer" instantiated altera_avalon_onchip_memory2 "onchip_memory"
 Info: spi: Starting RTL generation for module 'nios_accelerometer_spi'
-Info: spi:   Generation command is [exec /home/youlittleperson/intelFPGA_lite/20.1/quartus/linux64/perl/bin/perl -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/linux64/perl/lib -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/sopc_builder/bin/europa -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/sopc_builder/bin -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/sopc_builder_ip/common -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_spi -- /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_spi/generate_rtl.pl --name=nios_accelerometer_spi --dir=/tmp/alt9436_5108721693617325004.dir/0007_spi_gen/ --quartus_dir=/home/youlittleperson/intelFPGA_lite/20.1/quartus --verilog --config=/tmp/alt9436_5108721693617325004.dir/0007_spi_gen//nios_accelerometer_spi_component_configuration.pl  --do_build_sim=0  ]
+Info: spi:   Generation command is [exec /home/youlittleperson/intelFPGA_lite/20.1/quartus/linux64/perl/bin/perl -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/linux64/perl/lib -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/sopc_builder/bin/europa -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/sopc_builder/bin -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/sopc_builder_ip/common -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_spi -- /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_spi/generate_rtl.pl --name=nios_accelerometer_spi --dir=/tmp/alt9438_5318849348252989048.dir/0007_spi_gen/ --quartus_dir=/home/youlittleperson/intelFPGA_lite/20.1/quartus --verilog --config=/tmp/alt9438_5318849348252989048.dir/0007_spi_gen//nios_accelerometer_spi_component_configuration.pl  --do_build_sim=0  ]
 Info: spi: Done RTL generation for module 'nios_accelerometer_spi'
 Info: spi: "nios_accelerometer" instantiated altera_avalon_spi "spi"
+Info: switches: Starting RTL generation for module 'nios_accelerometer_switches'
+Info: switches:   Generation command is [exec /home/youlittleperson/intelFPGA_lite/20.1/quartus/linux64/perl/bin/perl -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/linux64/perl/lib -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/sopc_builder/bin/europa -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/sopc_builder/bin -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/sopc_builder_ip/common -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_pio -- /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_pio/generate_rtl.pl --name=nios_accelerometer_switches --dir=/tmp/alt9438_5318849348252989048.dir/0008_switches_gen/ --quartus_dir=/home/youlittleperson/intelFPGA_lite/20.1/quartus --verilog --config=/tmp/alt9438_5318849348252989048.dir/0008_switches_gen//nios_accelerometer_switches_component_configuration.pl  --do_build_sim=0  ]
+Info: switches: Done RTL generation for module 'nios_accelerometer_switches'
+Info: switches: "nios_accelerometer" instantiated altera_avalon_pio "switches"
 Info: timer_0: Starting RTL generation for module 'nios_accelerometer_timer_0'
-Info: timer_0:   Generation command is [exec /home/youlittleperson/intelFPGA_lite/20.1/quartus/linux64//perl/bin/perl -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/linux64//perl/lib -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/sopc_builder/bin/europa -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/sopc_builder/bin -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/sopc_builder_ip/common -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_timer -- /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_timer/generate_rtl.pl --name=nios_accelerometer_timer_0 --dir=/tmp/alt9436_5108721693617325004.dir/0008_timer_0_gen/ --quartus_dir=/home/youlittleperson/intelFPGA_lite/20.1/quartus --verilog --config=/tmp/alt9436_5108721693617325004.dir/0008_timer_0_gen//nios_accelerometer_timer_0_component_configuration.pl  --do_build_sim=0  ]
+Info: timer_0:   Generation command is [exec /home/youlittleperson/intelFPGA_lite/20.1/quartus/linux64//perl/bin/perl -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/linux64//perl/lib -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/sopc_builder/bin/europa -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/sopc_builder/bin -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/sopc_builder_ip/common -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_timer -- /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_timer/generate_rtl.pl --name=nios_accelerometer_timer_0 --dir=/tmp/alt9438_5318849348252989048.dir/0009_timer_0_gen/ --quartus_dir=/home/youlittleperson/intelFPGA_lite/20.1/quartus --verilog --config=/tmp/alt9438_5318849348252989048.dir/0009_timer_0_gen//nios_accelerometer_timer_0_component_configuration.pl  --do_build_sim=0  ]
 Info: timer_0: Done RTL generation for module 'nios_accelerometer_timer_0'
 Info: timer_0: "nios_accelerometer" instantiated altera_avalon_timer "timer_0"
 Info: avalon_st_adapter: Inserting error_adapter: error_adapter_0
@@ -121,17 +131,18 @@ Info: avalon_st_adapter_010: Inserting error_adapter: error_adapter_0
 Info: avalon_st_adapter_011: Inserting error_adapter: error_adapter_0
 Info: avalon_st_adapter_012: Inserting error_adapter: error_adapter_0
 Info: avalon_st_adapter_013: Inserting error_adapter: error_adapter_0
+Info: avalon_st_adapter_014: Inserting error_adapter: error_adapter_0
 Info: mm_interconnect_0: "nios_accelerometer" instantiated altera_mm_interconnect "mm_interconnect_0"
 Info: irq_mapper: "nios_accelerometer" instantiated altera_irq_mapper "irq_mapper"
 Info: rst_controller: "nios_accelerometer" instantiated altera_reset_controller "rst_controller"
 Info: cpu: Starting RTL generation for module 'nios_accelerometer_cpu_cpu'
-Info: cpu:   Generation command is [exec /home/youlittleperson/intelFPGA_lite/20.1/quartus/linux64//perl/bin/perl -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/linux64//perl/lib -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/sopc_builder/bin/europa -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/sopc_builder/bin -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/nios2_ip/altera_nios2_gen2/cpu_lib -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/nios2_ip/altera_nios2_gen2/nios_lib -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/nios2_ip/altera_nios2_gen2 -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/nios2_ip/altera_nios2_gen2 -- /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/nios2_ip/altera_nios2_gen2/generate_rtl.pl --name=nios_accelerometer_cpu_cpu --dir=/tmp/alt9436_5108721693617325004.dir/0011_cpu_gen/ --quartus_bindir=/home/youlittleperson/intelFPGA_lite/20.1/quartus/linux64/ --verilog --config=/tmp/alt9436_5108721693617325004.dir/0011_cpu_gen//nios_accelerometer_cpu_cpu_processor_configuration.pl  --do_build_sim=0  ]
-Info: cpu: # 2023.03.20 21:16:28 (*) Starting Nios II generation
-Info: cpu: # 2023.03.20 21:16:28 (*)   Elaborating CPU configuration settings
-Info: cpu: # 2023.03.20 21:16:28 (*)   Creating all objects for CPU
-Info: cpu: # 2023.03.20 21:16:28 (*)   Generating RTL from CPU objects
-Info: cpu: # 2023.03.20 21:16:28 (*)   Creating plain-text RTL
-Info: cpu: # 2023.03.20 21:16:29 (*) Done Nios II generation
+Info: cpu:   Generation command is [exec /home/youlittleperson/intelFPGA_lite/20.1/quartus/linux64//perl/bin/perl -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/linux64//perl/lib -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/sopc_builder/bin/europa -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/sopc_builder/bin -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/nios2_ip/altera_nios2_gen2/cpu_lib -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/nios2_ip/altera_nios2_gen2/nios_lib -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/nios2_ip/altera_nios2_gen2 -I /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/nios2_ip/altera_nios2_gen2 -- /home/youlittleperson/intelFPGA_lite/20.1/quartus/../ip/altera/nios2_ip/altera_nios2_gen2/generate_rtl.pl --name=nios_accelerometer_cpu_cpu --dir=/tmp/alt9438_5318849348252989048.dir/0012_cpu_gen/ --quartus_bindir=/home/youlittleperson/intelFPGA_lite/20.1/quartus/linux64/ --verilog --config=/tmp/alt9438_5318849348252989048.dir/0012_cpu_gen//nios_accelerometer_cpu_cpu_processor_configuration.pl  --do_build_sim=0  ]
+Info: cpu: # 2023.03.22 19:39:48 (*) Starting Nios II generation
+Info: cpu: # 2023.03.22 19:39:48 (*)   Elaborating CPU configuration settings
+Info: cpu: # 2023.03.22 19:39:48 (*)   Creating all objects for CPU
+Info: cpu: # 2023.03.22 19:39:49 (*)   Generating RTL from CPU objects
+Info: cpu: # 2023.03.22 19:39:49 (*)   Creating plain-text RTL
+Info: cpu: # 2023.03.22 19:39:49 (*) Done Nios II generation
 Info: cpu: Done RTL generation for module 'nios_accelerometer_cpu_cpu'
 Info: cpu: "cpu" instantiated altera_nios2_gen2_unit "cpu"
 Info: cpu_data_master_translator: "mm_interconnect_0" instantiated altera_merlin_master_translator "cpu_data_master_translator"
@@ -162,6 +173,6 @@ Info: avalon_st_adapter: "mm_interconnect_0" instantiated altera_avalon_st_adapt
 Info: avalon_st_adapter_001: "mm_interconnect_0" instantiated altera_avalon_st_adapter "avalon_st_adapter_001"
 Info: error_adapter_0: "avalon_st_adapter" instantiated error_adapter "error_adapter_0"
 Info: error_adapter_0: "avalon_st_adapter_001" instantiated error_adapter "error_adapter_0"
-Info: nios_accelerometer: Done "nios_accelerometer" with 36 modules, 61 files
+Info: nios_accelerometer: Done "nios_accelerometer" with 37 modules, 62 files
 Info: qsys-generate succeeded.
 Info: Finished: Create HDL design files for synthesis

@@ -4,7 +4,7 @@
  * Machine generated for CPU 'cpu' in SOPC Builder design 'nios_accelerometer'
  * SOPC Builder design path: ../../nios_accelerometer.sopcinfo
  *
- * Generated: Mon Mar 20 21:19:32 GMT 2023
+ * Generated: Wed Mar 22 19:45:32 GMT 2023
  */
 
 /*
@@ -158,19 +158,19 @@
 #define ALT_NUM_INTERNAL_INTERRUPT_CONTROLLERS 1
 #define ALT_NUM_INTERRUPT_CONTROLLERS 1
 #define ALT_STDERR "/dev/jtag_uart"
-#define ALT_STDERR_BASE 0x210d0
+#define ALT_STDERR_BASE 0x210e0
 #define ALT_STDERR_DEV jtag_uart
 #define ALT_STDERR_IS_JTAG_UART
 #define ALT_STDERR_PRESENT
 #define ALT_STDERR_TYPE "altera_avalon_jtag_uart"
 #define ALT_STDIN "/dev/jtag_uart"
-#define ALT_STDIN_BASE 0x210d0
+#define ALT_STDIN_BASE 0x210e0
 #define ALT_STDIN_DEV jtag_uart
 #define ALT_STDIN_IS_JTAG_UART
 #define ALT_STDIN_PRESENT
 #define ALT_STDIN_TYPE "altera_avalon_jtag_uart"
 #define ALT_STDOUT "/dev/jtag_uart"
-#define ALT_STDOUT_BASE 0x210d0
+#define ALT_STDOUT_BASE 0x210e0
 #define ALT_STDOUT_DEV jtag_uart
 #define ALT_STDOUT_IS_JTAG_UART
 #define ALT_STDOUT_PRESENT
@@ -183,7 +183,7 @@
  *
  */
 
-#define ACCELEROMETER_SPI_BASE 0x210d8
+#define ACCELEROMETER_SPI_BASE 0x210e8
 #define ACCELEROMETER_SPI_IRQ 0
 #define ACCELEROMETER_SPI_IRQ_INTERRUPT_CONTROLLER_ID 0
 #define ACCELEROMETER_SPI_NAME "/dev/accelerometer_spi"
@@ -209,7 +209,7 @@
  */
 
 #define ALT_MODULE_CLASS_hex_0 altera_avalon_pio
-#define HEX_0_BASE 0x210b0
+#define HEX_0_BASE 0x210c0
 #define HEX_0_BIT_CLEARING_EDGE_REGISTER 0
 #define HEX_0_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define HEX_0_CAPTURE 0
@@ -236,7 +236,7 @@
  */
 
 #define ALT_MODULE_CLASS_hex_1 altera_avalon_pio
-#define HEX_1_BASE 0x210a0
+#define HEX_1_BASE 0x210b0
 #define HEX_1_BIT_CLEARING_EDGE_REGISTER 0
 #define HEX_1_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define HEX_1_CAPTURE 0
@@ -263,7 +263,7 @@
  */
 
 #define ALT_MODULE_CLASS_hex_2 altera_avalon_pio
-#define HEX_2_BASE 0x21090
+#define HEX_2_BASE 0x210a0
 #define HEX_2_BIT_CLEARING_EDGE_REGISTER 0
 #define HEX_2_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define HEX_2_CAPTURE 0
@@ -290,7 +290,7 @@
  */
 
 #define ALT_MODULE_CLASS_hex_3 altera_avalon_pio
-#define HEX_3_BASE 0x21080
+#define HEX_3_BASE 0x21090
 #define HEX_3_BIT_CLEARING_EDGE_REGISTER 0
 #define HEX_3_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define HEX_3_CAPTURE 0
@@ -317,7 +317,7 @@
  */
 
 #define ALT_MODULE_CLASS_hex_4 altera_avalon_pio
-#define HEX_4_BASE 0x21070
+#define HEX_4_BASE 0x21080
 #define HEX_4_BIT_CLEARING_EDGE_REGISTER 0
 #define HEX_4_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define HEX_4_CAPTURE 0
@@ -344,7 +344,7 @@
  */
 
 #define ALT_MODULE_CLASS_hex_5 altera_avalon_pio
-#define HEX_5_BASE 0x21060
+#define HEX_5_BASE 0x21070
 #define HEX_5_BIT_CLEARING_EDGE_REGISTER 0
 #define HEX_5_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define HEX_5_CAPTURE 0
@@ -371,7 +371,7 @@
  */
 
 #define ALT_MODULE_CLASS_jtag_uart altera_avalon_jtag_uart
-#define JTAG_UART_BASE 0x210d0
+#define JTAG_UART_BASE 0x210e0
 #define JTAG_UART_IRQ 2
 #define JTAG_UART_IRQ_INTERRUPT_CONTROLLER_ID 0
 #define JTAG_UART_NAME "/dev/jtag_uart"
@@ -389,7 +389,7 @@
  */
 
 #define ALT_MODULE_CLASS_led altera_avalon_pio
-#define LED_BASE 0x210c0
+#define LED_BASE 0x210d0
 #define LED_BIT_CLEARING_EDGE_REGISTER 0
 #define LED_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define LED_CAPTURE 0
@@ -423,12 +423,12 @@
 #define ONCHIP_MEMORY_DUAL_PORT 0
 #define ONCHIP_MEMORY_GUI_RAM_BLOCK_TYPE "AUTO"
 #define ONCHIP_MEMORY_INIT_CONTENTS_FILE "nios_accelerometer_onchip_memory"
-#define ONCHIP_MEMORY_INIT_MEM_CONTENT 0
+#define ONCHIP_MEMORY_INIT_MEM_CONTENT 1
 #define ONCHIP_MEMORY_INSTANCE_ID "NONE"
 #define ONCHIP_MEMORY_IRQ -1
 #define ONCHIP_MEMORY_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define ONCHIP_MEMORY_NAME "/dev/onchip_memory"
-#define ONCHIP_MEMORY_NON_DEFAULT_INIT_FILE_ENABLED 0
+#define ONCHIP_MEMORY_NON_DEFAULT_INIT_FILE_ENABLED 1
 #define ONCHIP_MEMORY_RAM_BLOCK_TYPE "AUTO"
 #define ONCHIP_MEMORY_READ_DURING_WRITE_MODE "DONT_CARE"
 #define ONCHIP_MEMORY_SINGLE_CLOCK_OP 0
@@ -468,6 +468,33 @@
 #define SPI_TARGETCLOCK 100000u
 #define SPI_TARGETSSDELAY "0.0"
 #define SPI_TYPE "altera_avalon_spi"
+
+
+/*
+ * switches configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_switches altera_avalon_pio
+#define SWITCHES_BASE 0x21060
+#define SWITCHES_BIT_CLEARING_EDGE_REGISTER 0
+#define SWITCHES_BIT_MODIFYING_OUTPUT_REGISTER 0
+#define SWITCHES_CAPTURE 0
+#define SWITCHES_DATA_WIDTH 10
+#define SWITCHES_DO_TEST_BENCH_WIRING 0
+#define SWITCHES_DRIVEN_SIM_VALUE 0
+#define SWITCHES_EDGE_TYPE "NONE"
+#define SWITCHES_FREQ 50000000
+#define SWITCHES_HAS_IN 1
+#define SWITCHES_HAS_OUT 0
+#define SWITCHES_HAS_TRI 0
+#define SWITCHES_IRQ -1
+#define SWITCHES_IRQ_INTERRUPT_CONTROLLER_ID -1
+#define SWITCHES_IRQ_TYPE "NONE"
+#define SWITCHES_NAME "/dev/switches"
+#define SWITCHES_RESET_VALUE 0
+#define SWITCHES_SPAN 16
+#define SWITCHES_TYPE "altera_avalon_pio"
 
 
 /*

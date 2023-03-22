@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>Mar 20, 2023 9:19:32 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1679347172154</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>Mar 22, 2023 7:45:32 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1679514332148</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>/home/youlittleperson/Documents/Imperial/GoodTeam/Golden_Top/software/SPI_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>../../nios_accelerometer.sopcinfo</SopcDesignFile>
@@ -923,56 +923,62 @@
                 <attributes>timer</attributes>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>hex_5</slaveDescriptor>
+                <slaveDescriptor>switches</slaveDescriptor>
                 <addressRange>0x00021060 - 0x0002106F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>hex_4</slaveDescriptor>
+                <slaveDescriptor>hex_5</slaveDescriptor>
                 <addressRange>0x00021070 - 0x0002107F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>hex_3</slaveDescriptor>
+                <slaveDescriptor>hex_4</slaveDescriptor>
                 <addressRange>0x00021080 - 0x0002108F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>hex_2</slaveDescriptor>
+                <slaveDescriptor>hex_3</slaveDescriptor>
                 <addressRange>0x00021090 - 0x0002109F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>hex_1</slaveDescriptor>
+                <slaveDescriptor>hex_2</slaveDescriptor>
                 <addressRange>0x000210A0 - 0x000210AF</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>hex_0</slaveDescriptor>
+                <slaveDescriptor>hex_1</slaveDescriptor>
                 <addressRange>0x000210B0 - 0x000210BF</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>led</slaveDescriptor>
+                <slaveDescriptor>hex_0</slaveDescriptor>
                 <addressRange>0x000210C0 - 0x000210CF</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
+                <slaveDescriptor>led</slaveDescriptor>
+                <addressRange>0x000210D0 - 0x000210DF</addressRange>
+                <addressSpan>16</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
                 <slaveDescriptor>jtag_uart</slaveDescriptor>
-                <addressRange>0x000210D0 - 0x000210D7</addressRange>
+                <addressRange>0x000210E0 - 0x000210E7</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes>printable</attributes>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>accelerometer_spi</slaveDescriptor>
-                <addressRange>0x000210D8 - 0x000210D9</addressRange>
+                <addressRange>0x000210E8 - 0x000210E9</addressRange>
                 <addressSpan>2</addressSpan>
                 <attributes/>
         </MemoryMap>
