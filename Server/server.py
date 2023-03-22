@@ -9,6 +9,7 @@ def make_app():
         (r"/ping", PingHandler),
         (r"/status", StatusHandler),
         (r"/start", StartupHandler),
+        (r"/test", TestHandler),
     ])
 
 async def main():
