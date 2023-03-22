@@ -1,6 +1,6 @@
 <sld_project_info>
   <project>
-    <hash md5_digest_80b="996d16f666a7eed1ebf6"/>
+    <hash md5_digest_80b="af2c35c891dcd1db6a4d"/>
   </project>
   <file_info>
     <file device="10M50DAF484C6GES" path="DE10_LITE_Golden_Top.sof" usercode="0xFFFFFFFF"/>
@@ -137,12 +137,6 @@
     </node>
   </node_info>
   <sld_infos>
-    <sld_info hpath="nios_accelerometer:u0" name="u0">
-      <assignment_values>
-        <assignment_value text="QSYS_NAME nios_accelerometer HAS_SOPCINFO 1 GENERATION_ID 1679514219"/>
-      </assignment_values>
-      <parameters/>
-    </sld_info>
     <sld_info hpath="sld_hub:auto_hub|alt_sld_fab:\instrumentation_fabric_with_node_gen:instrumentation_fabric" library="alt_sld_fab" name="instrumentation_fabric">
       <assignment_values>
         <assignment_value text="QSYS_NAME alt_sld_fab HAS_SOPCINFO 1"/>

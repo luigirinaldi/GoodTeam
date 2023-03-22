@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <EnsembleReport name="nios_accelerometer" kind="system" version="20.1" fabric="QSYS">
  <!-- Format version 20.1 711 (Future versions may contain additional information.) -->
- <!-- 2023.03.22.19:39:50 -->
+ <!-- 2023.03.22.22:51:14 -->
  <!-- A collection of modules and connections -->
  <parameter name="clockCrossingAdapter">
   <type>com.altera.sopcmodel.ensemble.EClockAdapter</type>
@@ -53,7 +53,7 @@
  </parameter>
  <parameter name="generationId">
   <type>int</type>
-  <value>1679513979</value>
+  <value>1679525463</value>
   <derived>false</derived>
   <enabled>true</enabled>
   <visible>true</visible>
@@ -24208,5 +24208,5 @@ parameters are a RESULT of the module parameters. -->
   <version>20.1</version>
  </plugin>
  <reportVersion>20.1 711</reportVersion>
- <uniqueIdentifier>9CB6D0DD0907000001870AD59898</uniqueIdentifier>
+ <uniqueIdentifier>9CB6D0DD0907000001870B84D3A9</uniqueIdentifier>
 </EnsembleReport>

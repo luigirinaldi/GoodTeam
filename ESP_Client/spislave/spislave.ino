@@ -22,7 +22,7 @@ const int httpPort = 8888;
 
 TaskHandle_t ServerRequestTask;
 
-int DeviceID = 0;
+int DeviceID = 2;
 int RecipientID = 1;
 
 String msg = "READY TO SEND"; // Message that gets printed to the FPGA
