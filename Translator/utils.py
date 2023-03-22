@@ -113,7 +113,7 @@ def indexToLetter(y,x,table=tapTable):
     try:
         return table[y-1][x-1]
     except:
-        return "ඞ"
+        return "?"
 
 def splitTaps(taps,delay=100,var=0):
     #takes taps, delay and variance and splits up the taps into letters 
