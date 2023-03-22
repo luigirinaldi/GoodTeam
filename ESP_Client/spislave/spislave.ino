@@ -290,7 +290,7 @@ void loop() {
         sendJSON(array_timestamps);
 
         valid_tap_time = -1;
-      }
+      } 
 
       int16_t tap_data;
       if (spi_slave_rx_buf[0] & 0x80) { // check MSbit to be one
@@ -301,6 +301,14 @@ void loop() {
         convertTime(tap_data);
         printf("Tap detected ");
         printf("%d\n", tap_data);
+      } else {
+        // the value is the recipient ID
+        int newRecipient = (spi_slave_rx_buf[0] << 8 | spi_slave_rx_buf[1]);
+
+        if (newRecipient != RecipientID) {
+          Serial.printf("ID: %d\n", newRecipient);
+          RecipientID = newRecipient;
+        }
       }
 
 

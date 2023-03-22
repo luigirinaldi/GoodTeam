@@ -138,7 +138,7 @@ void accelerometer_isr(){
     // tap_data[1] = time_diff_msec & 0xff; //bottom 8 bits of timestamp
 
     send_spi = time_diff_msec | 0x8000;
-
+    // printf("Switch values: %x\n", IORD(SWITCHES_BASE, 0) );
     // alt_putstr("tap:");
     // printf("%d\n", time_diff_msec);
 
@@ -189,7 +189,7 @@ int main()
   while (1){
     
     if (newTapData) IOWR_ALTERA_AVALON_SPI_TXDATA(SPI_BASE, send_spi | 0x8000);
-    else IOWR_ALTERA_AVALON_SPI_TXDATA(SPI_BASE, 0 );
+    else IOWR_ALTERA_AVALON_SPI_TXDATA(SPI_BASE, IORD(SWITCHES_BASE, 0) >> 1); // ignore bottom bit since it's broken on my FPGA
     // IOWR_ALTERA_AVALON_SPI_TXDATA(SPI_BASE, send_spi | ((newTapData & 0b1) << 15)); // send the data setting the MSbit if there is new data to send
     newTapData = 0; // reset new data
 
