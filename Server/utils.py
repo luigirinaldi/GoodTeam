@@ -27,8 +27,9 @@ class TestHandler(tornado.web.RequestHandler):
         sender = 1
         recieve = 1
         messageQueue.append({"to":recieve,"from":sender,"message":corrected_word, "original":original_word, "confidence":confidence})
-
-        self.write(corrected_word, original_word, confidence)
+        self.write(corrected_word)
+        self.write(original_word)
+        self.write(confidence)
 
 class PingHandler(tornado.web.RequestHandler):
     def get(self):
