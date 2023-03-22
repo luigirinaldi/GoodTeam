@@ -23,7 +23,7 @@ def sql_table(con):
 
 def sql_insert(con, entities):
     cursorObj = con.cursor()   
-    cursorObj.execute('''INSERT INTO GoodDB(CompositeKey, DeviceId, message, original, receive, confidence, timestamps) VALUES(?, ?, ?, ?, ?, ?, ?)''', entities)   
+    cursorObj.execute('''INSERT INTO GoodDB(TimeKey, DeviceId, message, original, receive, confidence, timestamps) VALUES(?, ?, ?, ?, ?, ?, ?)''', entities)   
     con.commit()
 
 con = sql_connection()
