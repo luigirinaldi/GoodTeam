@@ -15,7 +15,7 @@ class MainHandler(tornado.web.RequestHandler):
         sender = data_in["DeviceID"]
         recieve = data_in["RecipientID"]
         messageQueue.append({"to":recieve,"from":sender,"message":corrected_word, "original":original_word, "confidence":confidence})
-        self.write(corrected_word, original_word, confidence)
+        self.write({"corrected":corrected_word,"original": original_word,"confidence": confidence})
 
 
 class TestHandler(tornado.web.RequestHandler):

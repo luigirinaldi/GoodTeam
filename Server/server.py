@@ -15,6 +15,7 @@ def make_app():
 async def main():
     app = make_app()
     app.listen(8888)
+    print("server started on port 8888")
     await asyncio.Event().wait()
 
 def start():

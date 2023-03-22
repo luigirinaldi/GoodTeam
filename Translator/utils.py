@@ -39,7 +39,7 @@ probs = get_probs(word_freq)
 def my_autocorrect(input_word):
     input_word = input_word.lower()
     if input_word in v:
-            return(input_word.upper())
+            return(input_word.upper(),input_word.upper(),"1")
     else:
         sim = [1-(textdistance.Jaccard(qval=2).distance(v,input_word)) for v in word_freq.keys()]
         df = pd.DataFrame.from_dict(probs, orient='index').reset_index()
@@ -168,6 +168,17 @@ def tapsToWord(taps, delay=100, var=0):
             word = word + letter
         except:
             word = word
+    words = word.split("X")
+    corrected_words = []
+    original_words = []
+    confidences = []
+    for w in words:
+        corrected_w, original_w, conf = my_autocorrect(w)
+        corrected_words.append(corrected_w)
+        original_words.append(original_w)
+        confidences.append(conf)
 
-    corrected_word, original_word, confidence = my_autocorrect(word)
-    return (corrected_word, original_word, confidence)
+    
+    return (corrected_words, original_words, confidences)
+
+
