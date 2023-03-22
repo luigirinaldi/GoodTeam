@@ -4,6 +4,9 @@
 <nav class="bg-white px-4 sm:px-4 py-2.5 bg-gray-700 fixed w-full top-0 left-0
     border-b border-gray-200 dark:border-gray-600 drop-shadow-md">
     <div class="container flex flex-wrap md:space-x-10 mx-auto">
+        <img class="w-10 h-10 -mr-10"
+            src="static/src/assets/logo.png"
+            alt="logo image">
         <span class="text-3xl text-purple-600 font-bold tracking-tight ">TapTalk</span>
         <div class="flex items-center w-full md:flex md:w-auto md:order-1"
             id="navbar-sticky">
@@ -50,7 +53,8 @@
                         class="bg-gray-50
                         border
                         border-gray-300 text-gray-900 text-sm rounded-lg
-                        focus:ring-purple-500 focus:border-purple-500 block w-full
+                        focus:ring-purple-500 focus:border-purple-500 block
+                        w-full
                         p-2.5" placeholder="Hello World" required>
                 </div>
                 <button type="submit" class="w-full text-white bg-purple-700
@@ -66,7 +70,8 @@
             shadow px-20">
             <label for="message" class="block mb-2 text-sm font-medium
                 text-gray-900 dark:text-white">Translated Taps</label>
-            <textarea readonly id="message" rows="4" class="block p-2.5 w-full text-sm
+            <textarea readonly id="message" rows="4" class="block p-2.5 w-full
+                text-sm
                 text-gray-900 bg-gray-50 rounded-lg border border-gray-300
                 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700"
                 placeholder="Your translated taps will be here">{{translated}}</textarea>
