@@ -23,7 +23,7 @@ const int httpPort = 8888;
 TaskHandle_t ServerRequestTask;
 
 int DeviceID = 0;
-int RecipientID = -1;
+int RecipientID = 1;
 
 String msg = "READY TO SEND"; // Message that gets printed to the FPGA
 int count =0;
@@ -208,12 +208,12 @@ void setup() {
 
     initWIFI();
     
-    while(!connectToServer()){
-      Serial.println("Trying to connect to the server");
-      delay(1000);
-    }
+    // while(!connectToServer()){
+    //   Serial.println("Trying to connect to the server");
+    //   delay(1000);
+    // }
 
-    RecipientID = DeviceID;
+    // RecipientID = DeviceID;
 
     Serial.println("Connected to server with ID" + String(DeviceID));
 
@@ -236,7 +236,15 @@ void setup() {
 
 
 void loop() {
-
+  if (WiFi.status() != WL_CONNECTED) {
+    WiFi.mode(WIFI_STA);
+    WiFi.begin(ssid, password);
+    Serial.println("Connecting to WiFi ..");
+    while (WiFi.status() != WL_CONNECTED) {
+      Serial.print(".");
+      delay(500);
+    }    
+  } else {
     if (msg.length() > 0){  // when new message send to the FPGA
       spi_slave_tx_buf[0] = 255;
       spi_slave_tx_buf[1] = msg.length(); // assuming lengths is less than 256
@@ -298,7 +306,7 @@ void loop() {
 
       slave.pop();
     }
-
+  }
 
 
 }
