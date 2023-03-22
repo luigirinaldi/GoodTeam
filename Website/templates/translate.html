@@ -1,0 +1,77 @@
+<!-- Container for demo purpose -->
+{% extends "base.html" %}
+{% block navbar %}
+<nav class="bg-white px-4 sm:px-4 py-2.5 bg-gray-700 fixed w-full top-0 left-0
+    border-b border-gray-200 dark:border-gray-600 drop-shadow-md">
+    <div class="container flex flex-wrap md:space-x-10 mx-auto">
+        <span class="text-3xl text-purple-600 font-bold tracking-tight ">TapTalk</span>
+        <div class="flex items-center w-full md:flex md:w-auto md:order-1"
+            id="navbar-sticky">
+            <ul class="flex flex-col py-2 px-4 border rounded-lg md:flex-row
+                md:space-x-10 md:mt-0 md:text-lg md:font-medium md:border-0
+                md:bg-gray-500">
+                <li>
+                    <a href="/dashboard" class="block px-3 text-white rounded
+                        hover:bg-gray-800 md:text-gray-100 "
+                        aria-current="page">Home</a>
+                </li>
+                <li>
+                    <a href="/translate" class="block px-3 text-gray-700 rounded
+                        hover:bg-gray-800 md:hover:text-gray-400 "> Translate
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="block px-3 text-gray-700 rounded
+                        hover:bg-gray-800 md:hover:text-gray-400 "> Nodes </a>
+                </li>
+                <li>
+                    <a href="#" class="block px-3 text-gray-700 rounded
+                        hover:bg-gray-800 md:hover:text-gray-400 "> Analysis
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+{% block content %}
+<div class="flex grid grid-cols-1 grid-rows-2 m-20 h-screen">
+    <div class="m-auto">
+        <div class="w-50 p-4 m-4 bg-white border
+            border-gray-200 rounded-lg
+            shadow px-20">
+            <form class="space-y-6" method="POST">
+                <h5 class="text-xl font-medium text-gray-900 dark:text-white">Tap
+                    Translator</h5>
+                <div>
+                    <label for="email" class="block mb-2 text-sm font-medium
+                        text-gray-900 dark:text-white">Enter some words</label>
+                    <input type="translate" name="translate" id="translate"
+                        class="bg-gray-50
+                        border
+                        border-gray-300 text-gray-900 text-sm rounded-lg
+                        focus:ring-blue-500 focus:border-blue-500 block w-full
+                        p-2.5" placeholder="Hello World" required>
+                </div>
+                <button type="submit" class="w-full text-white bg-blue-700
+                    hover:bg-blue-800 focus:ring-4 focus:outline-none
+                    focus:ring-blue-300 font-medium rounded-lg text-sm px-5
+                    py-2.5
+                    text-center dark:bg-blue-600 dark:hover:bg-blue-700
+                    dark:focus:ring-blue-800">Translate</button>
+            </form>
+        </div>
+        <div class="w-50 p-4 m-4 bg-white border
+            border-gray-200 rounded-lg
+            shadow px-20">
+            <label for="message" class="block mb-2 text-sm font-medium
+                text-gray-900 dark:text-white">Translated Taps</label>
+            <textarea readonly id="message" rows="4" class="block p-2.5 w-full text-sm
+                text-gray-900 bg-gray-50 rounded-lg border border-gray-300
+                focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700"
+                placeholder="Your translated taps will be here">{{translated}}</textarea>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
