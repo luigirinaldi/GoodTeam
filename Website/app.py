@@ -20,4 +20,4 @@ def home():
     return render_template("dash.html", nodes = ips,len = len(ips), messages = messages)
 
 app.jinja_env.globals.update(average=average)
-app.run(debug=True)
+app.run(debug=True, port=8080, host="0.0.0.0")
