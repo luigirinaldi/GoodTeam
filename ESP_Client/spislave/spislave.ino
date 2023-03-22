@@ -17,11 +17,22 @@ const std::string RecipientID = "-1";
 
 
 String server_ip = "http://54.237.83.228:8888/";
+
+const char* host = "54.237.83.228";
+const int httpPort = 8888;
+
 String SERVER_PING = server_ip + "ping";
 String SERVER_START = server_ip + "start";
 String SERVER_SUSSY = server_ip + "status";
 
-HTTPClient http;
+// RECEIVE MESSAGE
+
+// StaticJsonBuffer<300> jsonRXBuffer;
+
+// TAP SEND
+
+
+TaskHandle_t ServerRequestTask;
 
 int deviceID = 0;
 
@@ -38,6 +49,33 @@ static constexpr uint32_t BUFFER_SIZE {2};
 uint8_t spi_slave_tx_buf[BUFFER_SIZE];
 uint8_t spi_slave_rx_buf[BUFFER_SIZE];
 
+void taskServerRequests( void * pvParameters ){
+  while(true){
+    pingServer();
+    Serial.printf("DeviceID: %d\n", count);
+    delay(1000);
+  }
+}
+
+void pingServer() {
+  HTTPClient client;
+  client.begin(host, httpPort, "/status");
+
+  int response = client.GET(); // send GET request
+  
+  if (response == 200){
+    Serial.print("Successfull Startup request!");
+    String payload = client.getString();
+    Serial.println(payload);
+  } else {
+    Serial.print("Error: ");
+    Serial.println(response);
+    String payload = client.getString();
+    Serial.println(payload);
+  }
+
+  client.end();
+}
 
 void initWIFI() {
   Serial.println("Attempting to connect...");
@@ -52,22 +90,24 @@ void initWIFI() {
 }
 
 void connectToServer() {
-  http.begin(SERVER_START.c_str());
-  int response = http.GET(); // send GET request
+  HTTPClient client;
+  client.begin(SERVER_START);
+  pingClient.begin(SERVER_PING);
+
+  int response = client.GET(); // send GET request
   
   if (response == 200){
     Serial.print("Successfull Startup request!");
-    String payload = http.getString();
+    String payload = client.getString();
     Serial.println(payload);
   } else {
     Serial.print("Error: ");
     Serial.println(response);
-    String payload = http.getString();
+    String payload = client.getString();
     Serial.println(payload);
   }
 
-  // Free resources
-  // http.end();
+  client.end();
 }
 
 float convertTime(int16_t timestamp){
@@ -95,31 +135,6 @@ void sendJSON(float array_timestamps[]){
 }
 
 
-void IRAM_ATTR HTTP_request_ISR(){
-  // Serial.print("TEST");
-  // Serial.println(count);
-  // msg = "TEST" + String(count++);  
-
-  // http.begin(SERVER_SUSSY.c_str());
-  // int response = http.GET(); // send GET request
-
-
-  // if (response == 200){
-  //   Serial.println("Successfull Startup request!");
-  //   String payload = http.getString();
-  //   Serial.println(payload);
-  // } else {
-  //   Serial.print("Error: ");
-  //   Serial.println(response);
-  //   String payload = http.getString();
-  //   Serial.println(payload);
-  // }
-
-  // // Free resources
-  // // http.end();
-}
-
-hw_timer_t *Timer0_Cfg = NULL;
 
 void setup() {
     // HSPI = CS: 15, CLK: 14, MOSI: 13, MISO: 12 -> default
@@ -127,31 +142,25 @@ void setup() {
 
     Serial.begin(115200);
 
-    // initWIFI();
-
-    // WiFiClient client;
-
-    // //connect to client
-    // client.setTimeout(10000);
-    // if (!client.connect(server_ip, 80)) {
-    //   Serial.println(F("Connection failed"));
-    //   return;
-    // }
-
-    // connectToServer();
-
-
-
+    initWIFI();
+    
+    connectToServer();
 
     slave.setDataMode(SPI_MODE0);
     slave.begin(HSPI);
 
-    // INTERRUPT ROUTINE FOR POLLING THE SERVER
-    Timer0_Cfg = timerBegin(0, 80, true); // use timer 0, prescaler of 80 and count up
-    timerAttachInterrupt(Timer0_Cfg, &HTTP_request_ISR, true); // att ach interrupt
-    timerAlarmWrite(Timer0_Cfg, 1000000, true);  // set the period
-    timerAlarmEnable(Timer0_Cfg); // start the timeer
+    xTaskCreatePinnedToCore(
+      taskServerRequests, /* Function to implement the task */
+      "ServerRequests", /* Name of the task */
+      10000,  /* Stack size in words */
+      NULL,  /* Task input parameter */
+      0,  /* Priority of the task */
+      &ServerRequestTask,  /* Task handle. */
+      0); /* Core where the task should run */
 
+    delay(2000);
+
+    pingServer();
 }
 
 
