@@ -18,16 +18,15 @@ const std::string RecipientID = "-1";
 
 String server_ip = "http://54.237.83.228:8888/";
 
-const char* host = "54.237.83.228";
+const char* host = "100.26.142.78";
 const int httpPort = 8888;
 
-String SERVER_PING = server_ip + "ping";
-String SERVER_START = server_ip + "start";
-String SERVER_SUSSY = server_ip + "status";
+// String SERVER_PING = server_ip + "ping";
+// String SERVER_START = server_ip + "start";
+// String SERVER_SUSSY = server_ip + "status";
 
 // RECEIVE MESSAGE
 
-// StaticJsonBuffer<300> jsonRXBuffer;
 
 // TAP SEND
 
@@ -51,30 +50,60 @@ uint8_t spi_slave_rx_buf[BUFFER_SIZE];
 
 void taskServerRequests( void * pvParameters ){
   while(true){
-    pingServer();
-    Serial.printf("DeviceID: %d\n", count);
+    String newMessage;
+    if(pingServer(deviceID, newMessage)){
+      Serial.println(newMessage);
+    } else {
+      Serial.println(newMessage);
+    }
+
+    
     delay(1000);
   }
 }
 
-void pingServer() {
+bool pingServer(int deviceID, String &ReceivedMsg) {
   HTTPClient client;
-  client.begin(host, httpPort, "/status");
+  client.begin(host, httpPort, "/ping");
+  bool returnVal = false;
+  String pingPayload = "{\"DeviceID\":" + String(deviceID) + "}";
 
-  int response = client.GET(); // send GET request
+  int response = client.sendRequest("GET", pingPayload); // send GET request
   
   if (response == 200){
-    Serial.print("Successfull Startup request!");
+    // Serial.print("Successfull Startup request!");
+    DynamicJsonDocument doc(1024);
     String payload = client.getString();
     Serial.println(payload);
+    DeserializationError error = deserializeJson(doc, payload);
+    if (error) {
+      Serial.println("Deserialization failed!");
+      Serial.println(error.f_str());
+      return false;
+    }
+    int sender = doc["messages"][0]["from"];
+    JsonArray message = doc["messages"][0]["message"].as<JsonArray>();
+
+    ReceivedMsg = String(sender) + ":";
+
+    for (JsonVariant word : message) {
+      ReceivedMsg += word.as<String>() + " ";
+    }   
+    returnVal = true;
+  } else if (response == 206) {
+    ReceivedMsg = "Nothing new to see here";    
+    returnVal = false;
   } else {
     Serial.print("Error: ");
     Serial.println(response);
     String payload = client.getString();
     Serial.println(payload);
+
+    ReceivedMsg = "Something went wrong";
   }
 
   client.end();
+  return returnVal;
 }
 
 void initWIFI() {
@@ -91,8 +120,7 @@ void initWIFI() {
 
 void connectToServer() {
   HTTPClient client;
-  client.begin(SERVER_START);
-  pingClient.begin(SERVER_PING);
+  client.begin(host, httpPort, "/start");
 
   int response = client.GET(); // send GET request
   
@@ -159,8 +187,6 @@ void setup() {
       0); /* Core where the task should run */
 
     delay(2000);
-
-    pingServer();
 }
 
 
