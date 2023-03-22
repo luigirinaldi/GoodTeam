@@ -220,7 +220,7 @@ int main()
       putchar('\n');
 
       // Write to the HEX digits
-      memcpy(currMsg.text, inc_msg, num_char * sizeof(char)); // copy data
+      memcpy(currMsg.text, inc_msg, (num_char + BLANK_SPACES) * sizeof(char)); // copy data
       if (num_char > 6) currMsg.length = num_char + BLANK_SPACES; // add blanks
       else currMsg.length = num_char;
 

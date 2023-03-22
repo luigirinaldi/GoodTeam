@@ -11,19 +11,8 @@ int time_since_valid;
 const char* ssid = "iPhone di Luigi";
 const char* password = "chungusVBD";
 
-const std::string DeviceID = "test";
-
-const std::string RecipientID = "-1";
-
-
-String server_ip = "http://54.237.83.228:8888/";
-
 const char* host = "100.26.142.78";
 const int httpPort = 8888;
-
-// String SERVER_PING = server_ip + "ping";
-// String SERVER_START = server_ip + "start";
-// String SERVER_SUSSY = server_ip + "status";
 
 // RECEIVE MESSAGE
 
@@ -33,9 +22,10 @@ const int httpPort = 8888;
 
 TaskHandle_t ServerRequestTask;
 
-int deviceID = 0;
+int DeviceID = 0;
+int RecipientID = 0;
 
-String msg = "CARPO DIEM"; // Message that gets printed to the FPGA
+String msg = "READY TO SEND"; // Message that gets printed to the FPGA
 int count =0;
 
 float array_timestamps[256];
@@ -51,10 +41,12 @@ uint8_t spi_slave_rx_buf[BUFFER_SIZE];
 void taskServerRequests( void * pvParameters ){
   while(true){
     String newMessage;
-    if(pingServer(deviceID, newMessage)){
+    if(pingServer(DeviceID, newMessage)){
       Serial.println(newMessage);
-    } else {
-      Serial.println(newMessage);
+      msg = newMessage; // display this on the FPGA
+    } 
+    else {
+      Serial.print(newMessage);
     }
 
     
@@ -71,7 +63,7 @@ bool pingServer(int deviceID, String &ReceivedMsg) {
   int response = client.sendRequest("GET", pingPayload); // send GET request
   
   if (response == 200){
-    // Serial.print("Successfull Startup request!");
+    Serial.print("Getting ping info");
     DynamicJsonDocument doc(1024);
     String payload = client.getString();
     Serial.println(payload);
@@ -88,18 +80,21 @@ bool pingServer(int deviceID, String &ReceivedMsg) {
 
     for (JsonVariant word : message) {
       ReceivedMsg += word.as<String>() + " ";
-    }   
+    }
+    ReceivedMsg.remove(ReceivedMsg.length() - 1);
+    // ReceivedMsg += doc["message"][0].as<String>();
+
     returnVal = true;
   } else if (response == 206) {
-    ReceivedMsg = "Nothing new to see here";    
+    ReceivedMsg = "";    
     returnVal = false;
   } else {
     Serial.print("Error: ");
     Serial.println(response);
-    String payload = client.getString();
-    Serial.println(payload);
+    // String payload = client.getString();
+    // Serial.println(payload);
 
-    ReceivedMsg = "Something went wrong";
+    ReceivedMsg = "Something went wrong\n";
   }
 
   client.end();
@@ -118,24 +113,38 @@ void initWIFI() {
   Serial.println(WiFi.localIP());
 }
 
-void connectToServer() {
+bool connectToServer() {
   HTTPClient client;
   client.begin(host, httpPort, "/start");
-
+  bool returnVal = false;
   int response = client.GET(); // send GET request
   
   if (response == 200){
-    Serial.print("Successfull Startup request!");
+    DynamicJsonDocument doc(1024);
     String payload = client.getString();
     Serial.println(payload);
+    DeserializationError error = deserializeJson(doc, payload);
+
+    if (error) {
+      Serial.println("Deserialization failed!");
+      Serial.println(error.f_str());
+
+      client.end();
+      return false;
+    }
+    
+    // change global variable
+    DeviceID = doc["deviceID"].as<int>();
+
+    returnVal = true;
   } else {
     Serial.print("Error: ");
     Serial.println(response);
-    String payload = client.getString();
-    Serial.println(payload);
+    returnVal = false;
   }
 
   client.end();
+  return returnVal;
 }
 
 float convertTime(int16_t timestamp){
@@ -150,15 +159,37 @@ void sendJSON(float array_timestamps[]){
   request["DeviceID"] = DeviceID;
   request["RecipientID"] = RecipientID;
 
-  JsonArray timestamps = request.createNestedArray("Timestamps");
+  JsonArray timestamps = request.createNestedArray("taps");
 
   timestamps.add(0);
 
   for(int i=1; i < count_timestamps; i++){
-        timestamps.add(array_timestamps[i]); // Add floats to JSON array starting from second, first value 0;
+        timestamps.add(array_timestamps[i]); // Add floats to JSON array starting from second value, first value 0;
   }
   
   serializeJsonPretty(request, Serial);
+
+  // SEND TO SERVER
+
+  HTTPClient client;
+  client.begin(host, httpPort, "/");
+
+  String tapPayload;
+  serializeJson(request, tapPayload);
+  Serial.println("");
+  
+  int response = client.sendRequest("GET", tapPayload); // send GET request
+  
+  if (response == 200){
+    Serial.println("Data sent successfully");
+    Serial.println(client.getString());
+  } else {
+    Serial.println("Sending data went wrong: " + String(response));
+  }
+
+  client.end();
+  
+  // reset counter 
   count_timestamps = 0;
 }
 
@@ -170,9 +201,16 @@ void setup() {
 
     Serial.begin(115200);
 
+    while(!Serial);
+
     initWIFI();
     
-    connectToServer();
+    while(!connectToServer()){
+      Serial.println("Trying to connect to the server");
+      delay(1000);
+    }
+
+    Serial.println("Connected to server with ID" + String(DeviceID));
 
     slave.setDataMode(SPI_MODE0);
     slave.begin(HSPI);
@@ -250,9 +288,6 @@ void loop() {
         convertTime(tap_data);
         printf("Tap detected ");
         printf("%d\n", tap_data);
-        // printf("Time since last tap: ");
-        // printf("%d\n",   tap_data);          
-        // printf("%d, %d\n", spi_slave_rx_buf[0], spi_slave_rx_buf[1]);
       }
 
 
