@@ -22,6 +22,7 @@ def letterToIndex(search,table=tapTable):
     
 def translate(words):
     words = words.replace(" ", "X")
+    words = words.replace("C", "K")
     words = words.lower()
     output = ""
     for letter in words:
