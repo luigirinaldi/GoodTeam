@@ -1,6 +1,8 @@
-from flask import Flask, redirect, url_for, render_template, request
+from flask import Flask, redirect, url_for, render_template, request, Response
+import io
 import utils 
 from datetime import datetime
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
 def create_app():
     app = Flask(__name__,template_folder='templates')
@@ -32,6 +34,14 @@ def translator_return():
     text = request.form['translate']
     translated = utils.translate(text)
     return render_template("translate.html",translated = translated)
+@app.route('/plot', methods=['POST'])
+def chartTest():
+    text = request.body
+    if text:
+        fig = utils.plotTapGraph()
+        output = io.BytesIO()
+        FigureCanvas(fig).print_png(output)
+        return Response(output.getvalue(), mimetype='image/png')
 
 
 app.jinja_env.globals.update(average=average, getTime = getTime)
