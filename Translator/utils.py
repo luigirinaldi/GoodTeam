@@ -14,12 +14,20 @@ import pandas as pd
 # Auto-correct 
 #####################################################################
 w = [] #words
+d = [] #dict_word
 with open('big.txt','r',encoding="utf8") as f:
     file_name_data = f.read()
     file_name_data = file_name_data.lower()
     w = re.findall('\w+', file_name_data)
 
+with open('dict.txt','r',encoding="utf8") as f:
+    file_name_data = f.read()
+    file_name_data = file_name_data.lower()
+    d = re.findall('\w+', file_name_data)
+
 v = set(w) #vocabulary
+x = set(d) #dictionary
+
 
 def get_count(words):
         word_freq = {}  
@@ -38,7 +46,7 @@ probs = get_probs(word_freq)
 
 def my_autocorrect(input_word):
     input_word = input_word.lower()
-    if input_word in v:
+    if input_word in x:
             print("Word: ",input_word.upper(), "Original word: ", input_word.upper(), "Confidence 100%, word exists: ", "1")
             return(input_word.upper(),input_word.upper(),"1")
     else:

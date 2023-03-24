@@ -18,7 +18,9 @@ class MessageHandler(tornado.web.RequestHandler):
             print(Error)
 
         cursorObj = con.cursor()
-        DB_content = con.execute('SELECT * FROM GoodDB;')
-        results = DB_content.fetchall()
-
-        self.write({"messages":[{DB_content.description[i][0]:row[i] for i in range(len(row))} for row in results]})
+        if cursorObj == {"to":0,"from":0,"message":'0', "original":'0', "confidence":'0'}:
+            return 
+        else:
+            DB_content = con.execute('SELECT * FROM GoodDB;')
+            results = DB_content.fetchall()
+            self.write({"messages":[{DB_content.description[i][0]:row[i] for i in range(len(row))} for row in results]})
